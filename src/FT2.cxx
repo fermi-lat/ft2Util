@@ -1,4 +1,4 @@
-
+// c++/stl headers
 #include <cmath>
 #include <cstdlib>
 #include <algorithm>
@@ -9,6 +9,8 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+
+// Headers from this package
 #include "ft2Util/FT2_Time.hpp"
 
 
