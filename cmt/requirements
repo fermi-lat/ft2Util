@@ -1,7 +1,7 @@
-package idents
+package ft2Util
 # $Header$
-version v2r18
-author Joanne Bogart <jrb@slac.stanford.edu>
+version v0r0
+author Andrea Tramacere <tramacer@slac.stanford.edu>
 
 use GlastPolicy v*
 use enums v*
