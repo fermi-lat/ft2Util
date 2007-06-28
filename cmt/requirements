@@ -1,0 +1,18 @@
+package idents
+# $Header$
+version v2r18
+author Joanne Bogart <jrb@slac.stanford.edu>
+
+use GlastPolicy v*
+use enums v*
+use commonRootData v*
+use digiRootData v*
+
+apply_pattern  package_include
+apply_pattern  package_headers
+apply_pattern  package_linkopts
+
+library ft2Util -no_share *.cxx ${ft2Util_headers}
+
+private
+application MakeFt2 ../apps/main.cxx
