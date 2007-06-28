@@ -1,0 +1,30 @@
+------------------------------------------------------------
+User: echarles  Thu Jun 28 14:31:37 PDT 2007
+ft2Util
+
+Log Message:
+Importing ft2Util
+
+Status:
+
+Vendor Tag:	initial
+Release Tags:	v0
+		
+N ft2Util/apps/main.cxx
+I ft2Util/apps/main.cxx~
+N ft2Util/cmt/requirements
+N ft2Util/cmt/Makefile
+I ft2Util/cmt/requirements~
+N ft2Util/cmt/setup.csh
+N ft2Util/cmt/setup.sh
+N ft2Util/cmt/cleanup.csh
+N ft2Util/cmt/cleanup.sh
+N ft2Util/cmt/rh9_gcc32opt.make
+N ft2Util/doc/release.notes
+I ft2Util/src/FT2.cxx~
+N ft2Util/src/FT2.cxx
+N ft2Util/ft2Util/FT2_Time.hpp
+
+No conflicts created by this import
+
+    *
