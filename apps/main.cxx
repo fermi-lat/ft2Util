@@ -422,7 +422,7 @@ int main(int argc, char **argv){
   FT2.Evaluate_Live_Time(FT2);
   
   //----------- WRITE FT2 TXT FILE -----------------------------------------------------------------
-  FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith b_mcilwain geom_lat is_saa ra_scz dec_scz lat_mode livetime"<<endl;
+  FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime"<<endl;
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
 
   //check-up
@@ -443,6 +443,12 @@ int main(int argc, char **argv){
 	<<FT2.ORB.y[i]/double(FT2.ORB.entr[i])
 	<<","
 	<<FT2.ORB.z[i]/double(FT2.ORB.entr[i])
+	<<","
+	<<0
+	<<","
+	<<0
+	<<","
+	<<0
 	<<","
 	<<0
 	<<","
