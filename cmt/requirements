@@ -15,4 +15,4 @@ apply_pattern  package_linkopts
 library ft2Util -no_share *.cxx ${ft2Util_headers}
 
 private
-application MakeFt2 ../apps/main.cxx
+application makeFT2Entries ../apps/main.cxx
