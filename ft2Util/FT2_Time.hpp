@@ -1,3 +1,11 @@
+/** @file FT2_Time.cxx
+@brief 
+
+@author Andrea Tramacere <tramacer@slac.stanford.edu>
+
+*/
+
+
 #ifndef __FT2_Time_Class__
 #define __FT2_Time_Class__
 
