@@ -1,3 +1,10 @@
+/** @file FT2_Time.cxx
+@brief 
+
+@author Andrea Tramacere <tramacer@slac.stanford.edu>
+
+*/
+
 // ROOT Headers
 #include "TROOT.h"
 #include "TFile.h"
