@@ -399,9 +399,8 @@ double  FT2::Get_M7_Time(const std::string &Time, const std::string &Frac_Time){
 }
 
 
-
+//----------------------------------------------------------------------------------------
 void FT2::Set_M7_Entries(FT2 &FT2){
-
 
   double time,Tstart;
   //int new_entry(1);
@@ -413,7 +412,9 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   std::string buf,comment; //buffer string
   std::string line;
   std::ifstream M7F(FT2.M7File.c_str());
-  
+ 
+  printf("----------- Set FT2 Entries from M7 file -----------\n");
+ 
   //Read M-7 File 
   while (std::getline(M7F, line, '\n')) {
     //A SIMPLE TOKENIZER
@@ -516,9 +517,9 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   
   M7F.close();
  
-  for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
-    printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
-  }
+  //for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
+  //  printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
+  //}
 
 }
 
