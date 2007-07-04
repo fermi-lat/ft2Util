@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Tue Jul  3 17:26:06 PDT 2007
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+No more fixed bin, signficant changes in the code
+    *
+------------------------------------------------------------
+User: tramacer  Tue Jul  3 17:26:06 PDT 2007
 ft2Util/apps
 
 Modified Files:
