@@ -55,8 +55,6 @@ class ORBIT{
 public:
   ORBIT();
   void Set_ORB_Size(ORBIT &Orb,unsigned int size);
- 
-
   std::vector<double> x,y,z,vx,vy,vz;
   std::vector<int>  entr,CM,SAA; 
 };
@@ -84,18 +82,22 @@ public:
   //File Names 
   void getFileNames(int iargc, char * argv[]);
   unsigned int LineNumberCount(const std::string & infile); 
-  void Get_DigiFileLineNumber(const std::string & infile );
+  void Get_DigiFileLineNumber(FT2 &FT2, const std::string & infile );
  
  
   //M-7
+  void Set_M7_Entries(FT2 &FT2);
   double Get_M7_Time(const std::string &Time, const std::string &Frac_Time);
-  void Handle_M7_Entries(FT2 &FT2);
+  void Fill_M7_Entries(FT2 &FT2);
+  void Average_M7_Entries(FT2 &FT2);
   void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry);
   void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, unsigned int entry);
+  void Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry);
+  void Clean_ORB(ORBIT &Orb, unsigned int entry);
   unsigned int M7_Entries;
  
   //FT2_Time
-  void Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries, unsigned int bin);
+  //void Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries, unsigned int bin);
  
   //DIGI
   unsigned int DigiEntries;
@@ -104,20 +106,26 @@ public:
   
 
   //FT2
-  int Get_FT2_Entry_Index(FT2 &FT2 ,double time);
+  void Get_FT2_Entry_Index(FT2 &FT2, double time, unsigned int &i);
   void Update_FT2_Entries(FT2 &FT2, int i);
   unsigned int Get_FT2_Entries(FT2 &FT2);
+  void Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run);
   unsigned int DigiFileLineNumber;
+  void Set_OutOfRange_TRUE(FT2 &FT2);
+  void Set_OutOfRange_FALSE(FT2 &FT2);
+  bool Get_OutOfRange(FT2 &FT2);
+
   //unsigned long FT2_Entries;
 
 
   //FT2
-  int Get_FT2_Time_Bin(double time);  
+  int Get_FT2_Time_Bin(double time,double Tstart);  
   void Evaluate_Live_Time(FT2 &FT2);
  
 
   
 private:
+  bool OutOfRange;
   unsigned int CurrentEntry;
   unsigned int Entries; 
   

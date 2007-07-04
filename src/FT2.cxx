@@ -201,8 +201,6 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
   // }
   // }
   //printf("diff=%30.28e fraction_tot=%30.28e\n",diff,fraction_tot);
-  printf("FT2.DT.Tstop_LiveTime[10]=%30.28e FT2.DT.Tstart_LiveTime[0]=%30.28e \n",FT2.DT.Tstop_LiveTime[10],FT2.DT.Tstart_LiveTime[0]);
-  printf("FT2.DT.Tstop_LiveTime[10]-FT2.DT.Tstart_LiveTime[0] live=%30.28e\n",FT2.DT.Tstop_LiveTime[10]-FT2.DT.Tstart_LiveTime[0]);
 }
 //-------------------------------------------------------------
 
@@ -243,15 +241,70 @@ unsigned int  FT2::LineNumberCount(const std::string & infile){
   return nlines;
 } 
 
-void FT2::Get_DigiFileLineNumber(const std::string & infile){
+void FT2::Get_DigiFileLineNumber(FT2 &FT2,const std::string & infile){
   //std::cout<<infile<<std::endl ;
-  DigiFileLineNumber=LineNumberCount(infile);
+  FT2.DigiFileLineNumber=LineNumberCount(infile);
+}
+
+ 
+
+ 
+//------------------------------  FT2_CLASS FT2 --------------------------------------------
+//
+void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
+  unsigned int Current_FT2_Entry,FT2_Entries;
+
+ 
+  printf("Merge M7 with Digi entries\n");
+
+  //add new entry
+  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
+  FT2.Get_FT2_Entry_Index(FT2, Tstart_Run,Current_FT2_Entry);
+  printf("Entry index=%d \n",Current_FT2_Entry);
+  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+  FT2_Entries= Get_FT2_Entries(FT2);
+  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+  printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+
+  FT2.FT2_T.Tstart[Current_FT2_Entry]=FT2.FT2_T.Tstart[Current_FT2_Entry];
+  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entry];
+  FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstart_Run ;
+  FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_Run ;
+
+
+  std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
+  std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
+ 
+
+  //add new entry
+  printf("FT2 entris %d \n",Get_FT2_Entries(FT2));
+  FT2.Get_FT2_Entry_Index(FT2,Tstop_Run,Current_FT2_Entry);
+  printf("Entry index=%d \n",Current_FT2_Entry);
+  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+  FT2_Entries= Get_FT2_Entries(FT2);
+  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+  printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+
+  FT2.FT2_T.Tstart[Current_FT2_Entry]=FT2.FT2_T.Tstart[Current_FT2_Entry];
+  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entry];
+  FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstop_Run ;
+  FT2.FT2_T.Tstart[FT2_Entries-1]=Tstop_Run ;
+
+  std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
+  std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
+  //SORTING
+  // 
+  
+  for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
+     FT2.FT2_T.LiveTime[i]=0;
+     FT2.FT2_T.bin[i]=i;
+     printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
+  }
+  
 }
 
 
 
- 
-//------------------------------  FT2_CLASS FT2 --------------------------------------------
 
 //Update the private filed Entries
 void FT2::Update_FT2_Entries(FT2 &FT2, int i){
@@ -262,44 +315,73 @@ unsigned int FT2::Get_FT2_Entries(FT2 &FT2){
   return FT2.Entries;
 }
 
-//Update the fields of the FT2_Time Class
-void FT2::Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries ,unsigned int TimeBin){
-  
-  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Get_Tstart(TimeBin);
-  FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Get_Tstop(TimeBin);
-  FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin;
+
+
+void FT2::Set_OutOfRange_TRUE(FT2 &FT2){
+  FT2.OutOfRange=true;
 }
 
 
+void FT2::Set_OutOfRange_FALSE(FT2 &FT2){
+  FT2.OutOfRange=false;
+}
+
+bool FT2::Get_OutOfRange(FT2 &FT2){
+  return FT2.OutOfRange;
+}
 
 
-int FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time){
-  unsigned int i, Entries ;
+//Update the fields of the FT2_Time Class
+//void FT2::Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries ,unsigned int TimeBin){
+  
+//  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Get_Tstart(TimeBin);
+//  FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Get_Tstop(TimeBin);
+//  FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin;
+//}
+
+
+
+
+void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
+  unsigned Entries ;
+
   Entries=Get_FT2_Entries(FT2);
-  for(i=0;i<Entries;i++){
-    if((time<=FT2.FT2_T.Tstop[i])&&(time>=FT2.FT2_T.Tstart[i])){
-      return i;
+
+  FT2.Set_OutOfRange_TRUE(FT2);
+
+  for(unsigned int l=0;l<Entries;l++){
+    if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
+      Set_OutOfRange_FALSE(FT2);
+      i=l;
     }  
   }
-  std::cout<<"M7 data out of any Bin time interval "  
-	   << i
+  if (FT2.Get_OutOfRange(FT2)){
+  std::cout<<"!!!Warning "
+	   <<"data out of any Bin time interval "  
+	   << l
 	   <<"time "
 	   <<std::setprecision(20)
 	   <<time
-	 <<std::endl;
- exit(1);
+	   <<" Tstart of First Bin "
+	   <<FT2.FT2_T.Tstart[0]
+	   <<" Tstop of Last Bin "
+	   <<FT2.FT2_T.Tstop[FT2.FT2_T.Tstop.size()-1]
+	   <<std::endl;
+  }
 }
 
-int FT2::Get_FT2_Time_Bin(double time){
+int FT2::Get_FT2_Time_Bin(double time,double Tstart){
   unsigned int i;
   
-  i=int(time/30.0);
+  i=int((time-Tstart)/30.0);
   //std::cout<<"bin "
   //    <<i
   //    <<std::endl;
     
   return i;
 }
+
+
 
 
 
@@ -317,22 +399,21 @@ double  FT2::Get_M7_Time(const std::string &Time, const std::string &Frac_Time){
 }
 
 
-//Handle M7 Entries in M7 File
 
-void FT2::Handle_M7_Entries(FT2 &FT2){
+void FT2::Set_M7_Entries(FT2 &FT2){
 
-  double time;
+
+  double time,Tstart;
   //int new_entry(1);
   unsigned int M7LineCounter(0);
   int  TimeBin, NewTimeBin(0),OldTimeBin(0);
   unsigned int Current_FT2_Entries(0);
-
+  
   //File Handlign
   std::string buf,comment; //buffer string
   std::string line;
   std::ifstream M7F(FT2.M7File.c_str());
-    
-
+  
   //Read M-7 File 
   while (std::getline(M7F, line, '\n')) {
     //A SIMPLE TOKENIZER
@@ -348,24 +429,32 @@ void FT2::Handle_M7_Entries(FT2 &FT2){
 
     time=FT2.Get_M7_Time(tokens[3],tokens[4]);
 
-    //Absolute FT2 time bin Id
-    TimeBin=FT2.Get_FT2_Time_Bin(time);
+
+    if (M7LineCounter==0){
+      Tstart=time;
+    }
+
+
+
+    //FT2 time bin Id
+    TimeBin=FT2.Get_FT2_Time_Bin(time,Tstart);
     
-    //std::cout<<"TimeBin"
-    //	   <<TimeBin
-    //	   <<"OldTimeBin"
-    //	   <<OldTimeBin
-    //	   <<std::endl;
+    //std::cout<<"TimeBin "
+    //	     <<TimeBin
+    //	     <<" OldTimeBin "
+    //	     <<OldTimeBin
+    //	     <<std::endl;
     
     //IF a new TimeBin has started and
     //it is not the first!!!!!
     //print information about the previously 
     //completed TimeBin
     if(TimeBin!=OldTimeBin && M7LineCounter>0){
+      printf("---------------------------------------------------------\n");
       NewTimeBin=1;
       std::cout<<"New Time bin "
 	       <<Current_FT2_Entries
-	       <<" Abd Time Id "
+	       <<" Time Id "
 	       <<std::setprecision(20)
 	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
 	       <<" FT2 Tstart "
@@ -384,10 +473,10 @@ void FT2::Handle_M7_Entries(FT2 &FT2){
       //UPADTE THE NUMBER OF ENTRIES IN THE FT2 CLASS
       Current_FT2_Entries++;
       FT2.Update_FT2_Entries(FT2,Current_FT2_Entries);
-      std::cout<<"New Bin  " 
-	       <<"Current FT2 Entries "
+      std::cout<<"New Bin  "  
+	       <<" Current FT2 Entries "
 	       <<Current_FT2_Entries
-	       <<"M7 line "
+	       <<" M7 line "
 	       <<M7LineCounter
 	       <<std::endl; 
       
@@ -395,47 +484,189 @@ void FT2::Handle_M7_Entries(FT2 &FT2){
     
       //Resize FT2_Time class 
       FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,Current_FT2_Entries);
-      
+         
+  
       //Update FT2_Time class
-      FT2.Update_FT2_Time(FT2,Current_FT2_Entries,TimeBin);
-      
+      if(M7LineCounter==0){
+	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
+      }
+      else{ 
+	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2]; 
+      }
+
+      FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin;
+      std::cout<<Tstart <<" +"<<time<<std::endl;
+
+
       //Live Time set to zero!!!
       FT2.FT2_T.LiveTime[Current_FT2_Entries-1]=0;
       
-
-      
-      
-      //Resize ATT & ORB
-      FT2.ATT.Set_ATT_Size(FT2.ATT,Current_FT2_Entries);
-      FT2.ORB.Set_ORB_Size(FT2.ORB,Current_FT2_Entries);
-      
       NewTimeBin=0;
+      
     }
-    
-    
+    else{
+      FT2.FT2_T.Tstop[Current_FT2_Entries-1]=time; 
+    }
+ 
+    //SWAPPING
+    OldTimeBin=TimeBin; 
+    M7LineCounter++;
+    }
+  }
+  
+  M7F.close();
+ 
+  for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
+    printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
+  }
+
+}
+
+
+
+
+//Fill M7 Entries in M7 File
+void FT2::Fill_M7_Entries(FT2 &FT2){
+
+  double time,Tstart;
+  //int new_entry(1);
+  unsigned int M7LineCounter(0);
+  bool  NewEntry(false);
+  unsigned int FT2_Entries(0),Current_FT2_Entry(0),Old_FT2_Entry(0);
+
+  //File Handlign
+  std::string buf,comment; //buffer string
+  std::string line;
+  std::ifstream M7F(FT2.M7File.c_str());
+  
+
+  
+  //Resize ATT & ORB
+  FT2_Entries=Get_FT2_Entries(FT2);
+  FT2.ATT.Set_ATT_Size(FT2.ATT,FT2_Entries);
+  FT2.ORB.Set_ORB_Size(FT2.ORB,FT2_Entries);
+  
+
+  //Read M-7 File 
+  while (std::getline(M7F, line, '\n')) {
+    //A SIMPLE TOKENIZER
+    std::vector<std::string> tokens; // Create vector to hold our words
+    std::stringstream ss(line); // Insert the string into a stream  
+    while (ss >> buf)	tokens.push_back(buf);
+
+    //SKIP lines that start with # character
+    comment=line.substr(0,1);
+    if(comment.find( "#", 0) == std::string::npos ){
+
+
+
+    time=FT2.Get_M7_Time(tokens[3],tokens[4]);
+
+
+    if (M7LineCounter==0){
+      Tstart=time;
+    }
+
+
+
+    //FT2 Entry Index
+    Get_FT2_Entry_Index(FT2,time,Current_FT2_Entry);
+   
+    if(Current_FT2_Entry!=Old_FT2_Entry && M7LineCounter>0){
+      NewEntry=true;
+      std::cout<<"Time bin "
+	       <<Current_FT2_Entry 
+	       <<"Entry Id "
+	       <<std::setprecision(20)
+	       <<FT2.FT2_T.bin[Current_FT2_Entry]
+	       <<" FT2 Tstart "
+	       <<FT2.FT2_T.Tstart[Current_FT2_Entry]
+	       <<" FT2 Tstop "
+	       <<FT2.FT2_T.Tstop[Current_FT2_Entry]
+
+	       <<std::endl;
+    }    
+    //IF we are at the beginning of a new TimeBin or
+    //at the start UpadteSomeThing
+    if((M7LineCounter==0)||(NewEntry)){
+      NewEntry=false;
+      FT2.Clean_ATT_Quaternions(FT2.ATT,Current_FT2_Entry);
+      FT2.Clean_ORB(FT2.ORB,Current_FT2_Entry);
+    }
     
     if (tokens[2]=="ATT"){
-      FT2.Update_ATT_Quaternions(FT2.ATT,tokens,Current_FT2_Entries-1);
+      FT2.Update_ATT_Quaternions(FT2.ATT,tokens,Current_FT2_Entry);
     }
     if (tokens[2]=="ORB"){ 
-    FT2.Update_ORB(FT2.ORB,tokens,Current_FT2_Entries-1);
+      FT2.Update_ORB(FT2.ORB,tokens,Current_FT2_Entry);
     }
     
     
     //SWAPPING
-    OldTimeBin=TimeBin; 
+    Old_FT2_Entry=Current_FT2_Entry; 
     
     
     M7LineCounter++;
 
     }
   }
+  
+
 
   M7F.close();
+  
+  FT2.Average_M7_Entries(FT2);
+
+
 }
 
-void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){
 
+
+//Handle M7 Entries in M7 File
+void FT2::Average_M7_Entries(FT2 &FT2){
+
+  for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){ 
+    FT2.ATT.x[i]*=1.0/(double( FT2.ATT.entr[i]));
+    FT2.ATT.y[i]*=1.0/(double( FT2.ATT.entr[i]));
+    FT2.ATT.z[i]*=1.0/(double( FT2.ATT.entr[i]));
+    FT2.ATT.w[i]*=1.0/(double( FT2.ATT.entr[i]));
+    FT2.ATT.vx[i]*=1.0/(double( FT2.ATT.entr[i]));
+    FT2.ATT.vy[i]*=1.0/(double( FT2.ATT.entr[i]));
+    FT2.ATT.vz[i]*=1.0/(double( FT2.ATT.entr[i]));
+  }
+
+  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+    FT2.ORB.x[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.y[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.z[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.vx[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.vy[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.vz[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.CM[i]*=1.0/(double(FT2.ORB.entr[i]));
+    FT2.ORB.SAA[i]*=1.0/(double(FT2.ORB.entr[i]));
+  }
+}
+
+
+
+void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
+      
+  Att.entr[entry]=0;
+  Att.x[entry]=0;
+  Att.y[entry]=0;
+  Att.z[entry]=0;
+  Att.w[entry]=0;
+  Att.vx[entry]=0;
+  Att.vy[entry]=0;
+  Att.vz[entry]=0;
+    
+}
+
+
+
+
+
+void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){
       
   Att.entr[entry]++;
   Att.x[entry]+=atof(tokens[5].c_str());
@@ -445,14 +676,33 @@ void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &
   Att.vx[entry]+=atof(tokens[9].c_str());
   Att.vy[entry]+=atof(tokens[10].c_str());
   Att.vz[entry]+=atof(tokens[11].c_str());
-    
 }
 
 
 
 
-void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){
 
+
+
+void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
+  
+  Orb.entr[entry]=0;
+  Orb.x[entry]=0;
+  Orb.y[entry]=0;
+  Orb.z[entry]=0;
+  Orb.vx[entry]=0;
+  Orb.vy[entry]=0;
+  Orb.vz[entry]=0;
+  Orb.CM[entry]=0;
+  Orb.SAA[entry]=0;
+}
+
+
+
+
+
+
+void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){
   
   Orb.entr[entry]++;
   Orb.x[entry]+=atof(tokens[5].c_str());
