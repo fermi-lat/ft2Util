@@ -358,7 +358,6 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
   if (FT2.Get_OutOfRange(FT2)){
   std::cout<<"!!!Warning "
 	   <<"data out of any Bin time interval "  
-	   << l
 	   <<"time "
 	   <<std::setprecision(20)
 	   <<time
@@ -643,8 +642,6 @@ void FT2::Average_M7_Entries(FT2 &FT2){
     FT2.ORB.vx[i]*=1.0/(double(FT2.ORB.entr[i]));
     FT2.ORB.vy[i]*=1.0/(double(FT2.ORB.entr[i]));
     FT2.ORB.vz[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.CM[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.SAA[i]*=1.0/(double(FT2.ORB.entr[i]));
   }
 }
 
