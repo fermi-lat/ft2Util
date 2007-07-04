@@ -220,7 +220,7 @@ int main(int argc, char **argv){
  
   
 
-  Digi_nEvt=50000;
+  //Digi_nEvt=50000;
   
   //Set FT2.Digi_Time_Size
   FT2.DT.Set_DigiTime_Size(FT2.DT,FT2.Get_FT2_Entries(FT2));
@@ -238,9 +238,9 @@ int main(int argc, char **argv){
 
 
     //Simulating a Crash!!!
-    if(Digi_EvtId==403612){
-      Merit_i+=10000; 
-    } 
+    //if(Digi_EvtId==403612){
+    //  Merit_i+=10000; 
+    //} 
     
    
 
