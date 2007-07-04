@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Tue Jul  3 17:26:06 PDT 2007
+ft2Util/apps
+
+Modified Files:
+	main.cxx 
+Log Message:
+No more fixed bin, signficant changes in the code
+    *
+------------------------------------------------------------
 User: tramacer  Fri Jun 29 12:07:20 PDT 2007
 ft2Util/apps
 
