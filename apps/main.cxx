@@ -95,6 +95,9 @@ int main(int argc, char **argv){
   std::string DigiFile;
   std::string M7File;
   std::string FT2_txt_File;
+
+
+  printf("1\n");
   
   //--- Get File Names ---
   FT2.getFileNames(argc, argv);
@@ -220,7 +223,7 @@ int main(int argc, char **argv){
 
   //-----------  LOOP OVER DIGI & MERIT FILE -----------------------------
 
-  Digi_nEvt=50000;
+  //Digi_nEvt=50000;
   
   //Set FT2.Digi_Time_Size
   FT2.DT.Set_DigiTime_Size(FT2.DT,FT2.Get_FT2_Entries(FT2));
@@ -263,8 +266,8 @@ int main(int argc, char **argv){
     
     
     //ROOT TXT OUT FILE
-    if ( Digi_i % 10000 == 0 ) {
-      cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
+    if ( Digi_i % 1000 == 0 ) {
+      //      cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
       out<<(int)Digi_i<<" ";
       out<<Digi_EvtId<<" " ;
       out<<Merit_EvtId<<" " ;
@@ -323,12 +326,16 @@ int main(int argc, char **argv){
       printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
 	     FT2.DT.Tstart_LiveTime[Current_FT2_Entry-1],FT2.DT.Tstop_LiveTime[Current_FT2_Entry-1]);
       std::cout<<setprecision(20)
-	       <<"Tstart "
+	       <<"DT.Tstart "
 	       <<FT2.DT.Tstart[Current_FT2_Entry-1]
-	       <<" Tstop "
+	       <<" DT.Tstop "
 	       <<FT2.DT.Tstop[Current_FT2_Entry-1]
 	       <<" Delta T "
 	       <<FT2.DT.Tstop[Current_FT2_Entry-1] - FT2.DT.Tstart[Current_FT2_Entry-1]
+	       <<"\nFT.Tstart "
+	       <<FT2.FT2_T.Tstart[Current_FT2_Entry-1]
+	       <<" FT.Tstop "
+	       <<FT2.FT2_T.Tstop[Current_FT2_Entry-1]
 	       <<" Live Time "
 	       <<FT2.FT2_T.LiveTime[Current_FT2_Entry-1]
 	       <<" Dead Time "
@@ -347,7 +354,8 @@ int main(int argc, char **argv){
       first_bin=false;
 
       printf("New Entry %d\n",Current_FT2_Entry);
-      
+      cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
+
       //Set true update value
       FT2.DT.update[Current_FT2_Entry]=1;
       
@@ -380,20 +388,20 @@ int main(int argc, char **argv){
 	       <<std::endl
 	       <<std::endl;
     }
-    else{
-      //UPDATE TSTOP
-      FT2.DT.Tstop[Current_FT2_Entry]=DigiTime;
-      
-      //UPDATE LIVE TIME
-      LiveTime_Tstop = Current_LiveTime; 
-      //FT2.FT2_T.LiveTime[Current_FT2_Entry]=(LiveTime_Tstop -  LiveTime_Tstart)-DeadTime;
-      FT2.DT.Tstop_LiveTime[Current_FT2_Entry] = Current_LiveTime; 
-      
-      //check-up
-      LiveTime_Tstop=Current_LiveTime;
-      EvID_Tstop_Live=Digi_EvtId;
-    }
-     
+    
+    //UPDATE TSTOP
+    FT2.DT.Tstop[Current_FT2_Entry]=DigiTime;
+    
+    //UPDATE LIVE TIME
+    LiveTime_Tstop = Current_LiveTime; 
+    //FT2.FT2_T.LiveTime[Current_FT2_Entry]=(LiveTime_Tstop -  LiveTime_Tstart)-DeadTime;
+    FT2.DT.Tstop_LiveTime[Current_FT2_Entry] = Current_LiveTime; 
+    
+    //check-up
+    LiveTime_Tstop=Current_LiveTime;
+    EvID_Tstop_Live=Digi_EvtId;
+    
+    
     //--- Increase Merit Index only id the index is aligned with Digi one ----  
     if(Digi_EvtId==Merit_EvtId){
       Merit_i++; 
@@ -408,7 +416,62 @@ int main(int argc, char **argv){
     Last_Live_Time=Current_LiveTime;
   }
   //--------  END OF LOOPING DIGI FILE -------------------------------------------------
-    
+
+  //Print last Entry Values
+  printf("Old Entry %d\n",Current_FT2_Entry);
+  printf("Old Entry Results\n");
+  printf("DigiTime=%20.18e \n",DigiTime);
+  printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+	 FT2.DT.Tstart_LiveTime[Current_FT2_Entry],FT2.DT.Tstop_LiveTime[Current_FT2_Entry]);
+  std::cout<<setprecision(20)
+	   <<"DT.Tstart "
+	   <<FT2.DT.Tstart[Current_FT2_Entry]
+	   <<" DT.Tstop "
+	   <<FT2.DT.Tstop[Current_FT2_Entry]
+	   <<" Delta T "
+	   <<FT2.DT.Tstop[Current_FT2_Entry] - FT2.DT.Tstart[Current_FT2_Entry]
+	   <<"\nFT.Tstart "
+	   <<FT2.FT2_T.Tstart[Current_FT2_Entry]
+	   <<" FT.Tstop "
+	   <<FT2.FT2_T.Tstop[Current_FT2_Entry]
+	   <<" Live Time "
+	   <<FT2.FT2_T.LiveTime[Current_FT2_Entry]
+	   <<" Dead Time "
+	   <<FT2.DT.DeadTime[Current_FT2_Entry]
+	   <<endl
+	   <<"EvID_Tstart_Live "
+	   <<EvID_Tstart_Live
+	   <<" EvID_Tstop_Live "
+	   <<EvID_Tstop_Live	
+	   <<std::endl;
+
+
+
+
+  unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
+  
+  std::cout<<"======================================================"<<std::endl;
+  for(unsigned int i=0;i<FT2_ENTR;i++){
+    printf("Current Entry %d\n",i);
+    printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+	   FT2.DT.Tstart_LiveTime[i],FT2.DT.Tstop_LiveTime[i]);
+    std::cout<<setprecision(20)
+	     <<"Tstart "
+	     <<FT2.DT.Tstart[i]
+	     <<" Tstop "
+	     <<FT2.DT.Tstop[i]
+	     <<" Delta T "
+	     <<FT2.DT.Tstop[i] - FT2.DT.Tstart[i]
+	     <<" Live Time "
+	     <<FT2.FT2_T.LiveTime[i]
+	       <<" Dead Time "
+	     <<FT2.DT.DeadTime[i]
+	     <<"\n--------------------------------------------------------"
+	     <<std::endl;
+  }
+  std::cout<<"======================================================"<<std::endl;
+
+ 
   
   //----- Evaluate Live Time and tacking into account edge effects --------
   FT2.Evaluate_Live_Time(FT2);
@@ -416,7 +479,7 @@ int main(int argc, char **argv){
 
   //----------- WRITE FT2 TXT FILE -----------------------------------------------------
   FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime"<<endl;
-  unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
+  
 
   //check-up
   FT2_Live_Time=0;

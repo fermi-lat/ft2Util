@@ -152,7 +152,16 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
 	       <<std::endl;
       FT2.FT2_T.LiveTime[i]=
 	(FT2.DT.Tstop_LiveTime[i] -  FT2.DT.Tstart_LiveTime[i]) - FT2.DT.DeadTime[i]; 
-      std::cout<<"live "<<FT2.FT2_T.LiveTime[i]<<std::endl;;
+      std::cout<<"Tstart "
+	       <<FT2.FT2_T.Tstart[i]
+	       <<"\nTstop "
+	       <<FT2.FT2_T.Tstop[i]
+	       <<"\nTstart Live " 
+	       <<FT2.DT.Tstart_LiveTime[i]
+	       <<"\nTstop Live "
+	       <<FT2.DT.Tstop_LiveTime[i] 
+	       <<"\nlive "<<FT2.FT2_T.LiveTime[i]
+	       <<std::endl;;
     
     
       if(FT2.DT.update[i+1] && i<FT2_ENTR-1){
@@ -192,15 +201,7 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
     
   }
   
-  //double diff=0;
-  //for(unsigned int i=1;i<FT2_ENTR-1;i++){
- 
-  //    if(FT2.DT.update[i]){
-  //   printf("Entry %d \n",i);
-  //   diff+=FT2.DT.Tstart_LiveTime[i]-FT2.DT.Tstop_LiveTime[i-1];  
-  // }
-  // }
-  //printf("diff=%30.28e fraction_tot=%30.28e\n",diff,fraction_tot);
+  
 }
 //-------------------------------------------------------------
 
@@ -254,7 +255,7 @@ void FT2::Get_DigiFileLineNumber(FT2 &FT2,const std::string & infile){
 void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
   unsigned int Current_FT2_Entry,FT2_Entries;
 
- 
+  printf("---------------------------------------------------------\n");
   printf("Merge M7 with Digi entries\n");
 
   //add new entry
@@ -292,15 +293,18 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
 
   std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
   std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
+
   //SORTING
   // 
-  
+  printf("---------------------------------------------------------\n");
+
+  printf("---------------------------------------------------------\n");
   for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
      FT2.FT2_T.LiveTime[i]=0;
      FT2.FT2_T.bin[i]=i;
-     printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
+     printf("Entry Id=%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
   }
-  
+  printf("---------------------------------------------------------\n");
 }
 
 
@@ -434,33 +438,23 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       Tstart=time;
     }
 
-
+   
+ 
 
     //FT2 time bin Id
     TimeBin=FT2.Get_FT2_Time_Bin(time,Tstart);
     
-    //std::cout<<"TimeBin "
-    //	     <<TimeBin
-    //	     <<" OldTimeBin "
-    //	     <<OldTimeBin
-    //	     <<std::endl;
-    
-    //IF a new TimeBin has started and
-    //it is not the first!!!!!
-    //print information about the previously 
-    //completed TimeBin
+
     if(TimeBin!=OldTimeBin && M7LineCounter>0){
       printf("---------------------------------------------------------\n");
       NewTimeBin=1;
-      std::cout<<"New Time bin "
-	       <<Current_FT2_Entries
-	       <<" Time Id "
+      std::cout<<"Previous Entry Time Id "
 	       <<std::setprecision(20)
 	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
 	       <<" FT2 Tstart "
 	       <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
 	       <<" FT2 Tstop "
-	       <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
+ 	       <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
 	       <<std::endl;
     }
     
@@ -468,23 +462,16 @@ void FT2::Set_M7_Entries(FT2 &FT2){
     //at the start UpadteSomeThing
     if((M7LineCounter==0)||(NewTimeBin)){
       
-      
+
       
       //UPADTE THE NUMBER OF ENTRIES IN THE FT2 CLASS
       Current_FT2_Entries++;
       FT2.Update_FT2_Entries(FT2,Current_FT2_Entries);
-      std::cout<<"New Bin  "  
-	       <<" Current FT2 Entries "
-	       <<Current_FT2_Entries
-	       <<" M7 line "
-	       <<M7LineCounter
-	       <<std::endl; 
+
       
-      
-    
       //Resize FT2_Time class 
       FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,Current_FT2_Entries);
-         
+      FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin;
   
       //Update FT2_Time class
       if(M7LineCounter==0){
@@ -493,15 +480,25 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       else{ 
 	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2]; 
       }
-
-      FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin;
-      std::cout<<Tstart <<" +"<<time<<std::endl;
+      
+      
 
 
       //Live Time set to zero!!!
       FT2.FT2_T.LiveTime[Current_FT2_Entries-1]=0;
       
       NewTimeBin=0;
+
+        std::cout<<"New Entry, Current number of  FT2 Entries "
+	       <<Current_FT2_Entries
+	       <<" Current Entry Id"
+	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+		 <<" M7 line "
+	       <<M7LineCounter
+	       <<std::endl; 
+	std::cout<<Tstart <<" +"<<time<<std::endl;
+
+
       
     }
     else{
@@ -539,7 +536,9 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   std::string line;
   std::ifstream M7F(FT2.M7File.c_str());
   
-
+  printf("---------------------------------------------------------\n");
+  printf("----------- Fill M7 Entries from  M7 file -----------\n");
+ 
   
   //Resize ATT & ORB
   FT2_Entries=Get_FT2_Entries(FT2);
@@ -574,9 +573,9 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
    
     if(Current_FT2_Entry!=Old_FT2_Entry && M7LineCounter>0){
       NewEntry=true;
-      std::cout<<"Time bin "
+      std::cout<<"Current Entry "
 	       <<Current_FT2_Entry 
-	       <<"Entry Id "
+	       <<" Current Entry Id "
 	       <<std::setprecision(20)
 	       <<FT2.FT2_T.bin[Current_FT2_Entry]
 	       <<" FT2 Tstart "
@@ -616,7 +615,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   M7F.close();
   
   FT2.Average_M7_Entries(FT2);
-
+  printf("---------------------------------------------------------\n");
 
 }
 
