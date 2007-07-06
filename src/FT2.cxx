@@ -203,11 +203,11 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
   
   
 }
-//-------------------------------------------------------------
 
 
 
-//-------------------Files -------------------------
+
+//-------------------Get Files Names -------------------------
 void FT2::getFileNames(int iargc, char * argv[]) {
   if (iargc < 5) {
       std::cout << "usage: " 
@@ -227,6 +227,8 @@ void FT2::getFileNames(int iargc, char * argv[]) {
 
 
 
+
+//-----------------Line Number Counter-------------------------
 unsigned int  FT2::LineNumberCount(const std::string & infile){
   std::ifstream file(infile.c_str());
   //unsigned long Lines;
@@ -250,8 +252,7 @@ void FT2::Get_DigiFileLineNumber(FT2 &FT2,const std::string & infile){
  
 
  
-//------------------------------  FT2_CLASS FT2 --------------------------------------------
-//
+//------------------------------ Merge M7 and Digi Entries --------------------------------------------
 void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
   unsigned int Current_FT2_Entry,FT2_Entries;
 
@@ -310,7 +311,7 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
 
 
 
-//Update the private filed Entries
+//--------------  Update the private FT2  Entries ----------------------------
 void FT2::Update_FT2_Entries(FT2 &FT2, int i){
   FT2.Entries=i;
 }
@@ -335,17 +336,8 @@ bool FT2::Get_OutOfRange(FT2 &FT2){
 }
 
 
-//Update the fields of the FT2_Time Class
-//void FT2::Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries ,unsigned int TimeBin){
-  
-//  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Get_Tstart(TimeBin);
-//  FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Get_Tstop(TimeBin);
-//  FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin;
-//}
 
-
-
-
+//---------------Get FT2 Entry Index    ---------------------------------
 void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
   unsigned Entries ;
 
@@ -353,12 +345,18 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
 
   FT2.Set_OutOfRange_TRUE(FT2);
 
-  for(unsigned int l=0;l<Entries;l++){
-    if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
+  for(unsigned int l=0;l<Entries-1;l++){
+    if((time<FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
       Set_OutOfRange_FALSE(FT2);
       i=l;
     }  
   }
+  l=Entries-1;
+  if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
+    Set_OutOfRange_FALSE(FT2);
+      i=l;
+  }
+
   if (FT2.Get_OutOfRange(FT2)){
   std::cout<<"!!!Warning "
 	   <<"data out of any Bin time interval "  
@@ -373,6 +371,9 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
   }
 }
 
+
+
+//----------------------------------------------------------------------------
 int FT2::Get_FT2_Time_Bin(double time,double Tstart){
   unsigned int i;
   
@@ -389,7 +390,7 @@ int FT2::Get_FT2_Time_Bin(double time,double Tstart){
 
 
 
-//------------------------------- FT2_CLASS M-7 -------------------------------------------
+//-------------------------------Get M-7 Time  -------------------------------------------
 
 double  FT2::Get_M7_Time(const std::string &Time, const std::string &Frac_Time){
   double time ,f_time;
@@ -402,13 +403,14 @@ double  FT2::Get_M7_Time(const std::string &Time, const std::string &Frac_Time){
 }
 
 
-//----------------------------------------------------------------------------------------
+//--------------------------------Set Entries According to M7 file -----------------------
 void FT2::Set_M7_Entries(FT2 &FT2){
 
   double time,Tstart;
   //int new_entry(1);
   unsigned int M7LineCounter(0);
-  int  TimeBin, NewTimeBin(0),OldTimeBin(0);
+  int  TimeBin, NewTimeBin(0),OldTimeBin(0),MODE(0),OLD_MODE;
+  bool first_orb_entry(true);
   unsigned int Current_FT2_Entries(0);
   
   //File Handlign
@@ -429,22 +431,28 @@ void FT2::Set_M7_Entries(FT2 &FT2){
     comment=line.substr(0,1);
     if(comment.find( "#", 0) == std::string::npos ){
 
-
-
     time=FT2.Get_M7_Time(tokens[3],tokens[4]);
-
 
     if (M7LineCounter==0){
       Tstart=time;
     }
 
-   
- 
-
-    //FT2 time bin Id
+    //-------FT2 time bin Id-----------------
     TimeBin=FT2.Get_FT2_Time_Bin(time,Tstart);
+
+
+    //------------ Read MODE from ORB Entry ----------------------
+    if (tokens[2]=="ORB"){ 
+      MODE=atoi(tokens[11].c_str());
+      //std::cout<<"Mode "<<MODE<<"   OLD Mode "<<OLD_MODE<<"\n";
+      if(first_orb_entry){
+	first_orb_entry=false;
+	OLD_MODE=MODE;
+      }
+    }
     
 
+    //------------ Make a new Entry if Time Bin Changes ----------------------
     if(TimeBin!=OldTimeBin && M7LineCounter>0){
       printf("---------------------------------------------------------\n");
       NewTimeBin=1;
@@ -456,8 +464,32 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 	       <<" FT2 Tstop "
  	       <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
 	       <<std::endl;
+        
+     
+    } 
+    
+    
+    //------------ Make a new Entry if MODE Changes ----------------------
+    if (MODE!=OLD_MODE){
+      printf("---------------------------------------------------------\n");
+      NewTimeBin=1;
+      std::cout<<"New Entry due to Changed Mode form "
+	       <<OLD_MODE
+	       <<" to "
+	       <<MODE
+		<<"\n";
+      std::cout<<"Previous Entry Time Id "
+	       <<std::setprecision(20)
+	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+	       <<" FT2 Tstart "
+	       <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
+	       <<" FT2 Tstop "
+		<<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
+	       <<std::endl;
     }
     
+
+
     //IF we are at the beginning of a new TimeBin or
     //at the start UpadteSomeThing
     if((M7LineCounter==0)||(NewTimeBin)){
@@ -507,6 +539,8 @@ void FT2::Set_M7_Entries(FT2 &FT2){
  
     //SWAPPING
     OldTimeBin=TimeBin; 
+    OLD_MODE=MODE;
+    
     M7LineCounter++;
     }
   }
@@ -522,7 +556,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 
 
 
-//Fill M7 Entries in M7 File
+//--------------  Fill M7 Entries in M7 File ----------------------------------
 void FT2::Fill_M7_Entries(FT2 &FT2){
 
   double time,Tstart;
@@ -621,9 +655,8 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
 
 
 
-//Handle M7 Entries in M7 File
+//-------------- Average M7 File  Entries  within a FT2 time bin -----------------------
 void FT2::Average_M7_Entries(FT2 &FT2){
-
   for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){ 
     FT2.ATT.x[i]*=1.0/(double( FT2.ATT.entr[i]));
     FT2.ATT.y[i]*=1.0/(double( FT2.ATT.entr[i]));
@@ -633,7 +666,6 @@ void FT2::Average_M7_Entries(FT2 &FT2){
     FT2.ATT.vy[i]*=1.0/(double( FT2.ATT.entr[i]));
     FT2.ATT.vz[i]*=1.0/(double( FT2.ATT.entr[i]));
   }
-
   for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
     FT2.ORB.x[i]*=1.0/(double(FT2.ORB.entr[i]));
     FT2.ORB.y[i]*=1.0/(double(FT2.ORB.entr[i]));
@@ -645,9 +677,8 @@ void FT2::Average_M7_Entries(FT2 &FT2){
 }
 
 
-
-void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
-      
+//-------------- Update and clean M7 fields in the FT2 Entries -----------------------
+void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){      
   Att.entr[entry]=0;
   Att.x[entry]=0;
   Att.y[entry]=0;
@@ -659,12 +690,7 @@ void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
     
 }
 
-
-
-
-
-void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){
-      
+void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){     
   Att.entr[entry]++;
   Att.x[entry]+=atof(tokens[5].c_str());
   Att.y[entry]+=atof(tokens[6].c_str());
@@ -676,13 +702,7 @@ void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &
 }
 
 
-
-
-
-
-
-void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
-  
+void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){  
   Orb.entr[entry]=0;
   Orb.x[entry]=0;
   Orb.y[entry]=0;
@@ -695,12 +715,7 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
 }
 
 
-
-
-
-
-void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){
-  
+void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){  
   Orb.entr[entry]++;
   Orb.x[entry]+=atof(tokens[5].c_str());
   Orb.y[entry]+=atof(tokens[6].c_str());
@@ -708,16 +723,20 @@ void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned
   Orb.vx[entry]+=atof(tokens[9].c_str());
   Orb.vy[entry]+=atof(tokens[9].c_str());
   Orb.vz[entry]+=atof(tokens[10].c_str());
-  Orb.CM[entry]+=atoi(tokens[11].c_str());
-  Orb.SAA[entry]+=atoi(tokens[12].c_str());
+
+  //These Entries are updated only the first time
+  if (Orb.entr[entry]==1){
+    Orb.CM[entry]+=atoi(tokens[11].c_str());
+    Orb.SAA[entry]+=atoi(tokens[12].c_str());
+  }
 
 }
 
 
 
 
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
+
+
 
 
 
