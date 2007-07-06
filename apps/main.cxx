@@ -175,7 +175,13 @@ int main(int argc, char **argv){
   //----------------------------------------------------------
   //Warning if Digi and Merit Entries are not the same
   if(Merit_nEvt != Digi_nEvt  ){
-    std::cout<<"Different numeber of entries in Digi and Merit File !!!!!!!"<<std::endl;
+    std::cout<<"Different numeber of entries in Digi and Merit File !!!!!!!\n"
+	     <<"Digi Entries "
+	     <<Digi_nEvt
+	     <<"Merit Entries "
+	     <<Merit_nEvt
+	     <<std::endl;
+    
   }
   //----------------------------------------------------------
 
