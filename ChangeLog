@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Fri Jul  6 14:34:15 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FT2.cxx 
+Log Message:
+Modified to split Entries when the MODE in the M7 changes
+    *
+------------------------------------------------------------
+User: tramacer  Fri Jul  6 14:34:15 PDT 2007
 ft2Util/apps
 
 Modified Files:
