@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+TAG
+Tag name: v0r1p2, operation: add
+Package: ft2Util
+User: tramacer  Fri Jul  6 14:34:41 2007
+Files:
+  ft2Util/ChangeLog  1.26
+  ft2Util/apps/main.cxx  1.8
+  ft2Util/cmt/requirements  1.4
+  ft2Util/doc/release.notes  1.2
+  ft2Util/ft2Util/FT2_Time.hpp  1.3
+  ft2Util/src/FT2.cxx  1.8
+
+    *
+------------------------------------------------------------
 User: tramacer  Fri Jul  6 14:34:15 PDT 2007
 ft2Util/src
 
