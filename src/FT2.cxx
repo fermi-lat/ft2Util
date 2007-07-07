@@ -419,7 +419,8 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   std::ifstream M7F(FT2.M7File.c_str());
  
   printf("----------- Set FT2 Entries from M7 file -----------\n");
- 
+  
+  
   //Read M-7 File 
   while (std::getline(M7F, line, '\n')) {
     //A SIMPLE TOKENIZER
@@ -439,7 +440,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 
     //-------FT2 time bin Id-----------------
     TimeBin=FT2.Get_FT2_Time_Bin(time,Tstart);
-
+    
 
     //------------ Read MODE from ORB Entry ----------------------
     if (tokens[2]=="ORB"){ 
@@ -448,6 +449,25 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       if(first_orb_entry){
 	first_orb_entry=false;
 	OLD_MODE=MODE;
+      }
+
+      //------------ Make a new Entry if MODE Changes ----------------------
+      if (MODE!=OLD_MODE){
+	printf("---------------------------------------------------------\n");
+	NewTimeBin=1;
+	std::cout<<"New Entry due to Changed Mode form "
+		 <<OLD_MODE
+		 <<" to "
+		 <<MODE
+		 <<"\n";
+	std::cout<<"Previous Entry Time Id "
+		 <<std::setprecision(20)
+		 <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+		 <<" FT2 Tstart "
+		 <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
+		 <<" FT2 Tstop "
+		 <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
+		 <<std::endl;
       }
     }
     
@@ -464,29 +484,10 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 	       <<" FT2 Tstop "
  	       <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
 	       <<std::endl;
-        
-     
     } 
     
     
-    //------------ Make a new Entry if MODE Changes ----------------------
-    if (MODE!=OLD_MODE){
-      printf("---------------------------------------------------------\n");
-      NewTimeBin=1;
-      std::cout<<"New Entry due to Changed Mode form "
-	       <<OLD_MODE
-	       <<" to "
-	       <<MODE
-		<<"\n";
-      std::cout<<"Previous Entry Time Id "
-	       <<std::setprecision(20)
-	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
-	       <<" FT2 Tstart "
-	       <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
-	       <<" FT2 Tstop "
-		<<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
-	       <<std::endl;
-    }
+   
     
 
 
@@ -541,6 +542,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
     OldTimeBin=TimeBin; 
     OLD_MODE=MODE;
     
+    
     M7LineCounter++;
     }
   }
@@ -550,7 +552,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   //for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
   //  printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
   //}
-
+  
 }
 
 
@@ -657,7 +659,9 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
 
 //-------------- Average M7 File  Entries  within a FT2 time bin -----------------------
 void FT2::Average_M7_Entries(FT2 &FT2){
+  
   for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){ 
+    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
     FT2.ATT.x[i]*=1.0/(double( FT2.ATT.entr[i]));
     FT2.ATT.y[i]*=1.0/(double( FT2.ATT.entr[i]));
     FT2.ATT.z[i]*=1.0/(double( FT2.ATT.entr[i]));
@@ -666,7 +670,15 @@ void FT2::Average_M7_Entries(FT2 &FT2){
     FT2.ATT.vy[i]*=1.0/(double( FT2.ATT.entr[i]));
     FT2.ATT.vz[i]*=1.0/(double( FT2.ATT.entr[i]));
   }
+
   for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+    std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+
+    if( FT2.ORB.entr.size()==0){
+      //Make interpolation
+      //FT2.interpolate(FT2.ORB);
+    }
+    
     FT2.ORB.x[i]*=1.0/(double(FT2.ORB.entr[i]));
     FT2.ORB.y[i]*=1.0/(double(FT2.ORB.entr[i]));
     FT2.ORB.z[i]*=1.0/(double(FT2.ORB.entr[i]));
