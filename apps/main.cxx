@@ -55,7 +55,7 @@ int main(int argc, char **argv){
   ULong64_t previousDeadTime;
   ULong64_t deltaDeadTime;
   char number_string[100];
-  //--------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------
   
   //-------------------  Check-up variables ---------------------------------------
   double First_Live_Time, Last_Live_Time;
@@ -66,7 +66,7 @@ int main(int argc, char **argv){
   //-------------------------------------------------------------------------------
 
 
-  //------------------------ FT2 DECLARATIONS ---------------------------------
+  //------------------------ FT2 DECLARATIONS ------------------------------------- 
   //Declarations of variable used for the Digi File and Live Time
   //unsigned int DigiLineCounter(0), M7LineCounter(0);
   double DigiTime, Current_LiveTime,Old_LiveTime, LiveTime_Tstart, LiveTime_Tstop;
@@ -89,7 +89,7 @@ int main(int argc, char **argv){
   //--------------------------------
 
 
-  //----------Operations for file I/O ------------------------------------------------
+  //----------Operations for file I/O ------------------------------------------
   //--- strings for files ---
   std::string MeritFile;
   std::string DigiFile;
@@ -120,7 +120,7 @@ int main(int argc, char **argv){
 
 
   //-------- WORK ON  M7 FILE ---------------------------------------------------------
-  out<<"M-7 file"<<endl;
+  std::cout<<"M-7 file"<<std::endl;
   //Read M-7 File and Set FT2 Entries
   FT2.Set_M7_Entries(FT2); 
   std::cout<<"======================================================"<<std::endl;
@@ -156,8 +156,8 @@ int main(int argc, char **argv){
 
 
 
-  //----------------------------------------------------------
-  //---------------- ROOT Start TTree Merit ------------------
+  //---------------------------------------------------------
+  //---------------- ROOT Start TTree Merit -----------------
   TFile *fMerit=new TFile(FT2.MeritFile.c_str());
   TTree *MT= (TTree*)fMerit->Get("MeritTuple");
   //--- ROOT Disable all branches MERIT ---
@@ -227,7 +227,7 @@ int main(int argc, char **argv){
   
 
 
-  //-----------  LOOP OVER DIGI & MERIT FILE -----------------------------
+  //-----------  LOOP OVER DIGI & MERIT FILE ---------------------------
 
   //Digi_nEvt=50000;
   
@@ -506,31 +506,31 @@ int main(int argc, char **argv){
 	<<","
 	<<FT2.ORB.z[i]
 	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
-	<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
+      //<<0
+      //<<","
 	<<FT2.ORB.SAA[i]
 	<<","
-	<<0
-	<<","
-	<<0
+      //<<0
+      //<<","
+      //<<0
 	<<","
 	<<FT2.ORB.CM[i]
 	<<","
