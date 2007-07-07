@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Fri Jul  6 17:16:15 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FT2.cxx 
+Log Message:
+FT2::Average_M7_Entries method has to deal with very narrow entries without ORB values, so we need to interpolate
+    *
+------------------------------------------------------------
+User: tramacer  Fri Jul  6 17:16:15 PDT 2007
 ft2Util/apps
 
 Modified Files:
