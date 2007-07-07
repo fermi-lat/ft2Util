@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Jul  6 17:16:15 PDT 2007
+ft2Util/apps
+
+Modified Files:
+	main.cxx 
+Log Message:
+FT2::Average_M7_Entries method has to deal with very narrow entries without ORB values, so we need to interpolate
+    *
+------------------------------------------------------------
 TAG
 Tag name: v0r1p2, operation: add
 Package: ft2Util
