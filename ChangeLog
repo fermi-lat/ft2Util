@@ -2,6 +2,20 @@
 TAG
 Tag name: v1r1p1, operation: add
 Package: ft2Util
+User: tramacer  Mon Aug 20 13:40:09 2007
+Files:
+  ft2Util/ChangeLog  1.42
+  ft2Util/apps/main.cxx  1.10
+  ft2Util/cmt/requirements  1.4
+  ft2Util/doc/release.notes  1.2
+  ft2Util/ft2Util/FT2_Time.hpp  1.3
+  ft2Util/src/FT2.cxx  1.9
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: v1r1p1, operation: add
+Package: ft2Util
 User: tramacer  Mon Aug 20 13:39:59 2007
 Files:
   ft2Util/ChangeLog  1.41
