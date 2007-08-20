@@ -9,7 +9,7 @@
 #ifndef __FT2_Time_Class__
 #define __FT2_Time_Class__
 
-
+const double FT2_BIN_WIDTH=1.0;
 
 //This class handles some time fields
 //for the FT2 file, all the time here refers
@@ -23,6 +23,19 @@ class FT2_Time {
   double FT2_Time::Get_Tstart( unsigned int  timebin );
   double FT2_Time::Get_Tstop( unsigned int  timebin );
 };
+
+
+class FT2_SpaceCraft {
+ public:
+  std::vector<double> RA_SCX,RA_SCZ,DEC_SCX,DEC_SCZ;
+  std::vector<double> RA_ZENITH,DEC_ZENITH;
+  std::vector<double> LAT_GEO,LON_GEO,RAD_GEO;
+  std::vector<double> B_MCILWAIN,L_MCILWAIN,GEOMAG_LAT;
+  FT2_SpaceCraft();
+
+  void Set_FT2SC_Size(FT2_SpaceCraft &FT2_SC,unsigned int size);
+};
+
 
 
 //This Class stores information about
@@ -44,6 +57,8 @@ class ATTITUDE{
  public:
   ATTITUDE();
   void Set_ATT_Size(ATTITUDE &Att, unsigned int size);
+  void Print_ATT_Entries(ATTITUDE &ATT);
+  std::vector<double> Tstart;
   std::vector<double> x,y,z,w,vx,vy,vz;
   std::vector<int>  entr;
 };
@@ -54,7 +69,9 @@ class ATTITUDE{
 class ORBIT{
 public:
   ORBIT();
-  void Set_ORB_Size(ORBIT &Orb,unsigned int size);
+  void Set_ORB_Size(ORBIT &ORB,unsigned int size);
+  void Print_ORB_Entries(ORBIT &ORB);
+  std::vector<double> Tstart;  
   std::vector<double> x,y,z,vx,vy,vz;
   std::vector<int>  entr,CM,SAA; 
 };
@@ -73,11 +90,13 @@ public:
   std::string DigiFile;
   std::string M7File;
   std::string FT2_txt_File;
+  std::string FT2_fits_File;
   
   DigiTime DT;
   ATTITUDE ATT;
   ORBIT ORB;
   FT2_Time FT2_T;
+  FT2_SpaceCraft FT2_SC;
 
   //File Names 
   void getFileNames(int iargc, char * argv[]);
@@ -94,6 +113,7 @@ public:
   void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, unsigned int entry);
   void Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry);
   void Clean_ORB(ORBIT &Orb, unsigned int entry);
+  void Interp_ORB_Entries(FT2 &FT2);
   unsigned int M7_Entries;
  
   //FT2_Time
@@ -123,6 +143,14 @@ public:
   void Evaluate_Live_Time(FT2 &FT2);
  
 
+
+  //FT2_SpaceCraft
+  void Fill_SC_Entries(FT2 &FT2);
+
+
+  
+  //Fits 
+  void WriteFitsFile(FT2 &FT2);
   
 private:
   bool OutOfRange;

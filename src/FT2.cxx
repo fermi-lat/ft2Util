@@ -81,17 +81,42 @@ ATTITUDE::ATTITUDE()
 {
 }
 
-void ATTITUDE::Set_ATT_Size(ATTITUDE &Att, unsigned int size){
-  Att.x.resize(size);
-  Att.y.resize(size);
-  Att.z.resize(size);
-  Att.w.resize(size);
-  Att.vx.resize(size);
-  Att.vy.resize(size);
-  Att.vz.resize(size);
-  Att.entr.resize(size);
+void ATTITUDE::Set_ATT_Size(ATTITUDE &ATT, unsigned int size){
+  ATT.Tstart.resize(size);
+  ATT.x.resize(size);
+  ATT.y.resize(size);
+  ATT.z.resize(size);
+  ATT.w.resize(size);
+  ATT.vx.resize(size);
+  ATT.vy.resize(size);
+  ATT.vz.resize(size);
+  ATT.entr.resize(size);
 }
 
+void ATTITUDE::Print_ATT_Entries(ATTITUDE &ATT){
+  std::cout<<"ATT elements --- "<<"\n";
+for (unsigned int i = 0; i < ATT.entr.size(); ++i){ 
+    std::cout
+      << i
+      <<" "
+      <<ATT.Tstart[i]
+      <<" "
+      << ATT.x[i]
+      <<" "
+      << ATT.y[i]
+      <<" " 
+      << ATT.z[i]
+      <<" "
+      << ATT.w[i]
+      <<" "
+      << ATT.vx[i]
+      <<" "
+      << ATT.vy[i]
+      <<" "
+      << ATT.vz[i]
+      <<"\n";
+  }
+}
 
 
 
@@ -107,18 +132,50 @@ void ATTITUDE::Set_ATT_Size(ATTITUDE &Att, unsigned int size){
 ORBIT::ORBIT()
 {
 }
-void ORBIT::Set_ORB_Size(ORBIT &Orb, unsigned int size){
-  Orb.x.resize(size);
-  Orb.y.resize(size);
-  Orb.z.resize(size);
-  Orb.vx.resize(size);
-  Orb.vy.resize(size);
-  Orb.vz.resize(size);
-  Orb.CM.resize(size);
-  Orb.SAA.resize(size);
-  Orb.entr.resize(size);
+void ORBIT::Set_ORB_Size(ORBIT &ORB, unsigned int size){
+  ORB.Tstart.resize(size);
+  ORB.x.resize(size);
+  ORB.y.resize(size);
+  ORB.z.resize(size);
+  ORB.vx.resize(size);
+  ORB.vy.resize(size);
+  ORB.vz.resize(size);
+  ORB.CM.resize(size);
+  ORB.SAA.resize(size);
+  ORB.entr.resize(size);
 }
 
+
+
+
+
+void ORBIT::Print_ORB_Entries(ORBIT &ORB){
+  std::cout<<"ORB elements  "<<"\n";
+  std::cout<<"Ts x y z vx vy vz CM SAA \n";
+for (unsigned int i = 0; i < ORB.entr.size(); ++i){ 
+    std::cout
+      << i
+      <<" "
+      << ORB.Tstart[i]
+      <<" "
+      << ORB.x[i]
+      <<" "
+      << ORB.y[i]
+      <<" " 
+      << ORB.z[i]
+      <<" "
+      << ORB.vx[i]
+      <<" "
+      << ORB.vy[i]
+      <<" "
+      << ORB.vz[i]
+       <<" "
+      << ORB.CM[i]
+      <<" "
+      << ORB.SAA[i]
+      <<"\n";
+  }
+}
 
 
 
@@ -215,6 +272,7 @@ void FT2::getFileNames(int iargc, char * argv[]) {
 	        << "<MeritFile> " 
 		<< "<M7File> " 
 		<< "<FT2_txt out file> "
+		<< "<FT2_fits_File> "
 		<< std::endl;
       std::exit(0);
    } else {
@@ -222,6 +280,7 @@ void FT2::getFileNames(int iargc, char * argv[]) {
       MeritFile = std::string(argv[2]);
       M7File = std::string(argv[3]);     
       FT2_txt_File = std::string(argv[4]);
+      FT2_fits_File= std::string(argv[5]);
    }
 }
 
@@ -279,7 +338,7 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
  
 
   //add new entry
-  printf("FT2 entris %d \n",Get_FT2_Entries(FT2));
+  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
   FT2.Get_FT2_Entry_Index(FT2,Tstop_Run,Current_FT2_Entry);
   printf("Entry index=%d \n",Current_FT2_Entry);
   FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
@@ -377,7 +436,7 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
 int FT2::Get_FT2_Time_Bin(double time,double Tstart){
   unsigned int i;
   
-  i=int((time-Tstart)/30.0);
+  i=int((time-Tstart)/FT2_BIN_WIDTH);
   //std::cout<<"bin "
   //    <<i
   //    <<std::endl;
@@ -627,7 +686,9 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
       NewEntry=false;
       FT2.Clean_ATT_Quaternions(FT2.ATT,Current_FT2_Entry);
       FT2.Clean_ORB(FT2.ORB,Current_FT2_Entry);
+    
     }
+    
     
     if (tokens[2]=="ATT"){
       FT2.Update_ATT_Quaternions(FT2.ATT,tokens,Current_FT2_Entry);
@@ -649,50 +710,78 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
 
 
   M7F.close();
-  
-  FT2.Average_M7_Entries(FT2);
+ 
+  //!!!!!!!!!!! WE DO NOT NEED ANYMORE THIS METHOD
+  //BECAUSE THE FT2 TEMPLATE REQUIRES VALUE AT 
+  //THE BEGINNING OF THE TIME BIN !!!!!!!!!!!!!!!
+  //FT2.Average_M7_Entries(FT2);
+  FT2.Interp_ORB_Entries(FT2);
   printf("---------------------------------------------------------\n");
 
 }
 
-
-
-//-------------- Average M7 File  Entries  within a FT2 time bin -----------------------
-void FT2::Average_M7_Entries(FT2 &FT2){
+//-------------Interplates ORB if entr=0------------------
+void FT2::Interp_ORB_Entries(FT2 &FT2){
+  double deltat ;
   
-  for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){ 
-    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-    FT2.ATT.x[i]*=1.0/(double( FT2.ATT.entr[i]));
-    FT2.ATT.y[i]*=1.0/(double( FT2.ATT.entr[i]));
-    FT2.ATT.z[i]*=1.0/(double( FT2.ATT.entr[i]));
-    FT2.ATT.w[i]*=1.0/(double( FT2.ATT.entr[i]));
-    FT2.ATT.vx[i]*=1.0/(double( FT2.ATT.entr[i]));
-    FT2.ATT.vy[i]*=1.0/(double( FT2.ATT.entr[i]));
-    FT2.ATT.vz[i]*=1.0/(double( FT2.ATT.entr[i]));
-  }
-
-  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+ for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
     std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+    
+    if(FT2.ORB.entr[i]==0 && i>0){
+      deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
+      std::cout<<"deltat"<<deltat<<"\n";
+      FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+      FT2.ORB.x[i]=ORB.x[i-1]+ORB.vx[i-1]*deltat;
+      FT2.ORB.y[i]=ORB.y[i-1]+ORB.vy[i-1]*deltat;
+      FT2.ORB.z[i]=ORB.z[i-1]+ORB.vz[i-1]*deltat;
+      FT2.ORB.CM[i]= ORB.CM[i-1];
+      FT2.ORB.SAA[i]=ORB.SAA[i-1];
 
-    if( FT2.ORB.entr.size()==0){
-      //Make interpolation
-      //FT2.interpolate(FT2.ORB);
     }
     
-    FT2.ORB.x[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.y[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.z[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.vx[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.vy[i]*=1.0/(double(FT2.ORB.entr[i]));
-    FT2.ORB.vz[i]*=1.0/(double(FT2.ORB.entr[i]));
-  }
+ }
+ 
 }
+
+//-------------- Average M7 File  Entries  within a FT2 time bin -----------------------
+//!!!!!!!!!!! WE DO NOT NEED ANYMORE THIS METHOD
+//BECAUSE THE FT2 TEMPLATE REQUIRES VALUE AT 
+//THE BEGINNING OF THE TIME BIN !!!!!!!!!!!!!!!
+//void FT2::Average_M7_Entries(FT2 &FT2){
+//  
+//  for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){ 
+//    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
+//    FT2.ATT.x[i]*=1.0/(double( FT2.ATT.entr[i]));
+//    FT2.ATT.y[i]*=1.0/(double( FT2.ATT.entr[i]));
+//    FT2.ATT.z[i]*=1.0/(double( FT2.ATT.entr[i]));
+//    FT2.ATT.w[i]*=1.0/(double( FT2.ATT.entr[i]));
+//    FT2.ATT.vx[i]*=1.0/(double( FT2.ATT.entr[i]));
+//    FT2.ATT.vy[i]*=1.0/(double( FT2.ATT.entr[i]));
+//    FT2.ATT.vz[i]*=1.0/(double( FT2.ATT.entr[i]));
+//  }
+//
+//  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+//   std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+//
+//    if( FT2.ORB.entr.size()==0){
+//      //!!!!!!!!!!!Make interpolation
+//     //!!!!!!!!!!!FT2.interpolate(FT2.ORB);
+//  }
+//  
+// FT2.ORB.x[i]*=1.0/(double(FT2.ORB.entr[i]));
+// FT2.ORB.y[i]*=1.0/(double(FT2.ORB.entr[i]));
+// FT2.ORB.z[i]*=1.0/(double(FT2.ORB.entr[i]));
+// FT2.ORB.vx[i]*=1.0/(double(FT2.ORB.entr[i]));
+// FT2.ORB.vy[i]*=1.0/(double(FT2.ORB.entr[i]));
+// FT2.ORB.vz[i]*=1.0/(double(FT2.ORB.entr[i]));
+//  }
+//}
 
 
 //-------------- Update and clean M7 fields in the FT2 Entries -----------------------
 void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){      
   Att.entr[entry]=0;
-  Att.x[entry]=0;
+  Att.Tstart[entry]=0;
   Att.y[entry]=0;
   Att.z[entry]=0;
   Att.w[entry]=0;
@@ -704,18 +793,21 @@ void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
 
 void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){     
   Att.entr[entry]++;
-  Att.x[entry]+=atof(tokens[5].c_str());
-  Att.y[entry]+=atof(tokens[6].c_str());
-  Att.z[entry]+=atof(tokens[7].c_str());
-  Att.w[entry]+=atof(tokens[8].c_str());
-  Att.vx[entry]+=atof(tokens[9].c_str());
-  Att.vy[entry]+=atof(tokens[10].c_str());
-  Att.vz[entry]+=atof(tokens[11].c_str());
+  if( Att.entr[entry]==1){
+    Att.Tstart[entry]=FT2::Get_M7_Time(tokens[3],tokens[4]);
+    Att.x[entry]=atof(tokens[5].c_str());
+    Att.y[entry]=atof(tokens[6].c_str());
+    Att.z[entry]=atof(tokens[7].c_str());
+    Att.w[entry]=atof(tokens[8].c_str());
+    Att.vx[entry]=atof(tokens[9].c_str());
+    Att.vy[entry]=atof(tokens[10].c_str());
+    Att.vz[entry]=atof(tokens[11].c_str());
+  }
 }
-
 
 void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){  
   Orb.entr[entry]=0;
+  Orb.Tstart[entry]=0;
   Orb.x[entry]=0;
   Orb.y[entry]=0;
   Orb.z[entry]=0;
@@ -729,17 +821,17 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
 
 void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){  
   Orb.entr[entry]++;
-  Orb.x[entry]+=atof(tokens[5].c_str());
-  Orb.y[entry]+=atof(tokens[6].c_str());
-  Orb.z[entry]+=atof(tokens[7].c_str());
-  Orb.vx[entry]+=atof(tokens[9].c_str());
-  Orb.vy[entry]+=atof(tokens[9].c_str());
-  Orb.vz[entry]+=atof(tokens[10].c_str());
-
-  //These Entries are updated only the first time
   if (Orb.entr[entry]==1){
-    Orb.CM[entry]+=atoi(tokens[11].c_str());
-    Orb.SAA[entry]+=atoi(tokens[12].c_str());
+    printf("--\n");
+    Orb.Tstart[entry]=FT2::Get_M7_Time(tokens[3],tokens[4]);
+    Orb.x[entry]=atof(tokens[5].c_str());
+    Orb.y[entry]=atof(tokens[6].c_str());
+    Orb.z[entry]=atof(tokens[7].c_str());
+    Orb.vx[entry]=atof(tokens[8].c_str());
+    Orb.vy[entry]=atof(tokens[9].c_str());
+    Orb.vz[entry]=atof(tokens[10].c_str());
+    Orb.CM[entry]=atoi(tokens[11].c_str());
+    Orb.SAA[entry]=atoi(tokens[12].c_str());
   }
 
 }
