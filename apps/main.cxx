@@ -91,11 +91,11 @@ int main(int argc, char **argv){
 
   //----------Operations for file I/O ------------------------------------------
   //--- strings for files ---
-  std::string MeritFile;
-  std::string DigiFile;
-  std::string M7File;
-  std::string FT2_txt_File;
-
+  //std::string MeritFile;
+  //std::string DigiFile;
+  //std::string M7File;
+  //std::string FT2_txt_File;
+  //std::string FT2_fits_File;
 
   printf("1\n");
   
@@ -109,7 +109,10 @@ int main(int argc, char **argv){
 	   <<"M7 File "
 	   <<FT2.M7File<<std::endl
 	   <<"OUT FILE"
-	   <<FT2.FT2_txt_File<<std::endl;
+	   <<FT2.FT2_txt_File
+	   <<" FITS FILE"
+	   <<FT2.FT2_fits_File
+	   <<std::endl;
   
 
   std::ofstream FT2F(FT2.FT2_txt_File.c_str());
@@ -217,8 +220,16 @@ int main(int argc, char **argv){
  
   //-------- Fill the M7 Entries ---------------------------------------
   FT2.Fill_M7_Entries(FT2);
+  FT2.ATT.Print_ATT_Entries(FT2.ATT);
+  FT2.ORB.Print_ORB_Entries(FT2.ORB);
   //--------------------------------------------------------------------
  
+
+  //-------- Fill the SC Entries ---------------------------------------
+  FT2.Fill_SC_Entries(FT2);
+  //--------------------------------------------------------------------
+
+
   //Digi File Line Numbers
   std::cout<<"DigiFile has "<<   Digi_nEvt <<" events" <<std::endl;
   
@@ -229,7 +240,7 @@ int main(int argc, char **argv){
 
   //-----------  LOOP OVER DIGI & MERIT FILE ---------------------------
 
-  //Digi_nEvt=50000;
+  Digi_nEvt=50000;
   
   //Set FT2.Digi_Time_Size
   FT2.DT.Set_DigiTime_Size(FT2.DT,FT2.Get_FT2_Entries(FT2));
@@ -495,10 +506,14 @@ int main(int argc, char **argv){
     FT2F<<FT2.FT2_T.bin[i]
 	<<","
 	<<setprecision(20)
-	<<scientific
+      //<<scientific
 	<<FT2.FT2_T.Tstart[i]
 	<<","
 	<<FT2.FT2_T.Tstop[i]
+	<<","
+	<<FT2.ATT.Tstart[i]
+	<<","
+	<<FT2.ORB.Tstart[i]
 	<<","
 	<<FT2.ORB.x[i]
 	<<","
@@ -506,31 +521,31 @@ int main(int argc, char **argv){
 	<<","
 	<<FT2.ORB.z[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.LAT_GEO[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.LAT_GEO[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.LAT_GEO[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.RA_ZENITH[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.DEC_ZENITH[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.B_MCILWAIN[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.L_MCILWAIN[i]
 	<<","
-	<<0
-	<<","
-	<<0
-	<<","
-	<<0
+	<<FT2.FT2_SC.GEOMAG_LAT[i]
 	<<","
 	<<FT2.ORB.SAA[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.RA_SCZ[i]
 	<<","
-	<<0
+	<<FT2.FT2_SC.DEC_SCZ[i]
+	<<","
+	<<FT2.FT2_SC.RA_SCX[i]
+	<<","
+	<<FT2.FT2_SC.DEC_SCX[i]
 	<<","
 	<<FT2.ORB.CM[i]
 	<<","
@@ -566,6 +581,9 @@ int main(int argc, char **argv){
       <<"Total_Dead_Time "
       <<Total_Dead_Time
       <<endl;  
+  
+
+  FT2.WriteFitsFile(FT2);
   return(0);
 }
 
