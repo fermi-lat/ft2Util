@@ -100,9 +100,9 @@ int main(int argc, char **argv){
   printf("1\n");
   
   //--- Get File Names ---
-  FT2.getFileNames(argc, argv);
+  FT2.getFileNames(argc, argv, FT2);
   
-  std::cout<<"Digi File "
+  std::cout<<"Digi File " 
 	   <<FT2.DigiFile<<std::endl
 	   <<"MeritFile"
 	   <<FT2.MeritFile<<std::endl
@@ -240,7 +240,7 @@ int main(int argc, char **argv){
 
   //-----------  LOOP OVER DIGI & MERIT FILE ---------------------------
 
-  Digi_nEvt=50000;
+  //Digi_nEvt=50000;
   
   //Set FT2.Digi_Time_Size
   FT2.DT.Set_DigiTime_Size(FT2.DT,FT2.Get_FT2_Entries(FT2));
