@@ -99,7 +99,7 @@ public:
   FT2_SpaceCraft FT2_SC;
 
   //File Names 
-  void getFileNames(int iargc, char * argv[]);
+  void getFileNames(int iargc, char * argv[], FT2 &FT2);
   unsigned int LineNumberCount(const std::string & infile); 
   void Get_DigiFileLineNumber(FT2 &FT2, const std::string & infile );
  
