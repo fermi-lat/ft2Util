@@ -114,6 +114,7 @@ public:
   void Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry);
   void Clean_ORB(ORBIT &Orb, unsigned int entry);
   void Interp_ORB_Entries(FT2 &FT2);
+  void Interp_ATT_Entries(FT2 &FT2);
   unsigned int M7_Entries;
  
   //FT2_Time
