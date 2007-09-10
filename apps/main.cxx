@@ -97,7 +97,7 @@ int main(int argc, char **argv){
   //std::string FT2_txt_File;
   //std::string FT2_fits_File;
 
-  printf("1\n");
+  printf("v1r1p3\n");
   
   //--- Get File Names ---
   FT2.getFileNames(argc, argv, FT2);

@@ -432,10 +432,14 @@ bool FT2::Get_OutOfRange(FT2 &FT2){
 void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
   unsigned Entries ;
 
+  //FT2 entries Number
   Entries=Get_FT2_Entries(FT2);
+  
 
+  //Set true the out of range value
   FT2.Set_OutOfRange_TRUE(FT2);
 
+  //Look for the Entry index
   for(unsigned int l=0;l<Entries-1;l++){
     if((time<FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
       Set_OutOfRange_FALSE(FT2);
@@ -443,6 +447,7 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
     }  
   }
   l=Entries-1;
+
   if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
     Set_OutOfRange_FALSE(FT2);
       i=l;
@@ -700,17 +705,19 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
    
     if(Current_FT2_Entry!=Old_FT2_Entry && M7LineCounter>0){
       NewEntry=true;
-      std::cout<<"Current Entry "
-	       <<Current_FT2_Entry 
-	       <<" Current Entry Id "
-	       <<std::setprecision(20)
-	       <<FT2.FT2_T.bin[Current_FT2_Entry]
-	       <<" FT2 Tstart "
-	       <<FT2.FT2_T.Tstart[Current_FT2_Entry]
-	       <<" FT2 Tstop "
-	       <<FT2.FT2_T.Tstop[Current_FT2_Entry]
-
-	       <<std::endl;
+      std::cout
+	<<"M7 time"
+	<<time
+	<<"Current Entry "
+	<<Current_FT2_Entry 
+	<<" Current Entry Id "
+	<<std::setprecision(20)
+	<<FT2.FT2_T.bin[Current_FT2_Entry]
+	<<" FT2 Tstart "
+	<<FT2.FT2_T.Tstart[Current_FT2_Entry]
+	<<" FT2 Tstop "
+	<<FT2.FT2_T.Tstop[Current_FT2_Entry]
+	<<std::endl;
     }    
     //IF we are at the beginning of a new TimeBin or
     //at the start UpadteSomeThing
@@ -748,6 +755,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   //THE BEGINNING OF THE TIME BIN !!!!!!!!!!!!!!!
   //FT2.Average_M7_Entries(FT2);
   FT2.Interp_ORB_Entries(FT2);
+  FT2.Interp_ATT_Entries(FT2);
   printf("---------------------------------------------------------\n");
 
 }
@@ -761,7 +769,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
     
     if(FT2.ORB.entr[i]==0 && i>0){
       deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
-      std::cout<<"deltat"<<deltat<<"\n";
+      std::cout<<"deltat = "<<deltat<<"\n";
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
       FT2.ORB.x[i]=ORB.x[i-1]+ORB.vx[i-1]*deltat;
       FT2.ORB.y[i]=ORB.y[i-1]+ORB.vy[i-1]*deltat;
@@ -774,6 +782,33 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
  }
  
 }
+
+
+
+//-------------Interplates ATT if entr=0------------------
+void FT2::Interp_ATT_Entries(FT2 &FT2){
+  double deltat ;
+  
+ for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){
+    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
+    
+    if(FT2.ATT.entr[i]==0 && i>0){
+      deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
+      std::cout<<"deltat = "<<deltat<<"\n";
+      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+      FT2.ATT.x[i]=FT2.ATT.x[i-1];
+      FT2.ATT.y[i]=FT2.ATT.y[i-1];
+      FT2.ATT.z[i]=FT2.ATT.z[i-1];
+      FT2.ATT.w[i]=FT2.ATT.w[i-1];
+      FT2.ATT.vx[i]=FT2.ATT.vx[i-1];
+      FT2.ATT.vy[i]=FT2.ATT.vy[i-1];
+      FT2.ATT.vz[i]=FT2.ATT.vz[i-1];
+    }
+    
+ }
+ 
+}
+
 
 //-------------- Average M7 File  Entries  within a FT2 time bin -----------------------
 //!!!!!!!!!!! WE DO NOT NEED ANYMORE THIS METHOD
@@ -825,6 +860,7 @@ void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
 
 void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){     
   Att.entr[entry]++;
+  //Update only if the entry is the first for the time bin
   if( Att.entr[entry]==1){
     Att.Tstart[entry]=FT2::Get_M7_Time(tokens[3],tokens[4]);
     Att.x[entry]=atof(tokens[5].c_str());
@@ -853,6 +889,7 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
 
 void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){  
   Orb.entr[entry]++;
+  //Update only if the entry is the first for the time bin
   if (Orb.entr[entry]==1){
     printf("--\n");
     Orb.Tstart[entry]=FT2::Get_M7_Time(tokens[3],tokens[4]);
