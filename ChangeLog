@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Tue Sep 18 11:45:20 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FITS.cxx 
+Log Message:
+verbose check in FITS.cxx
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p5, operation: add
 Package: ft2Util
