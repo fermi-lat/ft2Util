@@ -21,22 +21,31 @@
 
 #include "fitsGen/Ft2File.h"
 
+
+
 void FT2::WriteFitsFile(FT2 &FT2) {
- 
-  unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
+
   
+  unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
+
+  std::cout<<"Start Instance of Ft2File\n";
+  std::cout<<"The file name is"<<FT2.FT2_fits_File<<"\n";
+  std::cout<<"The file lenght is"<<FT2_ENTR<<"\n";
   fitsGen::Ft2File ft2(FT2.FT2_fits_File,FT2_ENTR);
- 
+  std::cout<<"Instanced\n";
+  
   //!!!!!!!!!!!!!!Verify this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //ft2.header().addHistory("Input pointing history file: " + pointingFile);
   
   //std::ifstream d2(pointingFile.c_str()); 
   //std::string line;
   //std::vector<std::string> dataFields;
+  std::cout<<"SC vector\n";
   std::vector<float> scPosition(3);
+  std::cout<<"done\n";
   
   
-  
+  std::cout<<"Loop over fields\n";
   for(unsigned int i=0;i<FT2_ENTR;i++){
     ft2["start"].set(FT2_T.Tstart[i]);
     ft2["stop"].set(FT2.FT2_T.Tstop[i]);
@@ -66,4 +75,5 @@ void FT2::WriteFitsFile(FT2 &FT2) {
     }
     ft2.next();
   }
+  std::cout<<"done\n";
 }
