@@ -149,10 +149,16 @@ public:
   void Fill_SC_Entries(FT2 &FT2);
 
 
-  
+  //Gleam
+  //  void Gleam();
+  bool Gleam;
+   
   //Fits 
   void WriteFitsFile(FT2 &FT2);
   
+  //Text
+  void WriteTextFile(FT2 &FT2);
+
 private:
   bool OutOfRange;
   unsigned int CurrentEntry;
