@@ -268,6 +268,7 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
 void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   const char usage[] = 
     "usage: makeFT2Entries.exe  [OPTIONS]\n" 
+    " -DigiFile <FileName>\n"
     " -MeritFile <FileName>\n" 
     " -M7File <FileName>\n"  
     " -FT2_txt_File <FileName>\n" 
@@ -299,6 +300,10 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
 	  std::cout << usage;
 	  std::exit(0);  
 	  }
+	  if(par=="--Gleam"){
+	    std::cout<<"Gleam FT2\n";
+	    FT2.Gleam=true;
+	  }
 	}
       }
       std::cout<<"Digi File " 
@@ -311,6 +316,8 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
 	       <<FT2.FT2_txt_File
 	       <<" FITS FILE"
 	       <<FT2.FT2_fits_File
+	       <<" Gleam=="
+	       <<FT2.Gleam
 	       <<std::endl;
       
     }
