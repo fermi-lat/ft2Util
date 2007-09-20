@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: tramacer  Wed Sep 19 17:41:17 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FT2.cxx FT2_TXT.cxx Gleam.cxx 
+Added Files:
+	Digi.cxx 
+Log Message:
+Gleam and Digi
+    *
+------------------------------------------------------------
+User: tramacer  Wed Sep 19 17:41:17 PDT 2007
 ft2Util/ft2Util
 
 Modified Files:
