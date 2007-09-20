@@ -149,8 +149,11 @@ public:
   void Fill_SC_Entries(FT2 &FT2);
 
 
+  //Digi
+  void Digi_FT2(FT2 &FT2);
+  
   //Gleam
-  //  void Gleam();
+  void Gleam_FT2(FT2 &FT2);
   bool Gleam;
    
   //Fits 
