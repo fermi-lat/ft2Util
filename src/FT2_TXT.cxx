@@ -39,16 +39,16 @@ void FT2::WriteTextFile(FT2 &FT2) {
 	<<","
 	<<FT2.FT2_T.Tstop[i]
 	<<","
-	<<FT2.ATT.Tstart[i]
-	<<","
-	<<FT2.ORB.Tstart[i]
-	  <<","
+      //<<FT2.ATT.Tstart[i]
+      //<<","
+      //<<FT2.ORB.Tstart[i]
+      //<<","
 	<<FT2.ORB.x[i]
 	<<","
 	<<FT2.ORB.y[i]
 	<<","
 	<<FT2.ORB.z[i]
-	  <<","
+	<<","
 	<<FT2.FT2_SC.LAT_GEO[i]
 	<<","
 	<<FT2.FT2_SC.LAT_GEO[i]
