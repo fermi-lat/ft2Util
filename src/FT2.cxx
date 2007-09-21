@@ -276,52 +276,50 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
     " --Gleam \n"
     " -h --help\n";
 
-  if (iargc < 5) {
+  if (iargc < 8) {
     std::cout << usage;
     std::exit(0);
-  } 
-  else  
-    {
-      int i;
-      std::cout<<"command line"<<std::endl;
-      for( i = 1; i < iargc; i++ ){
-	std::string par = argv[i];
-	if (argv[i][0] == '-'){
-	  std::cout<<argv[i]<<std::endl;
-	  if(par=="-DigiFile") FT2.DigiFile = std::string(argv[i+1]);
-	  if(par=="-MeritFile") FT2.MeritFile = std::string(argv[i+1]);
-	  if(par=="-M7File") FT2.M7File = std::string(argv[i+1]);
-	  if(par=="-FT2_txt_File") FT2.FT2_txt_File = std::string(argv[i+1]);
-	  if(par=="-FT2_fits_File") FT2.FT2_fits_File= std::string(argv[i+1]);
-	  if(par=="-h"){
-	    std::cout << usage;
-	    std::exit(0);
+  }   else  {
+    int i;
+    std::cout<<"command line"<<std::endl;
+    for( i = 1; i < iargc; i++ ){
+      std::string par = argv[i];
+      if (argv[i][0] == '-'){
+	std::cout<<argv[i]<<std::endl;
+	if(par=="-DigiFile") FT2.DigiFile = std::string(argv[i+1]);
+	if(par=="-MeritFile") FT2.MeritFile = std::string(argv[i+1]);
+	if(par=="-M7File") FT2.M7File = std::string(argv[i+1]);
+	if(par=="-FT2_txt_File") FT2.FT2_txt_File = std::string(argv[i+1]);
+	if(par=="-FT2_fits_File") FT2.FT2_fits_File= std::string(argv[i+1]);
+	if(par=="-h"){
+	  std::cout << usage;
+	  std::exit(0);
 	  }
-	  if(par=="--help"){
+	if(par=="--help"){
 	  std::cout << usage;
 	  std::exit(0);  
-	  }
-	  if(par=="--Gleam"){
-	    std::cout<<"Gleam FT2\n";
-	    FT2.Gleam=true;
-	  }
+	}
+	if(par=="--Gleam"){
+	  std::cout<<"Gleam FT2\n";
+	  FT2.Gleam=true;
 	}
       }
-      std::cout<<"Digi File " 
-	       <<FT2.DigiFile<<std::endl
-	       <<"MeritFile"
-	       <<FT2.MeritFile<<std::endl
-	       <<"M7 File "
-	       <<FT2.M7File<<std::endl
-	       <<"OUT FILE"
-	       <<FT2.FT2_txt_File
-	       <<" FITS FILE"
-	       <<FT2.FT2_fits_File
-	       <<" Gleam=="
-	       <<FT2.Gleam
-	       <<std::endl;
-      
     }
+    std::cout<<"Digi File " 
+	     <<FT2.DigiFile<<std::endl
+	     <<"MeritFile"
+	     <<FT2.MeritFile<<std::endl
+	     <<"M7 File "
+	     <<FT2.M7File<<std::endl
+	     <<"OUT FILE"
+	     <<FT2.FT2_txt_File
+	     <<" FITS FILE"
+	     <<FT2.FT2_fits_File
+	     <<" Gleam=="
+	       <<FT2.Gleam
+	     <<std::endl;
+    
+  }
 }
 
 

@@ -21,3 +21,4 @@ library ft2Util -no_share *.cxx ${ft2Util_headers}
 
 private
 application makeFT2Entries ../apps/main.cxx
+application mergeFT2Entries ../apps/mergeft2.cxx
