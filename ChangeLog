@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Thu Sep 20 17:32:40 PDT 2007
+ft2Util/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+added tool to merge 1s entries in 30s entries
+    *
+------------------------------------------------------------
+User: tramacer  Thu Sep 20 17:32:40 PDT 2007
 ft2Util/apps
 
 Modified Files:
