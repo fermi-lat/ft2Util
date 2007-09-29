@@ -54,11 +54,12 @@ int main(int argc, char **argv){
     //std::string FT2_fits_File;
     
 
-    printf("v1r1p11\n");
+    printf("v1r1p13\n");
     
     //--- Get File Names ---
 
     FT2.Gleam=false;
+    FT2.MC=false;
     FT2.getFileNames(argc, argv, FT2);
     
     std::cout<<"Digi File " 
@@ -76,11 +77,13 @@ int main(int argc, char **argv){
     if(FT2.Gleam==true){
       FT2.Gleam_FT2(FT2);
     }
-    else FT2.Digi_FT2(FT2);
-	  
+    else if(FT2.MC==true){
+      FT2.DigiMC_FT2(FT2);
+    }else FT2.Digi_FT2(FT2);
+      
   } catch (std::exception & eObj) {
-    std::cout << eObj.what() << std::endl;
-    std::exit(1);
+      std::cout << eObj.what() << std::endl;
+      std::exit(1);
   }
 }
 
