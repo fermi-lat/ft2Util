@@ -207,8 +207,10 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
       std::cout<<"upadte "
 	       <<i
 	       <<std::endl;
+ 
       FT2.FT2_T.LiveTime[i]=
 	(FT2.DT.Tstop_LiveTime[i] -  FT2.DT.Tstart_LiveTime[i]) - FT2.DT.DeadTime[i]; 
+      
       std::cout<<"Tstart "
 	       <<FT2.FT2_T.Tstart[i]
 	       <<"\nTstop "
@@ -303,6 +305,12 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
 	  std::cout<<"Gleam FT2\n";
 	  FT2.Gleam=true;
 	}
+	if(par=="--MC"){
+	  std::cout<<"MonteCarlo \n";
+	  FT2.MC=true;
+	}
+
+
       }
     }
     std::cout<<"Digi File " 
@@ -354,23 +362,34 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
   unsigned int Current_FT2_Entry,FT2_Entries;
 
   printf("---------------------------------------------------------\n");
-  printf("Merge M7 with Digi entries\n");
+  printf("Merge M7 with Digi entries -\n");
 
   //add new entry
   printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
   FT2.Get_FT2_Entry_Index(FT2, Tstart_Run,Current_FT2_Entry);
-  printf("Entry index=%d \n",Current_FT2_Entry);
-  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
-  FT2_Entries= Get_FT2_Entries(FT2);
-  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
-  printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+  if(!FT2.Get_OutOfRange(FT2)){
+    printf("Entry index=%d \n",Current_FT2_Entry);
+    FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+    FT2_Entries= Get_FT2_Entries(FT2);
+    FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+    printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
 
-  FT2.FT2_T.Tstart[Current_FT2_Entry]=FT2.FT2_T.Tstart[Current_FT2_Entry];
-  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entry];
-  FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstart_Run ;
-  FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_Run ;
+    FT2.FT2_T.Tstart[Current_FT2_Entry]=FT2.FT2_T.Tstart[Current_FT2_Entry];
+    FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entry];
+    FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstart_Run ;
+    FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_Run ;
+  }else{
+    printf("Adding entries before that M7 file starts");
+    FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+    FT2_Entries= Get_FT2_Entries(FT2);
+    FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+    printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+    printf("Entry index=0\n");
+    FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_Run;
+    FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[1];
+  }
 
-
+  
   std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
   std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
  
@@ -378,16 +397,29 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
   //add new entry
   printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
   FT2.Get_FT2_Entry_Index(FT2,Tstop_Run,Current_FT2_Entry);
-  printf("Entry index=%d \n",Current_FT2_Entry);
-  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
-  FT2_Entries= Get_FT2_Entries(FT2);
-  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
-  printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
-
-  FT2.FT2_T.Tstart[Current_FT2_Entry]=FT2.FT2_T.Tstart[Current_FT2_Entry];
-  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entry];
-  FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstop_Run ;
-  FT2.FT2_T.Tstart[FT2_Entries-1]=Tstop_Run ;
+  if(!FT2.Get_OutOfRange(FT2)){
+    printf("Entry index=%d \n",Current_FT2_Entry);
+    FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+    FT2_Entries= Get_FT2_Entries(FT2);
+    FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+    printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+    
+    FT2.FT2_T.Tstart[Current_FT2_Entry]=FT2.FT2_T.Tstart[Current_FT2_Entry];
+    FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entry];
+    FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstop_Run ;
+    FT2.FT2_T.Tstart[FT2_Entries-1]=Tstop_Run ;
+  }else{
+    printf("Adding entries after that M7 file ends");
+    FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+    FT2_Entries= Get_FT2_Entries(FT2);
+    FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+    printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+    printf("Entry index=%e \n",FT2_Entries-1);
+    FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2] ;
+    FT2.FT2_T.Tstop[FT2_Entries-1]=Tstop_Run;
+  }
+  
+  
 
   std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
   std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
@@ -785,6 +817,17 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
 
     }
     
+     if(FT2.ORB.entr[i]==0 && i==0){
+      deltat=FT2_T.Tstop[i]-FT2_T.Tstart[i];
+      std::cout<<"deltat = "<<deltat<<"\n";
+      FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+      FT2.ORB.x[i]=ORB.x[i+1]-ORB.vx[i+1]*deltat;
+      FT2.ORB.y[i]=ORB.y[i+1]-ORB.vy[i+1]*deltat;
+      FT2.ORB.z[i]=ORB.z[i+1]-ORB.vz[i+1]*deltat;
+      FT2.ORB.CM[i]= ORB.CM[i+1];
+      FT2.ORB.SAA[i]=ORB.SAA[i+1];
+    }
+
  }
  
 }
@@ -809,8 +852,20 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
       FT2.ATT.vx[i]=FT2.ATT.vx[i-1];
       FT2.ATT.vy[i]=FT2.ATT.vy[i-1];
       FT2.ATT.vz[i]=FT2.ATT.vz[i-1];
+    } 
+    if(FT2.ATT.entr[i]==0 && i==0){
+      deltat=FT2_T.Tstop[i+1]-FT2_T.Tstart[i+1];
+      std::cout<<"deltat = "<<deltat<<"\n";
+      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+      FT2.ATT.x[i]=FT2.ATT.x[i+1];
+      FT2.ATT.y[i]=FT2.ATT.y[i+1];
+      FT2.ATT.z[i]=FT2.ATT.z[i+1];
+      FT2.ATT.w[i]=FT2.ATT.w[i+1];
+      FT2.ATT.vx[i]=FT2.ATT.vx[i+1];
+      FT2.ATT.vy[i]=FT2.ATT.vy[i+1];
+      FT2.ATT.vz[i]=FT2.ATT.vz[i+1];
     }
-    
+  
  }
  
 }

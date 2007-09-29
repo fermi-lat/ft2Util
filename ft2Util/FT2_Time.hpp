@@ -156,6 +156,10 @@ public:
   void Gleam_FT2(FT2 &FT2);
   bool Gleam;
    
+  //MonteCarlo
+  void DigiMC_FT2(FT2 &FT2);
+  bool MC;
+  
   //Fits 
   void WriteFitsFile(FT2 &FT2);
   
