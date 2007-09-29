@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Sep 29 14:37:58 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FITS.cxx 
+Log Message:
+bug fixed in SC.cxx for Posiotn entries
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p14, operation: add
 Package: ft2Util
