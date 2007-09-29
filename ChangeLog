@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Sep 28 18:18:40 PDT 2007
+ft2Util/apps
+
+Modified Files:
+	main.cxx 
+Log Message:
+MonteCarlo implementation 2
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p12, operation: add
 Package: ft2Util
