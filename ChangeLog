@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: tramacer  Fri Sep 28 18:18:41 PDT 2007
+ft2Util/src
+
+Modified Files:
+	Digi.cxx FT2.cxx 
+Added Files:
+	DigiMC.cxx 
+Log Message:
+MonteCarlo implementation 2
+    *
+------------------------------------------------------------
+User: tramacer  Fri Sep 28 18:18:41 PDT 2007
 ft2Util/ft2Util
 
 Modified Files:
