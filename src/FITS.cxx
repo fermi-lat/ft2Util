@@ -49,10 +49,9 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   for(unsigned int i=0;i<FT2_ENTR;i++){
     ft2["start"].set(FT2_T.Tstart[i]);
     ft2["stop"].set(FT2.FT2_T.Tstop[i]);
-    //!!!!!!!!Check the conversion from km to meters!!!!
-    scPosition[0] = FT2.ORB.x[i]*1.e3;
-    scPosition[1] = FT2.ORB.y[i]*1.e3;
-    scPosition[2] = FT2.ORB.z[i]*1.e3;
+    scPosition[0] = FT2.ORB.x[i];
+    scPosition[1] = FT2.ORB.y[i];
+    scPosition[2] = FT2.ORB.z[i];
     ft2["sc_position"].set(scPosition);
     ft2["ra_scz"].set(FT2.FT2_SC.RA_SCZ[i]);
     ft2["dec_scz"].set(FT2.FT2_SC.DEC_SCZ[i]);
