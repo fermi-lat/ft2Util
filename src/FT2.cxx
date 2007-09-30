@@ -531,7 +531,7 @@ double  FT2::Get_M7_Time(const std::string &Time, const std::string &Frac_Time){
   
   time=atof(Time.c_str());
   f_time=atof(Frac_Time.c_str());
-  f_time*=1e-6;
+  f_time*=1.0e-6;
   
   return (time+f_time);
 }
@@ -543,7 +543,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   double time,Tstart;
   //int new_entry(1);
   unsigned int M7LineCounter(0);
-  int  TimeBin, NewTimeBin(0),OldTimeBin(0),MODE(0),OLD_MODE;
+  int  TimeBin(0), NewTimeBin(0),OldTimeBin(0),MODE(0),OLD_MODE;
   bool first_orb_entry(true);
   unsigned int Current_FT2_Entries(0);
   
@@ -567,14 +567,19 @@ void FT2::Set_M7_Entries(FT2 &FT2){
     if(comment.find( "#", 0) == std::string::npos ){
 
     time=FT2.Get_M7_Time(tokens[3],tokens[4]);
-
+    
+    std::cout<<"Time=" 
+	     <<std::setprecision(20)
+      	     <<time
+	     <<std::endl;
+    
     if (M7LineCounter==0){
       Tstart=time;
     }
 
     //-------FT2 time bin Id-----------------
     TimeBin=FT2.Get_FT2_Time_Bin(time,Tstart);
-    
+   
 
     //------------ Read MODE from ORB Entry ----------------------
     if (tokens[2]=="ORB"){ 
@@ -642,10 +647,14 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   
       //Update FT2_Time class
       if(M7LineCounter==0){
-	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
+	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=Tstart;
+
+	FT2.FT2_T.Tstop[Current_FT2_Entries-1]=Tstart+FT2_BIN_WIDTH;
+
       }
       else{ 
-	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2]; 
+	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
+	FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
       }
       
       
@@ -669,7 +678,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       
     }
     else{
-      FT2.FT2_T.Tstop[Current_FT2_Entries-1]=time; 
+      //FT2.FT2_T.Tstop[Current_FT2_Entries-1]=time; 
     }
  
     //SWAPPING
