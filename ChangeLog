@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Mon Oct  1 15:01:41 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FT2.cxx 
+Log Message:
+fixed bug in mergeft2.cxx
+    *
+------------------------------------------------------------
+User: tramacer  Mon Oct  1 15:01:41 PDT 2007
 ft2Util/apps
 
 Modified Files:
