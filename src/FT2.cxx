@@ -414,7 +414,7 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
     FT2_Entries= Get_FT2_Entries(FT2);
     FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
     printf("add entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
-    printf("Entry index=%e \n",FT2_Entries-1);
+    printf("Entry index=%d \n",FT2_Entries-1);
     FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2] ;
     FT2.FT2_T.Tstop[FT2_Entries-1]=Tstop_Run;
   }
