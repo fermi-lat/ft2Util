@@ -176,8 +176,11 @@ void FT2::DigiMC_FT2(FT2 &FT2){
   //Takes the first Digi Element
   //that falls within the M7 time span
   //do{
-  //T->GetEntry(Digi_i);
- 
+  
+  T->GetEntry(Digi_i);
+  //Does not! take the first element of the
+  //Digi file falling within the M7 time span
+  //but 
   DigiTime=evt->getTimeStamp();
   printf("DigiTime=%30.28g\n", DigiTime);
   //FT2.Get_FT2_Entry_Index(FT2,DigiTime,Current_FT2_Entry);
