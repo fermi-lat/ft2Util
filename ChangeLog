@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Oct  1 10:21:45 PDT 2007
+ft2Util/src
+
+Modified Files:
+	DigiMC.cxx FT2.cxx 
+Log Message:
+fixed bug on Merge_M7_Digi_Entries
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p17, operation: add
 Package: ft2Util
