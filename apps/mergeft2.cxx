@@ -135,11 +135,10 @@ int main(int iargc, char **argv){
 	 
 	  //store values
 	  FT2.FT2_T.Tstart[Entries-1]=atof(tokens[1].c_str());
-	  //!!!!!!!!ORB is in Km scPosiotion is in meters
 	  //printf("sono qui\n");
-	  FT2.ORB.x[Entries-1]=atof(tokens[3].c_str())/1.e3;
-	  FT2.ORB.y[Entries-1]=atof(tokens[4].c_str())/1.e3;
-	  FT2.ORB.z[Entries-1]=atof(tokens[5].c_str())/1.e3;
+	  FT2.ORB.x[Entries-1]=atof(tokens[3].c_str());
+	  FT2.ORB.y[Entries-1]=atof(tokens[4].c_str());
+	  FT2.ORB.z[Entries-1]=atof(tokens[5].c_str());
 	  FT2.FT2_SC.RA_SCZ[Entries-1]=atof(tokens[6].c_str());
 	  FT2.FT2_SC.DEC_SCZ[Entries-1]=atof(tokens[7].c_str());
 	  FT2.FT2_SC.RA_SCX[Entries-1]=atof(tokens[8].c_str());
