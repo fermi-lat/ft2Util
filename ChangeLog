@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Tue Oct  2 19:05:02 PDT 2007
+ft2Util/src
+
+Modified Files:
+	DigiMC.cxx 
+Log Message:
+fixed bug in DigiMC.cxx
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p19, operation: add
 Package: ft2Util
