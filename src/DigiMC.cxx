@@ -324,17 +324,17 @@ void FT2::DigiMC_FT2(FT2 &FT2){
       
       if(Digi_i==Digi_Start){
 	//check-up
-	First_Live_Time=Current_LiveTime;
-	Old_LiveTime = Current_LiveTime;
+	//First_Live_Time=Current_LiveTime;
+	//Old_LiveTime = Current_LiveTime;
 	first_bin=true;
       }
       
       
       //--- Increase dead time  ------
-      if(Digi_EvtId!=Merit_EvtId){
-	printf("DigiEvtID=%e MeritEvtID= %d\n",Digi_EvtId,Merit_EvtId);
-	FT2.DT.DeadTime[Current_FT2_Entry]+=Current_LiveTime-Old_LiveTime;	
-      }
+      //if(Digi_EvtId!=Merit_EvtId){
+      //printf("DigiEvtID=%e MeritEvtID= %d\n",Digi_EvtId,Merit_EvtId);
+      //FT2.DT.DeadTime[Current_FT2_Entry]+=Current_LiveTime-Old_LiveTime;	
+      //}
       
 
 
@@ -448,16 +448,16 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 	
 	
 	//------- Update LiveTime ----------------------------
-	FT2.DT.Tstart_LiveTime[Current_FT2_Entry]=Current_LiveTime;
+	//FT2.DT.Tstart_LiveTime[Current_FT2_Entry]=Current_LiveTime;
 
-	if((Digi_EvtId-Old_Digi_EvtId)<5000){
-	  FT2.FT2_T.LiveTime[Current_FT2_Entry]=Current_LiveTime-Old_LiveTime;
-	}else{
-	  FT2.FT2_T.LiveTime[Current_FT2_Entry]=0;
-	}
+	//if((Digi_EvtId-Old_Digi_EvtId)<5000){
+	//  FT2.FT2_T.LiveTime[Current_FT2_Entry]=Current_LiveTime-Old_LiveTime;
+	//}else{
+	//  FT2.FT2_T.LiveTime[Current_FT2_Entry]=0;
+	//}
 
-	LiveTime_Tstart = Current_LiveTime;
-	printf("TstartLiveTime %20.18e CurrentLive %20.18e \n",FT2.DT.Tstart_LiveTime[Current_FT2_Entry],Current_LiveTime);
+	//LiveTime_Tstart = Current_LiveTime;
+	//printf("TstartLiveTime %20.18e CurrentLive %20.18e \n",FT2.DT.Tstart_LiveTime[Current_FT2_Entry],Current_LiveTime);
 	
 	EvID_Tstart_Live=Digi_EvtId;
 	
@@ -486,12 +486,12 @@ void FT2::DigiMC_FT2(FT2 &FT2){
       FT2.DT.Tstop[Current_FT2_Entry]=DigiTime;
       
       //UPDATE LIVE TIME
-      LiveTime_Tstop = Current_LiveTime; 
+      //LiveTime_Tstop = Current_LiveTime; 
       //FT2.FT2_T.LiveTime[Current_FT2_Entry]=(LiveTime_Tstop -  LiveTime_Tstart)-DeadTime;
-      FT2.DT.Tstop_LiveTime[Current_FT2_Entry] = Current_LiveTime; 
+      //FT2.DT.Tstop_LiveTime[Current_FT2_Entry] = Current_LiveTime; 
       
       //check-up
-      LiveTime_Tstop=Current_LiveTime;
+      //LiveTime_Tstop=Current_LiveTime;
       EvID_Tstop_Live=Digi_EvtId;
       
       
@@ -517,7 +517,10 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 
   }
   //--------  END OF LOOPING DIGI FILE -------------------------------------------------
-  
+  FT2.FT2_T.LiveTime[Current_FT2_Entry-1]=
+    (FT2.DT.Tstop[Current_FT2_Entry-1]-FT2.DT.Tstart[Current_FT2_Entry-1])-	  
+    FT2.DT.DeadTime[Current_FT2_Entry-1];
+ 
   //Print last Entry Values
   printf("Old Entry %d\n",Current_FT2_Entry);
   printf("Old Entry Results\n");
