@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Oct  6 21:52:23 PDT 2007
+ft2Util/apps
+
+Modified Files:
+	mergeft2.cxx 
+Log Message:
+fixed bug on FT2.txt file
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p20, operation: add
 Package: ft2Util
