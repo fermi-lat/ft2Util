@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Oct  6 21:52:24 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FT2_TXT.cxx 
+Log Message:
+fixed bug on FT2.txt file
+    *
+------------------------------------------------------------
 User: tramacer  Sat Oct  6 21:52:23 PDT 2007
 ft2Util/apps
 
