@@ -49,24 +49,6 @@ void FT2::WriteTextFile(FT2 &FT2) {
 	<<","
 	<<FT2.ORB.z[i]
 	<<","
-	<<FT2.FT2_SC.LAT_GEO[i]
-	<<","
-	<<FT2.FT2_SC.LAT_GEO[i]
-	<<","
-	<<FT2.FT2_SC.LAT_GEO[i]
-	<<","
-	<<FT2.FT2_SC.RA_ZENITH[i]
-	<<","
-	<<FT2.FT2_SC.DEC_ZENITH[i]
-	<<","
-	<<FT2.FT2_SC.B_MCILWAIN[i]
-	<<","
-	<<FT2.FT2_SC.L_MCILWAIN[i]
-	<<","
-	<<FT2.FT2_SC.GEOMAG_LAT[i]
-	<<","
-	<<FT2.ORB.SAA[i]
-	<<","
 	<<FT2.FT2_SC.RA_SCZ[i]
 	<<","
 	<<FT2.FT2_SC.DEC_SCZ[i]
@@ -74,6 +56,24 @@ void FT2::WriteTextFile(FT2 &FT2) {
 	<<FT2.FT2_SC.RA_SCX[i]
 	<<","
 	<<FT2.FT2_SC.DEC_SCX[i]
+	<<","
+	<<FT2.FT2_SC.RA_ZENITH[i]
+	<<","
+	<<FT2.FT2_SC.DEC_ZENITH[i]
+	<<","
+	<<FT2.FT2_SC.LON_GEO[i]
+	<<","
+	<<FT2.FT2_SC.LAT_GEO[i]
+	<<","
+	<<FT2.FT2_SC.RAD_GEO[i]
+	<<","
+	<<FT2.FT2_SC.GEOMAG_LAT[i]
+	<<","
+	<< FT2.ORB.SAA[i]
+	<<","
+	<<FT2.FT2_SC.B_MCILWAIN[i]
+	<<","
+	<<FT2.FT2_SC.L_MCILWAIN[i]
 	<<","
 	<<FT2.ORB.CM[i]
 	<<","
