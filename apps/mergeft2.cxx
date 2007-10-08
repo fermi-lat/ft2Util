@@ -68,7 +68,7 @@ int main(int iargc, char **argv){
     std::string fitsFile;
     std::string line,comment;
 
-    double time, time_elapsed(0),live_time(0);
+    double time, t_stop,time_elapsed(0),live_time(0);
     unsigned int Entries(0);
     bool first_bin(true), new_entry(false);
     bool in_saa;
@@ -189,9 +189,19 @@ int main(int iargc, char **argv){
 	  live_time=0;
 	  time_elapsed=0;
 	}    
-      
 	
+	t_stop=atof(tokens[2].c_str());
       }
+    }
+    if(new_entry==false){
+      FT2.FT2_T.Tstop[Entries-1]=t_stop;
+      //store t_stop
+      //store live_time
+      //add en element to the arrays
+      FT2.FT2_T.LiveTime[Entries-1]=live_time;
+      new_entry=true;
+      live_time=0;
+      time_elapsed=0;
     }
     
     inFT2File.close();
