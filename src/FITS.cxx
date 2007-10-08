@@ -28,9 +28,7 @@
 
 void FT2::WriteFitsFile(FT2 &FT2) {
 
-  m_pars.Prompt();
-  m_pars.Save();
-
+  
   //using namespace fitsGen;
 
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
@@ -87,8 +85,8 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   std::ostringstream creator;
   creator << "ft2Util";
   ft2.setPhduKeyword("CREATOR", creator.str());
-  std::string version = m_pars["file_version"];
-  ft2.setPhduKeyword("VERSION", version);
+  //std::string version = m_pars["file_version"];
+  //ft2.setPhduKeyword("VERSION", version);
   std::string filename(facilities::Util::basename(FT2.FT2_fits_File));
   ft2.setPhduKeyword("FILENAME", filename);
   std::cout<<"done\n";
