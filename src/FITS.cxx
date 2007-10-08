@@ -21,11 +21,18 @@
 
 #include "fitsGen/Ft2File.h"
 
-
+//#include "st_stream/StreamFormatter.h"
+//#include "st_app/AppParGroup.h"
+//#include "st_app/StApp.h"
+//#include "st_app/StAppFactory.h"
 
 void FT2::WriteFitsFile(FT2 &FT2) {
 
-  
+  m_pars.Prompt();
+  m_pars.Save();
+
+  //using namespace fitsGen;
+
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
 
   std::cout<<"Start Instance of Ft2File\n";
@@ -45,6 +52,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   std::cout<<"done\n";
   
   
+
   std::cout<<"Loop over fields\n";
   for(unsigned int i=0;i<FT2_ENTR;i++){
     ft2["start"].set(FT2_T.Tstart[i]);
@@ -74,5 +82,14 @@ void FT2::WriteFitsFile(FT2 &FT2) {
     }
     ft2.next();
   }
+  
+  ft2.setObsTimes(FT2_T.Tstart[0], FT2_T.Tstop[FT2_ENTR-1]);
+  std::ostringstream creator;
+  creator << "ft2Util";
+  ft2.setPhduKeyword("CREATOR", creator.str());
+  std::string version = m_pars["file_version"];
+  ft2.setPhduKeyword("VERSION", version);
+  std::string filename(facilities::Util::basename(FT2.FT2_fits_File));
+  ft2.setPhduKeyword("FILENAME", filename);
   std::cout<<"done\n";
 }
