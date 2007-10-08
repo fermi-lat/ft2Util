@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sun Oct  7 21:48:08 PDT 2007
+ft2Util/src
+
+Modified Files:
+	FITS.cxx 
+Log Message:
+write Tstart and Tstop in fits file
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p21, operation: add
 Package: ft2Util
