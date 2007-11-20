@@ -653,7 +653,17 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 
       }
       else{ 
-	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
+	//!!!!!!!! IF there is some missing data
+	//that makes the following entry distant
+	//in time more than one entry time span
+	//than tacke Tstart not form previous entry
+	//Tstop but from current M7 file time
+	if(TimeBin-OldTimeBin<1){
+	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
+	}else{
+	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
+	}
+
 	FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
       }
       
