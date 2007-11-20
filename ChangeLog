@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Nov 19 18:16:05 PST 2007
+ft2Util/src
+
+Modified Files:
+	FT2.cxx 
+Log Message:
+fixed bug due to M7 with missing data
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p24, operation: add
 Package: ft2Util
