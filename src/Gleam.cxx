@@ -18,7 +18,7 @@
 
 
 void FT2::Gleam_FT2(FT2 &FT2){
- 
+  unsigned int Current_FT2_Entry,FT2_Entries;
 
   //-------- WORK ON  M7 FILE ---------------------------------------------------------
   std::cout<<"M-7 file"<<std::endl;
@@ -29,6 +29,30 @@ void FT2::Gleam_FT2(FT2 &FT2){
  
   
   
+  //-------- Add fake extra Entries at end and beginning ---------------
+  printf("Adding entries before that M7 file starts");
+  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
+  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+  FT2_Entries= Get_FT2_Entries(FT2);
+  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+  printf("added entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+  FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstart[0]-1.0;
+  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[0];
+  std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
+  std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
+  
+  printf("Adding entries after that M7 file ends"); 
+  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
+  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
+  FT2_Entries= Get_FT2_Entries(FT2);
+  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
+  printf("added entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
+  FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2];
+  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2]+1.0;
+  std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
+  std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
+  //--------------------------------------------------------------------
+
 
   //-------- Fill the M7 Entries ---------------------------------------
   FT2.Fill_M7_Entries(FT2);
