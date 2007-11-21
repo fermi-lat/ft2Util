@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Nov 21 15:47:54 PST 2007
+ft2Util/src
+
+Modified Files:
+	Gleam.cxx 
+Log Message:
+add extra entries at end and beginning when using --Gleam option
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p25, operation: add
 Package: ft2Util
