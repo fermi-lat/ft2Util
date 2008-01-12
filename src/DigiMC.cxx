@@ -211,8 +211,10 @@ void FT2::DigiMC_FT2(FT2 &FT2){
   
   //-------- Fill the M7 Entries ---------------------------------------
   FT2.Fill_M7_Entries(FT2);
-  FT2.ATT.Print_ATT_Entries(FT2.ATT);
-  FT2.ORB.Print_ORB_Entries(FT2.ORB);
+  if(FT2.verbose){
+    FT2.ATT.Print_ATT_Entries(FT2.ATT);
+    FT2.ORB.Print_ORB_Entries(FT2.ORB);
+  }
   //--------------------------------------------------------------------
   
   

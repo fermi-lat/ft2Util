@@ -276,6 +276,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
     " -FT2_txt_File <FileName>\n" 
     " -FT2_fits_File <FileName> \n"
     " --Gleam \n"
+    " --verbose\n"
     " -h --help\n";
 
   if (iargc < 8) {
@@ -304,6 +305,10 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
 	if(par=="--Gleam"){
 	  std::cout<<"Gleam FT2\n";
 	  FT2.Gleam=true;
+	}
+	if(par=="--verbose"){
+	  std::cout<<"verbose\n";
+	  FT2.verbose=true;
 	}
 	if(par=="--MC"){
 	  std::cout<<"MonteCarlo \n";
@@ -594,11 +599,33 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       if (MODE!=OLD_MODE){
 	printf("---------------------------------------------------------\n");
 	NewTimeBin=1;
-	std::cout<<"New Entry due to Changed Mode form "
-		 <<OLD_MODE
-		 <<" to "
-		 <<MODE
-		 <<"\n";
+	
+	if(FT2.verbose){
+	  std::cout<<"New Entry due to Changed Mode form "
+		   <<OLD_MODE
+		   <<" to "
+		   <<MODE
+		   <<"\n";
+	  std::cout<<"Previous Entry Time Id "
+		   <<std::setprecision(20)
+		   <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+		   <<" FT2 Tstart "
+		   <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
+		   <<" FT2 Tstop "
+		   <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
+		   <<std::endl;
+	}
+
+      }
+    }
+    
+
+    //------------ Make a new Entry if Time Bin Changes ----------------------
+    if(TimeBin!=OldTimeBin && M7LineCounter>0){
+      printf("---------------------------------------------------------\n");
+      NewTimeBin=1;
+
+      if(FT2.verbose){
 	std::cout<<"Previous Entry Time Id "
 		 <<std::setprecision(20)
 		 <<FT2.FT2_T.bin[Current_FT2_Entries-1]
@@ -608,21 +635,6 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 		 <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
 		 <<std::endl;
       }
-    }
-    
-
-    //------------ Make a new Entry if Time Bin Changes ----------------------
-    if(TimeBin!=OldTimeBin && M7LineCounter>0){
-      printf("---------------------------------------------------------\n");
-      NewTimeBin=1;
-      std::cout<<"Previous Entry Time Id "
-	       <<std::setprecision(20)
-	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
-	       <<" FT2 Tstart "
-	       <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
-	       <<" FT2 Tstop "
- 	       <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
-	       <<std::endl;
     } 
     
     
@@ -674,16 +686,16 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       FT2.FT2_T.LiveTime[Current_FT2_Entries-1]=0;
       
       NewTimeBin=0;
-
-        std::cout<<"New Entry, Current number of  FT2 Entries "
-	       <<Current_FT2_Entries
-	       <<" Current Entry Id"
-	       <<FT2.FT2_T.bin[Current_FT2_Entries-1]
-		 <<" M7 line "
-	       <<M7LineCounter
-	       <<std::endl; 
-	std::cout<<Tstart <<" +"<<time<<std::endl;
-
+      	if(FT2.verbose){
+	  std::cout<<"New Entry, Current number of  FT2 Entries "
+		   <<Current_FT2_Entries
+		   <<" Current Entry Id"
+		   <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+		   <<" M7 line "
+		   <<M7LineCounter
+		   <<std::endl; 
+	  std::cout<<Tstart <<" +"<<time<<std::endl;
+	}
 
       
     }
@@ -762,19 +774,21 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
    
     if(Current_FT2_Entry!=Old_FT2_Entry && M7LineCounter>0){
       NewEntry=true;
-      std::cout
-	<<"M7 time"
-	<<time
-	<<"Current Entry "
-	<<Current_FT2_Entry 
-	<<" Current Entry Id "
-	<<std::setprecision(20)
-	<<FT2.FT2_T.bin[Current_FT2_Entry]
-	<<" FT2 Tstart "
-	<<FT2.FT2_T.Tstart[Current_FT2_Entry]
-	<<" FT2 Tstop "
-	<<FT2.FT2_T.Tstop[Current_FT2_Entry]
-	<<std::endl;
+	if(FT2.verbose){
+	  std::cout
+	    <<"M7 time"
+	    <<time
+	    <<"Current Entry "
+	    <<Current_FT2_Entry 
+	    <<" Current Entry Id "
+	    <<std::setprecision(20)
+	    <<FT2.FT2_T.bin[Current_FT2_Entry]
+	    <<" FT2 Tstart "
+	    <<FT2.FT2_T.Tstart[Current_FT2_Entry]
+	    <<" FT2 Tstop "
+	    <<FT2.FT2_T.Tstop[Current_FT2_Entry]
+	    <<std::endl;
+	}
     }    
     //IF we are at the beginning of a new TimeBin or
     //at the start UpadteSomeThing
