@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Jan 11 17:06:06 PST 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx 
+Log Message:
+added verbosity option to command line
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p27, operation: add
 Package: ft2Util
