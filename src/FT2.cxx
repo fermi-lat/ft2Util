@@ -570,14 +570,18 @@ void FT2::Set_M7_Entries(FT2 &FT2){
     //SKIP lines that start with # character
     comment=line.substr(0,1);
     if(comment.find( "#", 0) == std::string::npos ){
+      
+      time=FT2.Get_M7_Time(tokens[3],tokens[4]);
+    
 
-    time=FT2.Get_M7_Time(tokens[3],tokens[4]);
-    
-    std::cout<<"Time=" 
-	     <<std::setprecision(20)
-      	     <<time
-	     <<std::endl;
-    
+   	if(FT2.verbose){ 
+	  std::cout<<"Time=" 
+		   <<std::setprecision(20)
+		   <<time
+		   <<std::endl;
+
+	}    
+
     if (M7LineCounter==0){
       Tstart=time;
     }
