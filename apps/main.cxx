@@ -60,6 +60,7 @@ int main(int argc, char **argv){
 
     FT2.Gleam=false;
     FT2.MC=false;
+    FT2.verbose=false;
     FT2.getFileNames(argc, argv, FT2);
     
     std::cout<<"Digi File " 

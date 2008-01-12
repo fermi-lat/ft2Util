@@ -111,33 +111,34 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
 
     //Geomag LAT
     FT2.FT2_SC.GEOMAG_LAT[i]=EC.geolat();
-    
-    std::cout<<i
-	     <<", "
-	     <<rax
-	     <<", "
-	     <<raz
-	     <<", "
-	     <<decx
-	     <<", "
-	     <<decz
-	     <<", "	
-	     <<FT2.FT2_SC.RA_ZENITH[i]
-	     <<", "
-	     <<FT2.FT2_SC.DEC_ZENITH[i]
-	     <<", "
-	     <<FT2.FT2_SC.LAT_GEO[i]
-	     <<", "
-	     <<FT2.FT2_SC.LON_GEO[i]
-	     <<", "
-	     <<FT2.FT2_SC.RAD_GEO[i]
-	     <<", "
-	     <<FT2.FT2_SC.B_MCILWAIN[i]
-	     <<", "
-	     <<FT2.FT2_SC.L_MCILWAIN[i]
-	     <<", "
-	     <<FT2.FT2_SC.GEOMAG_LAT[i]
-	     <<std::endl;
-
+   
+    if(FT2.verbose){
+      std::cout<<i
+	       <<", "
+	       <<rax
+	       <<", "
+	       <<raz
+	       <<", "
+	       <<decx
+	       <<", "
+	       <<decz
+	       <<", "	
+	       <<FT2.FT2_SC.RA_ZENITH[i]
+	       <<", "
+	       <<FT2.FT2_SC.DEC_ZENITH[i]
+	       <<", "
+	       <<FT2.FT2_SC.LAT_GEO[i]
+	       <<", "
+	       <<FT2.FT2_SC.LON_GEO[i]
+	       <<", "
+	       <<FT2.FT2_SC.RAD_GEO[i]
+	       <<", "
+	       <<FT2.FT2_SC.B_MCILWAIN[i]
+	       <<", "
+	       <<FT2.FT2_SC.L_MCILWAIN[i]
+	       <<", "
+	       <<FT2.FT2_SC.GEOMAG_LAT[i]
+	       <<std::endl;
+    }
   }
 }
