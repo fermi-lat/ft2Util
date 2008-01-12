@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Jan 11 16:47:12 PST 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx 
+Log Message:
+added verbose option
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p26, operation: add
 Package: ft2Util
