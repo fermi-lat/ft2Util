@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Jan 14 16:20:48 PST 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx FT2.cxx 
+Log Message:
+fixeb bug on m7 entries
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p28, operation: add
 Package: ft2Util
