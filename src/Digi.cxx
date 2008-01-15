@@ -309,33 +309,35 @@ void FT2::Digi_FT2(FT2 &FT2){
       
       
       //Print last Entry Values
-      printf("Start a New Entry\n");
-      printf("Current %d  Old Entry %d\n",Current_FT2_Entry,Current_FT2_Entry-1);
-      printf("Old Entry Results\n");
-      printf("DigiTime=%20.18e \n",DigiTime);
-      printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
-	     FT2.DT.Tstart_LiveTime[Current_FT2_Entry-1],FT2.DT.Tstop_LiveTime[Current_FT2_Entry-1]);
-      std::cout<<setprecision(20)
-	       <<"DT.Tstart "
-	       <<FT2.DT.Tstart[Current_FT2_Entry-1]
-	       <<" DT.Tstop "
-	       <<FT2.DT.Tstop[Current_FT2_Entry-1]
-	       <<" Delta T "
-	       <<FT2.DT.Tstop[Current_FT2_Entry-1] - FT2.DT.Tstart[Current_FT2_Entry-1]
-	       <<"\nFT.Tstart "
-	       <<FT2.FT2_T.Tstart[Current_FT2_Entry-1]
-	       <<" FT.Tstop "
-	       <<FT2.FT2_T.Tstop[Current_FT2_Entry-1]
-	       <<" Live Time "
-	       <<FT2.FT2_T.LiveTime[Current_FT2_Entry-1]
-	       <<" Dead Time "
-	       <<FT2.DT.DeadTime[Current_FT2_Entry-1]
-	       <<endl
-	       <<"EvID_Tstart_Live "
-	       <<EvID_Tstart_Live
-	       <<" EvID_Tstop_Live "
-	       <<EvID_Tstop_Live	
-	       <<std::endl;
+      if(FT2.verbose){ 
+	printf("Start a New Entry\n");
+	printf("Current %d  Old Entry %d\n",Current_FT2_Entry,Current_FT2_Entry-1);
+	printf("Old Entry Results\n");
+	printf("DigiTime=%20.18e \n",DigiTime);
+	printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+	       FT2.DT.Tstart_LiveTime[Current_FT2_Entry-1],FT2.DT.Tstop_LiveTime[Current_FT2_Entry-1]);
+	std::cout<<setprecision(20)
+		 <<"DT.Tstart "
+		 <<FT2.DT.Tstart[Current_FT2_Entry-1]
+		 <<" DT.Tstop "
+		 <<FT2.DT.Tstop[Current_FT2_Entry-1]
+		 <<" Delta T "
+		 <<FT2.DT.Tstop[Current_FT2_Entry-1] - FT2.DT.Tstart[Current_FT2_Entry-1]
+		 <<"\nFT.Tstart "
+		 <<FT2.FT2_T.Tstart[Current_FT2_Entry-1]
+		 <<" FT.Tstop "
+		 <<FT2.FT2_T.Tstop[Current_FT2_Entry-1]
+		 <<" Live Time "
+		 <<FT2.FT2_T.LiveTime[Current_FT2_Entry-1]
+		 <<" Dead Time "
+		 <<FT2.DT.DeadTime[Current_FT2_Entry-1]
+		 <<endl
+		 <<"EvID_Tstart_Live "
+		 <<EvID_Tstart_Live
+		 <<" EvID_Tstop_Live "
+		 <<EvID_Tstop_Live	
+		 <<std::endl;
+      }
     }
     
     //--- if a new bin start ------
@@ -357,7 +359,7 @@ void FT2::Digi_FT2(FT2 &FT2){
       //------- Update LiveTime ----------------------------
       FT2.DT.Tstart_LiveTime[Current_FT2_Entry]=Current_LiveTime;;
       LiveTime_Tstart = Current_LiveTime;
-      printf("TstartLiveTime %20.18e CurrentLive %20.18e \n",FT2.DT.Tstart_LiveTime[Current_FT2_Entry],Current_LiveTime);
+     
       
       EvID_Tstart_Live=Digi_EvtId;
       
@@ -365,18 +367,21 @@ void FT2::Digi_FT2(FT2 &FT2){
       Total_Dead_Time+=DeadTime;	
       DeadTime=0;
       
-      std::cout<<"New FT2 Entry, #="
-	       <<Current_FT2_Entry
-	       <<" DigiTime="
-	       <<DigiTime
-	       <<"FT2 Id="
-	       <<FT2.Get_FT2_Time_Bin(DigiTime,Tstart_Run)
-	       <<"Digi EvtId"
-	       <<Digi_EvtId
-	       <<std::endl
-	       <<"--------------------------------------------------------"
-	       <<std::endl
+      if(FT2.verbose){ 
+	printf("TstartLiveTime %20.18e CurrentLive %20.18e \n",FT2.DT.Tstart_LiveTime[Current_FT2_Entry],Current_LiveTime);
+	std::cout<<"New FT2 Entry, #="
+		 <<Current_FT2_Entry
+		 <<" DigiTime="
+		 <<DigiTime
+		 <<"FT2 Id="
+		 <<FT2.Get_FT2_Time_Bin(DigiTime,Tstart_Run)
+		 <<"Digi EvtId"
+		 <<Digi_EvtId
+		 <<std::endl
+		 <<"--------------------------------------------------------"
+		 <<std::endl
 		 <<std::endl;
+      }
     }
     
     //UPDATE TSTOP
@@ -441,26 +446,27 @@ void FT2::Digi_FT2(FT2 &FT2){
     
     unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
     std::cout<<"======================================================"<<std::endl;
-    for(unsigned int i=0;i<FT2_ENTR;i++){
-      printf("Current Entry %d\n",i);
-      printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
-	     FT2.DT.Tstart_LiveTime[i],FT2.DT.Tstop_LiveTime[i]);
-      std::cout<<setprecision(20)
-	       <<"Tstart "
-	       <<FT2.DT.Tstart[i]
-	       <<" Tstop "
-	       <<FT2.DT.Tstop[i]
-	       <<" Delta T "
-	       <<FT2.DT.Tstop[i] - FT2.DT.Tstart[i]
-	       <<" Live Time "
-	       <<FT2.FT2_T.LiveTime[i]
-	       <<" Dead Time "
-	       <<FT2.DT.DeadTime[i]
-	       <<"\n--------------------------------------------------------"
-	       <<std::endl;
+    if(FT2.verbose){ 
+      for(unsigned int i=0;i<FT2_ENTR;i++){
+	printf("Current Entry %d\n",i);
+	printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+	       FT2.DT.Tstart_LiveTime[i],FT2.DT.Tstop_LiveTime[i]);
+	std::cout<<setprecision(20)
+		 <<"Tstart "
+		 <<FT2.DT.Tstart[i]
+		 <<" Tstop "
+		 <<FT2.DT.Tstop[i]
+		 <<" Delta T "
+		 <<FT2.DT.Tstop[i] - FT2.DT.Tstart[i]
+		 <<" Live Time "
+		 <<FT2.FT2_T.LiveTime[i]
+		 <<" Dead Time "
+		 <<FT2.DT.DeadTime[i]
+		 <<"\n--------------------------------------------------------"
+		 <<std::endl;
+      }
+      std::cout<<"======================================================"<<std::endl;
     }
-    std::cout<<"======================================================"<<std::endl;
-    
     
     
     //----- Evaluate Live Time and tacking into account edge effects --------
