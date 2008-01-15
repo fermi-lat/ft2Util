@@ -8,7 +8,7 @@
 // c++/stl headers
 #include <cmath>
 #include <cstdlib>
-#include <algorithm>
+#include <algorithm>   
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -200,36 +200,45 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
   double fraction;//fraction_tot=0;
   
   for(unsigned int i=0;i<FT2_ENTR;i++){
-    printf("Entry %d \n",i);
+    
+    
+    
     //FT2.FT2_T.LiveTime[i]=0;
 
     if(FT2.DT.update[i]){
-      std::cout<<"upadte "
-	       <<i
-	       <<std::endl;
+      
  
       FT2.FT2_T.LiveTime[i]=
 	(FT2.DT.Tstop_LiveTime[i] -  FT2.DT.Tstart_LiveTime[i]) - FT2.DT.DeadTime[i]; 
-      
-      std::cout<<"Tstart "
-	       <<FT2.FT2_T.Tstart[i]
-	       <<"\nTstop "
-	       <<FT2.FT2_T.Tstop[i]
-	       <<"\nTstart Live " 
-	       <<FT2.DT.Tstart_LiveTime[i]
-	       <<"\nTstop Live "
-	       <<FT2.DT.Tstop_LiveTime[i] 
-	       <<"\nlive "<<FT2.FT2_T.LiveTime[i]
-	       <<std::endl;;
-    
+
+      if(FT2.verbose){
+	printf("Entry %d \n",i);
+	std::cout<<"upadte "
+		 <<i
+		 <<std::endl;
+	
+	std::cout<<"Tstart "
+		 <<FT2.FT2_T.Tstart[i]
+		 <<"\nTstop "
+		 <<FT2.FT2_T.Tstop[i]
+		 <<"\nTstart Live " 
+		 <<FT2.DT.Tstart_LiveTime[i]
+		 <<"\nTstop Live "
+		 <<FT2.DT.Tstop_LiveTime[i] 
+		 <<"\nlive "<<FT2.FT2_T.LiveTime[i]
+		 <<std::endl;;
+      }
+
     
       if(FT2.DT.update[i+1] && i<FT2_ENTR-1){
 	fraction=(FT2.FT2_T.Tstop[i]-FT2.DT.Tstop[i])/(FT2.DT.Tstart[i+1]-FT2.DT.Tstop[i]);
 	fraction*=(FT2.DT.Tstart_LiveTime[i+1]-FT2.DT.Tstop_LiveTime[i]);
-	std::cout<<"fraction fwd "
-		 <<fraction
-		 <<"\n";
-	//printf("%e %e\n",FT2.DT.Tstart_LiveTime[i+1],FT2.DT.Tstop_LiveTime[i]);
+	if(FT2.verbose){
+	  std::cout<<"fraction fwd "
+		   <<fraction
+		   <<"\n";
+	  //printf("%e %e\n",FT2.DT.Tstart_LiveTime[i+1],FT2.DT.Tstop_LiveTime[i]);
+	}
 	FT2.FT2_T.LiveTime[i]+= fraction;
 	//fraction_tot+=fraction;
       }
@@ -238,10 +247,12 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
 	fraction=1.0/(FT2.DT.Tstart[i]-FT2.DT.Tstop[i-1]);
 	fraction*=(FT2.DT.Tstart[i]-FT2.FT2_T.Tstart[i]);
 	fraction*=(FT2.DT.Tstart_LiveTime[i]-FT2.DT.Tstop_LiveTime[i-1]);
-	std::cout<<"fraction back "
-		 <<fraction
-		 <<"\n";
-	//printf("%e %e\n",FT2.DT.Tstart_LiveTime[i+1],FT2.DT.Tstop_LiveTime[i]);
+	if(FT2.verbose){
+	  std::cout<<"fraction back "
+		   <<fraction
+		   <<"\n";
+	  //printf("%e %e\n",FT2.DT.Tstart_LiveTime[i+1],FT2.DT.Tstop_LiveTime[i]);
+	}
 	FT2.FT2_T.LiveTime[i]+= fraction;
 	//fraction_tot+=fraction;
       }
@@ -249,13 +260,15 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
       
     }
 
-
-    std::cout<<"live "
-	     <<std::setprecision(20)
-	     <<FT2.FT2_T.LiveTime[i]
-	     <<std::endl 
-	     <<"-------------------------------------------------------------------------"
-	     <<std::endl;
+    
+    if(FT2.verbose){
+      std::cout<<"live "
+	       <<std::setprecision(20)
+	       <<FT2.FT2_T.LiveTime[i]
+	       <<std::endl 
+	       <<"-------------------------------------------------------------------------"
+	       <<std::endl;
+    }
     //------ inter bin correction --------
     
   }
@@ -601,10 +614,11 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 
       //------------ Make a new Entry if MODE Changes ----------------------
       if (MODE!=OLD_MODE){
-	printf("---------------------------------------------------------\n");
+
 	NewTimeBin=1;
 	
 	if(FT2.verbose){
+	  printf("---------------------------------------------------------\n");
 	  std::cout<<"New Entry due to Changed Mode form "
 		   <<OLD_MODE
 		   <<" to "
@@ -626,10 +640,11 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 
     //------------ Make a new Entry if Time Bin Changes ----------------------
     if(TimeBin!=OldTimeBin && M7LineCounter>0){
-      printf("---------------------------------------------------------\n");
+    
       NewTimeBin=1;
 
-      if(FT2.verbose){
+      if(FT2.verbose){ 
+	printf("---------------------------------------------------------\n");
 	std::cout<<"Previous Entry Time Id "
 		 <<std::setprecision(20)
 		 <<FT2.FT2_T.bin[Current_FT2_Entries-1]
@@ -674,7 +689,8 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 	//in time more than one entry time span
 	//than tacke Tstart not form previous entry
 	//Tstop but from current M7 file time
-	if(TimeBin-OldTimeBin<1){
+	//printf("(TimeBin-OldTimeBin=%d\n",TimeBin-OldTimeBin);
+	if(TimeBin-OldTimeBin<=1){
 	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
 	}else{
 	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
@@ -831,8 +847,9 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   //FT2.Average_M7_Entries(FT2);
   FT2.Interp_ORB_Entries(FT2);
   FT2.Interp_ATT_Entries(FT2);
-  printf("---------------------------------------------------------\n");
-
+  if(FT2.verbose){
+    printf("---------------------------------------------------------\n");
+  }
 }
 
 //-------------Interplates ORB if entr=0------------------
@@ -840,9 +857,10 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
   double deltat ;
   
  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
-    std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-    
-    if(FT2.ORB.entr[i]==0 && i>0){
+   if(FT2.verbose){
+     std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+   }
+   if(FT2.ORB.entr[i]==0 && i>0){
       deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
       std::cout<<"deltat = "<<deltat<<"\n";
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
@@ -852,9 +870,9 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       FT2.ORB.CM[i]= ORB.CM[i-1];
       FT2.ORB.SAA[i]=ORB.SAA[i-1];
 
-    }
-    
-     if(FT2.ORB.entr[i]==0 && i==0){
+   }
+   
+   if(FT2.ORB.entr[i]==0 && i==0){
       deltat=FT2_T.Tstop[i]-FT2_T.Tstart[i];
       std::cout<<"deltat = "<<deltat<<"\n";
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
@@ -863,7 +881,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       FT2.ORB.z[i]=ORB.z[i+1]-ORB.vz[i+1]*deltat;
       FT2.ORB.CM[i]= ORB.CM[i+1];
       FT2.ORB.SAA[i]=ORB.SAA[i+1];
-    }
+   }
 
  }
  
@@ -876,33 +894,34 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
   double deltat ;
   
  for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){
-    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-    
-    if(FT2.ATT.entr[i]==0 && i>0){
-      deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
-      std::cout<<"deltat = "<<deltat<<"\n";
-      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
-      FT2.ATT.x[i]=FT2.ATT.x[i-1];
-      FT2.ATT.y[i]=FT2.ATT.y[i-1];
-      FT2.ATT.z[i]=FT2.ATT.z[i-1];
-      FT2.ATT.w[i]=FT2.ATT.w[i-1];
-      FT2.ATT.vx[i]=FT2.ATT.vx[i-1];
-      FT2.ATT.vy[i]=FT2.ATT.vy[i-1];
-      FT2.ATT.vz[i]=FT2.ATT.vz[i-1];
-    } 
-    if(FT2.ATT.entr[i]==0 && i==0){
-      deltat=FT2_T.Tstop[i+1]-FT2_T.Tstart[i+1];
-      std::cout<<"deltat = "<<deltat<<"\n";
-      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
-      FT2.ATT.x[i]=FT2.ATT.x[i+1];
-      FT2.ATT.y[i]=FT2.ATT.y[i+1];
-      FT2.ATT.z[i]=FT2.ATT.z[i+1];
-      FT2.ATT.w[i]=FT2.ATT.w[i+1];
-      FT2.ATT.vx[i]=FT2.ATT.vx[i+1];
-      FT2.ATT.vy[i]=FT2.ATT.vy[i+1];
+   if(FT2.verbose){
+     std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
+   }
+   if(FT2.ATT.entr[i]==0 && i>0){
+     deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
+     std::cout<<"deltat = "<<deltat<<"\n";
+     FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+     FT2.ATT.x[i]=FT2.ATT.x[i-1];
+     FT2.ATT.y[i]=FT2.ATT.y[i-1];
+     FT2.ATT.z[i]=FT2.ATT.z[i-1];
+     FT2.ATT.w[i]=FT2.ATT.w[i-1];
+     FT2.ATT.vx[i]=FT2.ATT.vx[i-1];
+     FT2.ATT.vy[i]=FT2.ATT.vy[i-1];
+     FT2.ATT.vz[i]=FT2.ATT.vz[i-1];
+   } 
+   if(FT2.ATT.entr[i]==0 && i==0){
+     deltat=FT2_T.Tstop[i+1]-FT2_T.Tstart[i+1];
+     std::cout<<"deltat = "<<deltat<<"\n";
+     FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+     FT2.ATT.x[i]=FT2.ATT.x[i+1];
+     FT2.ATT.y[i]=FT2.ATT.y[i+1];
+     FT2.ATT.z[i]=FT2.ATT.z[i+1];
+     FT2.ATT.w[i]=FT2.ATT.w[i+1];
+     FT2.ATT.vx[i]=FT2.ATT.vx[i+1];
+     FT2.ATT.vy[i]=FT2.ATT.vy[i+1];
       FT2.ATT.vz[i]=FT2.ATT.vz[i+1];
-    }
-  
+   }
+   
  }
  
 }
@@ -956,6 +975,7 @@ void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
     
 }
 
+
 void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){     
   Att.entr[entry]++;
   //Update only if the entry is the first for the time bin
@@ -989,7 +1009,7 @@ void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned
   Orb.entr[entry]++;
   //Update only if the entry is the first for the time bin
   if (Orb.entr[entry]==1){
-    printf("--\n");
+    //printf("--\n");
     Orb.Tstart[entry]=FT2::Get_M7_Time(tokens[3],tokens[4]);
     Orb.x[entry]=atof(tokens[5].c_str());
     Orb.y[entry]=atof(tokens[6].c_str());
