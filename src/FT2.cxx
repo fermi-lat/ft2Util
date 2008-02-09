@@ -568,8 +568,19 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   //File Handlign
   std::string buf,comment; //buffer string
   std::string line;
-  std::ifstream M7F(FT2.M7File.c_str());
- 
+  std::ifstream M7F;
+
+  M7F.open(FT2.M7File.c_str());
+
+  if(M7F.fail())
+    {
+      std::cout<<"The file *** \'"
+	  <<FT2.M7File.c_str()
+	  <<"\' *** could not be opened!\n"
+	  <<"Abnormal Exit !!!\n";
+      exit(1); 
+    }
+  
   printf("----------- Set FT2 Entries from M7 file -----------\n");
   
   
