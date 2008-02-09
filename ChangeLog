@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Feb  8 16:36:58 PST 2008
+ft2Util/src
+
+Modified Files:
+	FT2.cxx 
+Log Message:
+check if M7file exist
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p29, operation: add
 Package: ft2Util
