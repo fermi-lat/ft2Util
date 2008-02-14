@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Wed Feb 13 17:57:59 PST 2008
+ft2Util/src
+
+Modified Files:
+	FITS.cxx FT2.cxx 
+Log Message:
+added -Version to command  line, keyword for FITS file
+    *
+------------------------------------------------------------
+User: tramacer  Wed Feb 13 17:57:59 PST 2008
 ft2Util/ft2Util
 
 Modified Files:
