@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Thu Feb 14 14:12:58 PST 2008
+ft2Util/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+added version number to mergeFT2, initialize EarhtCordinate(lat,lon)
+    *
+------------------------------------------------------------
+User: tramacer  Thu Feb 14 14:12:58 PST 2008
 ft2Util/apps
 
 Modified Files:
