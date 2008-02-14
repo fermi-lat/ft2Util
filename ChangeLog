@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Thu Feb 14 14:15:09 PST 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+added version number to mergeFT2, initialize EarhtCordinate(lat,lon)
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p32, operation: add
 Package: ft2Util
