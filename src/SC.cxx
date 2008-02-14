@@ -18,8 +18,9 @@
 #include "astro/Quaternion.h"
 #include "astro/SkyDir.h" 
 #include "astro/EarthCoordinate.h"
-
-
+#include "astro/GPS.h"
+#include "FluxSvc/PointingInfo.h"
+#include "astro/JulianDate.h"
 
 
 //Constructor
@@ -74,7 +75,7 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
 
   std::cout<<"----------------- Fill SC entries --------------------"<<std::endl;
   for (unsigned int i = 0; i < FT2.FT2_SC.RA_SCX.size(); ++i){   
- 
+    
     //RA and DEC of SC X and Z axis
     static Hep3Vector xaxis(1,0,0), zaxis(0,0,1);
     Quaternion q(Hep3Vector(FT2.ATT.x[i],FT2.ATT.y[i],FT2.ATT.z[i]),FT2.ATT.w[i]);
@@ -86,7 +87,7 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     FT2.FT2_SC.DEC_SCX[i]=decx;
     FT2.FT2_SC.DEC_SCZ[i]=decz;
 
-
+    printf("1 ----\n");
     //Position Vector
     Hep3Vector pos(FT2.ORB.x[i],FT2.ORB.y[i],FT2.ORB.z[i]);
     
@@ -108,10 +109,21 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     //MCILWAIN coordinates
     FT2.FT2_SC.B_MCILWAIN[i]=EC.B();
     FT2.FT2_SC.L_MCILWAIN[i]=EC.L();
-
+ 
     //Geomag LAT
     FT2.FT2_SC.GEOMAG_LAT[i]=EC.geolat();
-   
+    printf("2 ----\n");
+    //TEST
+    GPS* gps = GPS::instance();
+    start = gps->time();
+    CLHEP::Hep3Vector pos_km = gps->position();
+    CLHEP::Hep3Vector location = 1.e3* pos_km;
+    EarthCoordinate loc = gps->earthpos();
+    printf("3 ----\n");
+
+
+    printf("M7 %e  GPS %e\n",FT2.ORB.x[i],location.x());
+    
     if(FT2.verbose){
       std::cout<<i
 	       <<", "
