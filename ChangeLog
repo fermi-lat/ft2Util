@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Thu Feb 14 14:12:59 PST 2008
+ft2Util/src
+
+Modified Files:
+	FT2.cxx SC.cxx 
+Log Message:
+added version number to mergeFT2, initialize EarhtCordinate(lat,lon)
+    *
+------------------------------------------------------------
 User: tramacer  Thu Feb 14 14:12:58 PST 2008
 ft2Util/ft2Util
 
