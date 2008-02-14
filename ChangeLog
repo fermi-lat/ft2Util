@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Feb 13 17:57:59 PST 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+added -Version to command  line, keyword for FITS file
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p30, operation: add
 Package: ft2Util
