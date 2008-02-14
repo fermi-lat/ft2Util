@@ -12,7 +12,7 @@ use cfitsio * IExternal
 use CLHEP v3* IExternal
 use facilities v*
 use fitsGen v*
-use FluxSvc v*
+
 
 apply_pattern  package_include
 apply_pattern  package_headers

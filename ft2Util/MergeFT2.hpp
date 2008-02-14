@@ -10,6 +10,6 @@
 
 
 void getFileNames(int iargc, char * argv[], std::string & FT2File,
-		       std::string & fitsFile);
+		       std::string & fitsFile,  std::string & Version);
 
 #endif

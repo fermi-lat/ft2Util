@@ -288,6 +288,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
     " -M7File <FileName>\n"  
     " -FT2_txt_File <FileName>\n" 
     " -FT2_fits_File <FileName> \n"
+    " -Version <vesion of the file>\n"
     " --Gleam \n"
     " --verbose\n"
     " -h --help\n";

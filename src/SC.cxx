@@ -119,7 +119,7 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     FT2.FT2_SC.L_MCILWAIN[i]=GEOM.L();
 
 
-    printf("lat %e lon %e geolat %e\n",EC.latitude(),EC.longitude (),GEOM.geolat());
+    //printf("lat %e lon %e geolat %e\n",EC.latitude(),EC.longitude (),GEOM.geolat());
     
     if(FT2.verbose){
       std::cout<<i
