@@ -86,7 +86,8 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   creator << "ft2Util";
   ft2.setPhduKeyword("CREATOR", creator.str());
   //std::string version = m_pars["file_version"];
-  //ft2.setPhduKeyword("VERSION", version);
+  //std::string version = FT2.VERSION.srt();
+  ft2.setPhduKeyword("VERSION", FT2.Version);
   std::string filename(facilities::Util::basename(FT2.FT2_fits_File));
   ft2.setPhduKeyword("FILENAME", filename);
   std::cout<<"done\n";

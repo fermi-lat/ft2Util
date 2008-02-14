@@ -91,7 +91,8 @@ public:
   std::string M7File;
   std::string FT2_txt_File;
   std::string FT2_fits_File;
-  
+  std::string Version;
+
   DigiTime DT;
   ATTITUDE ATT;
   ORBIT ORB;
@@ -166,6 +167,8 @@ public:
   
   //Text
   void WriteTextFile(FT2 &FT2);
+
+ 
 
 private:
   bool OutOfRange;

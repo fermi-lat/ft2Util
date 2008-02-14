@@ -307,6 +307,8 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
 	if(par=="-M7File") FT2.M7File = std::string(argv[i+1]);
 	if(par=="-FT2_txt_File") FT2.FT2_txt_File = std::string(argv[i+1]);
 	if(par=="-FT2_fits_File") FT2.FT2_fits_File= std::string(argv[i+1]);
+	if(par=="-Version")	  FT2.Version= std::string(argv[i+1]);
+       
 	if(par=="-h"){
 	  std::cout << usage;
 	  std::exit(0);
@@ -327,7 +329,6 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
 	  std::cout<<"MonteCarlo \n";
 	  FT2.MC=true;
 	}
-
 
       }
     }
