@@ -17,11 +17,12 @@
 
 
 void getFileNames(int iargc, char * argv[],std::string & FT2File,
-		  std::string & fitsFile) {
+		  std::string & fitsFile, std::string & Version) {
   const char usage[] = 
     "usage: mergeFT2Entries.exe  [OPTIONS]\n" 
     " -FT2_txt_File <FileName>\n" 
     " -FT2_fits_File <FileName> \n"
+    " -Version <vesion of the file>\n"
     " -h --help\n";
   
   if (iargc < 5) {
@@ -33,9 +34,10 @@ void getFileNames(int iargc, char * argv[],std::string & FT2File,
     std::cout<<"command line"<<std::endl;
     for( i = 1; i < iargc; i++ ){
       std::string par = argv[i];
-      if(par=="-FT2_txt_File") FT2File  = std::string(argv[i+1]);
-      if(par=="-FT2_fits_File")fitsFile = std::string(argv[i+1]);
-      if(par=="-h"){
+      if(par=="-FT2_txt_File" ) FT2File  = std::string(argv[i+1]);
+      if(par=="-FT2_fits_File") fitsFile = std::string(argv[i+1]);
+      if(par=="-Version")       Version= std::string(argv[i+1]);
+      if(par=="-h"){ 
 	std::cout << usage;
 	std::exit(0);
 	}
@@ -49,6 +51,8 @@ void getFileNames(int iargc, char * argv[],std::string & FT2File,
 	     <<FT2File
 	     <<" FITS FILE"
 	     <<fitsFile
+	     <<"Version of file"
+	     <<Version
 	     <<std::endl;
   }
 }
@@ -61,22 +65,25 @@ int main(int iargc, char **argv){
     
     FT2 FT2;
     
-    printf("v1r1p9\n");
+    printf("v1r1p32\n");
     
     //File Handlign
     std::string FT2File;
     std::string fitsFile;
     std::string line,comment;
+    std::string Version;
 
     double time, t_stop,time_elapsed(0),live_time(0);
     unsigned int Entries(0);
     bool first_bin(true), new_entry(false);
     bool in_saa;
     
-    getFileNames(iargc, argv, FT2File,fitsFile);
+    getFileNames(iargc, argv, FT2File,fitsFile, Version);
     
     std::ifstream inFT2File(FT2File.c_str());
-    
+
+    FT2.Version= Version;
+ 
     //Read FT2 File 
     while (std::getline(inFT2File, line, '\n')) {
 
