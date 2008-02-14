@@ -19,7 +19,6 @@
 #include "astro/SkyDir.h" 
 #include "astro/EarthCoordinate.h"
 #include "astro/GPS.h"
-#include "FluxSvc/PointingInfo.h"
 #include "astro/JulianDate.h"
 
 
@@ -87,10 +86,11 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     FT2.FT2_SC.DEC_SCX[i]=decx;
     FT2.FT2_SC.DEC_SCZ[i]=decz;
 
-    printf("1 ----\n");
+    
     //Position Vector
     Hep3Vector pos(FT2.ORB.x[i],FT2.ORB.y[i],FT2.ORB.z[i]);
-    
+    Hep3Vector pos_km =  pos/1e3;
+
     //SKY DIR RA and DEC of ZENITH
     SkyDir zenith(pos);
 
@@ -100,29 +100,26 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     //LAT LON and RAD  GEO
     //!!!!!!!!!!! Here we have
     //The time of the ORBIT stamp
-    EarthCoordinate EC(pos,FT2.ORB.Tstart[i]);
+    EarthCoordinate EC(pos_km,FT2.ORB.Tstart[i]);
  
     FT2.FT2_SC.LAT_GEO[i]=EC.latitude();
     FT2.FT2_SC.LON_GEO[i]=EC.longitude();
-    FT2.FT2_SC.RAD_GEO[i]=EC.altitude();
+    //rad_geo in meters!!!
+    FT2.FT2_SC.RAD_GEO[i]=EC.altitude()*1000;
     
-    //MCILWAIN coordinates
-    FT2.FT2_SC.B_MCILWAIN[i]=EC.B();
-    FT2.FT2_SC.L_MCILWAIN[i]=EC.L();
+    
+    //FT2.FT2_SC.B_MCILWAIN[i]=EC.B();
+    //FT2.FT2_SC.L_MCILWAIN[i]=EC.L();
  
     //Geomag LAT
-    FT2.FT2_SC.GEOMAG_LAT[i]=EC.geolat();
-    printf("2 ----\n");
-    //TEST
-    GPS* gps = GPS::instance();
-    start = gps->time();
-    CLHEP::Hep3Vector pos_km = gps->position();
-    CLHEP::Hep3Vector location = 1.e3* pos_km;
-    EarthCoordinate loc = gps->earthpos();
-    printf("3 ----\n");
+    EarthCoordinate GEOM(EC.latitude(),EC.longitude());
+    FT2.FT2_SC.GEOMAG_LAT[i]=GEOM.geolat();
+    //MCILWAIN coordinates
+    FT2.FT2_SC.B_MCILWAIN[i]=GEOM.B();
+    FT2.FT2_SC.L_MCILWAIN[i]=GEOM.L();
 
 
-    printf("M7 %e  GPS %e\n",FT2.ORB.x[i],location.x());
+    printf("lat %e lon %e geolat %e\n",EC.latitude(),EC.longitude (),GEOM.geolat());
     
     if(FT2.verbose){
       std::cout<<i
