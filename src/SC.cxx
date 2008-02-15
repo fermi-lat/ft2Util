@@ -107,16 +107,18 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     //rad_geo in meters!!!
     FT2.FT2_SC.RAD_GEO[i]=EC.altitude()*1000;
     
-    
-    //FT2.FT2_SC.B_MCILWAIN[i]=EC.B();
-    //FT2.FT2_SC.L_MCILWAIN[i]=EC.L();
+    //MCILWAIN coordinates
+    FT2.FT2_SC.B_MCILWAIN[i]=EC.B();
+    FT2.FT2_SC.L_MCILWAIN[i]=EC.L();
  
     //Geomag LAT
-    EarthCoordinate GEOM(EC.latitude(),EC.longitude());
-    FT2.FT2_SC.GEOMAG_LAT[i]=GEOM.geolat();
-    //MCILWAIN coordinates
-    FT2.FT2_SC.B_MCILWAIN[i]=GEOM.B();
-    FT2.FT2_SC.L_MCILWAIN[i]=GEOM.L();
+    FT2.FT2_SC.GEOMAG_LAT[i]=EC.geolat();
+
+    //EarthCoordinate GEOM(EC.latitude(),EC.longitude());
+    //FT2.FT2_SC.GEOMAG_LAT[i]=GEOM.geolat();
+    
+    //FT2.FT2_SC.B_MCILWAIN[i]=GEOM.B();
+    //FT2.FT2_SC.L_MCILWAIN[i]=GEOM.L();
 
 
     //printf("lat %e lon %e geolat %e\n",EC.latitude(),EC.longitude (),GEOM.geolat());
