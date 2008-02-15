@@ -91,7 +91,7 @@ public:
   std::string M7File;
   std::string FT2_txt_File;
   std::string FT2_fits_File;
-  std::string Version;
+  std::string Version ;
 
   DigiTime DT;
   ATTITUDE ATT;
@@ -177,6 +177,6 @@ private:
   
 };
 
-
+//const string FT2::Version = {"none"};
 
 #endif
