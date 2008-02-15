@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Thu Feb 14 17:42:35 PST 2008
+ft2Util/src
+
+Modified Files:
+	SC.cxx 
+Log Message:
+bug on no more supported EarthCoordinate initialization
+    *
+------------------------------------------------------------
+User: tramacer  Thu Feb 14 17:42:35 PST 2008
 ft2Util/ft2Util
 
 Modified Files:
