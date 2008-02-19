@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Feb 18 17:35:31 PST 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+isses on interpolation and Gaps in M7
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p34, operation: add
 Package: ft2Util
