@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Feb 18 23:21:32 PST 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+fixed issue about interpolation of ORB entries
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p35, operation: add
 Package: ft2Util
