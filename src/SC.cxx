@@ -100,7 +100,7 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     //LAT LON and RAD  GEO
     //!!!!!!!!!!! Here we have
     //The time of the ORBIT stamp
-    EarthCoordinate EC(pos_km,FT2.ORB.Tstart[i]);
+    EarthCoordinate EC(pos_km,FT2_T.Tstart[i]);
  
     FT2.FT2_SC.LAT_GEO[i]=EC.latitude();
     FT2.FT2_SC.LON_GEO[i]=EC.longitude();
