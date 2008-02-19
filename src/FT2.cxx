@@ -943,6 +943,7 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 
   printf("--------------------------- Interplates ORB if Vel=0 ---------------------------\n");
 
+  //First Entry
   unsigned int i=0;
   if(FT2.ORB.vx[i]==0 && FT2.ORB.entr[i]>0 ){
      //printf("Interpolation of ORB\n");
@@ -967,8 +968,9 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
      printf("jump_f=%d jump_f1=%d vx=%e vy=%e vz=%e\n",jump_f,jump_f1,FT2.ORB.vx[i],FT2.ORB.vy[i],FT2.ORB.vz[i]);
    }
 
-  unsigned int max= FT2.ORB.entr.size()-1;
   
+  // Second to N-1 entry
+  unsigned int max= FT2.ORB.entr.size()-1;
   for (unsigned int i = 1; i < FT2.ORB.entr.size()-1; ++i){
    
     
@@ -985,19 +987,21 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 	jump_f++;
       }
 
-      //FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
 
+      //If the jump fails replace
       if(i+jump_f==max){
 	FT2.ORB.vx[i]= FT2.ORB.vx[i-jump_b];
 	FT2.ORB.vy[i]= FT2.ORB.vy[i-jump_b];
 	FT2.ORB.vz[i]= FT2.ORB.vz[i-jump_b];
+	printf("jump failed in forward\n");
       }
       else if(i-jump_b==0){
 	FT2.ORB.vx[i]= FT2.ORB.vx[i+jump_f];
 	FT2.ORB.vy[i]= FT2.ORB.vy[i+jump_f];
 	FT2.ORB.vz[i]= FT2.ORB.vz[i+jump_f];
+	printf("jump failed in  backward\n");
       }else{
-	//!!! Average velocity
+	//!!! Interpolate velocities
 	t1= FT2.ORB.Tstart[i-jump_b];
 	t2= FT2.ORB.Tstart[i+jump_f];
 	t = FT2.ORB.Tstart[i];
@@ -1020,6 +1024,7 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
     
   }
   
+  //Last Entry
   i=FT2.ORB.entr.size()-1;
   if(FT2.ORB.vx[i]==0 && FT2.ORB.entr[i]>0 ){
      //printf("Interpolation of ORB\n");
@@ -1095,13 +1100,14 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
     
   }
   
+  //Last Entry
   if(FT2.ORB.entr[max]==0 ){
     unsigned int i=max;
     printf("Interpolation of ORB\n");
     
      jump_b=1;
      while(FT2.ORB.entr[i-jump_b]==0){
-       jump_f++;
+       jump_b++;
      }
  
     deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
