@@ -112,11 +112,13 @@ public:
   void Fill_M7_Entries(FT2 &FT2);
   void Average_M7_Entries(FT2 &FT2);
   void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry);
-  void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, unsigned int entry);
+  void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, unsigned int entry,double  Tstart);
   void Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry);
   void Clean_ORB(ORBIT &Orb, unsigned int entry);
   void Interp_ORB_Entries(FT2 &FT2);
   void Interp_ATT_Entries(FT2 &FT2);
+  void Interp_ORB_Tstart(FT2 &FT2);
+  void Interp_ORB_Vel_Entries(FT2 &FT2);
   unsigned int M7_Entries;
  
   //FT2_Time
