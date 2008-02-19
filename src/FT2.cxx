@@ -604,6 +604,8 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 	  std::cout<<"Time=" 
 		   <<std::setprecision(20)
 		   <<time
+		   <<" lable"
+		   <<tokens[2]
 		   <<std::endl;
 
 	}    
@@ -655,6 +657,58 @@ void FT2::Set_M7_Entries(FT2 &FT2){
     if(TimeBin!=OldTimeBin && M7LineCounter>0){
     
       NewTimeBin=1;
+     
+      //-----Put  empity entries if Delta_ID>1--------//
+      unsigned int Delta_Gap=(TimeBin-OldTimeBin);
+      if(Delta_Gap>1){
+	printf("---------------------------------------------------------\n");
+	printf("Found Gap, Delta_Gap=%d\n",Delta_Gap);
+	printf("Time=%20.20e Tstop previous entry=%20.20e\n",time,FT2.FT2_T.Tstop[Current_FT2_Entries-2]);
+	for(unsigned int i=1;i<Delta_Gap;i++){
+	  printf("---------------------------------------------------------\n");
+	  printf("add an empty entry in the Gap N=%d\n",i);
+	  if(FT2.verbose){ 
+	    std::cout<<"!!!GAP Previous Entry Time Id "
+		     <<std::setprecision(20)
+		     <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+		     <<" FT2 Tstart "
+		     <<FT2.FT2_T.Tstart[Current_FT2_Entries-1]
+		     <<" FT2 Tstop "
+		     <<FT2.FT2_T.Tstop[Current_FT2_Entries-1]
+		     <<std::endl;
+	  }
+
+	
+	  //UPADTE THE NUMBER OF ENTRIES IN THE FT2 CLASS
+	  Current_FT2_Entries++;
+	  FT2.Update_FT2_Entries(FT2,Current_FT2_Entries);
+
+	  //Resize FT2_Time class 
+	  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,Current_FT2_Entries);
+	  FT2.FT2_T.bin[Current_FT2_Entries-1]=TimeBin-(Delta_Gap)+i;
+
+	  //Update FT2_Time class
+	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
+	  FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
+	
+	
+
+
+
+	  if(FT2.verbose){ 
+	    std::cout<<"New Entry, Current number of  FT2 Entries "
+		     <<Current_FT2_Entries
+		     <<" Current Entry Id"
+		     <<FT2.FT2_T.bin[Current_FT2_Entries-1]
+		     <<" M7 line "
+		     <<M7LineCounter
+		     <<std::endl; 
+	    std::cout<<Tstart <<" +"<<time<<std::endl;
+	    
+	  }
+	}
+      }
+      //---------------------------------------------------------
 
       if(FT2.verbose){ 
 	printf("---------------------------------------------------------\n");
@@ -703,11 +757,12 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 	//than tacke Tstart not form previous entry
 	//Tstop but from current M7 file time
 	//printf("(TimeBin-OldTimeBin=%d\n",TimeBin-OldTimeBin);
-	if(TimeBin-OldTimeBin<=1){
-	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
-	}else{
-	  FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
-	}
+	
+	//if(TimeBin-OldTimeBin<=1){
+	FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
+	  //}else{
+	  //FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
+	  ///	}
 
 	FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
       }
@@ -747,16 +802,18 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   
   M7F.close();
  
-  //for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
-  //  printf("%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
-  //}
-  
+  if(FT2.verbose){
+    for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
+      printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i],FT2.FT2_T.bin[i]);
+    }
+  }
+
 }
 
 
 
 
-//--------------  Fill M7 Entries in M7 File ----------------------------------
+//--------------  Fill M7 Entries from M7 File ----------------------------------
 void FT2::Fill_M7_Entries(FT2 &FT2){
 
   double time,Tstart;
@@ -809,6 +866,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
       NewEntry=true;
 	if(FT2.verbose){
 	  std::cout
+	    <<"-------------------------------------------------\n"
 	    <<"M7 time"
 	    <<time
 	    <<"Current Entry "
@@ -820,6 +878,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
 	    <<FT2.FT2_T.Tstart[Current_FT2_Entry]
 	    <<" FT2 Tstop "
 	    <<FT2.FT2_T.Tstop[Current_FT2_Entry]
+	    <<"--------------------------------------------------"
 	    <<std::endl;
 	}
     }    
@@ -837,7 +896,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
       FT2.Update_ATT_Quaternions(FT2.ATT,tokens,Current_FT2_Entry);
     }
     if (tokens[2]=="ORB"){ 
-      FT2.Update_ORB(FT2.ORB,tokens,Current_FT2_Entry);
+      FT2.Update_ORB(FT2.ORB,tokens,Current_FT2_Entry,FT2.FT2_T.Tstart[Current_FT2_Entry]);
     }
     
     
@@ -858,49 +917,188 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   //BECAUSE THE FT2 TEMPLATE REQUIRES VALUE AT 
   //THE BEGINNING OF THE TIME BIN !!!!!!!!!!!!!!!
   //FT2.Average_M7_Entries(FT2);
+   if(FT2.verbose){
+    for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
+      printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i],FT2.FT2_T.bin[i]);
+    }
+  }
+
+  FT2.Interp_ORB_Vel_Entries(FT2);
   FT2.Interp_ORB_Entries(FT2);
+  FT2.Interp_ORB_Tstart(FT2);
   FT2.Interp_ATT_Entries(FT2);
   if(FT2.verbose){
     printf("---------------------------------------------------------\n");
   }
 }
 
+
+//-------------Interplates ORB if Vel=0------------------
+void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
+  double deltat ;
+  unsigned int jump_b, jump_f;
+  printf("--------------------------- Interplates ORB if Vel=0 ---------------------------\n");
+
+  unsigned int i=0;
+  if(FT2.ORB.vx[i]==0){
+     //printf("Interpolation of ORB\n");
+     //looks for the first entries wiht non zero velocities
+     jump_f=1;
+     while(FT2.ORB.vx[i+jump_f]==0){
+       jump_f++;
+     }
+ 
+     //!!!!I reply velocities at the beginning
+     FT2.ORB.vx[i]= FT2.ORB.vx[i+jump_f];
+     FT2.ORB.vy[i]= FT2.ORB.vy[i+jump_f];
+     FT2.ORB.vz[i]= FT2.ORB.vz[i+jump_f];
+     printf("jump_f=%d i=%d vx=%e\n",jump_f,i,FT2.ORB.vx[i+jump_f]);
+   }
+
+  unsigned int max= FT2.ORB.entr.size()-1;
+  for (unsigned int i = 1; i < FT2.ORB.entr.size()-1; ++i){
+   
+    
+    if(FT2.ORB.vx[i]==0){
+    
+      //looks for the first entries wiht non zero velocities
+      jump_b=1;
+      while(FT2.ORB.vx[i-jump_b]==0 && (i-jump_b>0)){
+       jump_b++;
+      }
+      
+      jump_f=1;
+      while(FT2.ORB.vx[i+jump_f]==0 && (i+jump_f<max)){
+	jump_f++;
+      }
+
+      if(i+jump_f==max){
+	FT2.ORB.vx[i]= FT2.ORB.vx[i-jump_b];
+	FT2.ORB.vy[i]= FT2.ORB.vy[i-jump_b];
+	FT2.ORB.vz[i]= FT2.ORB.vz[i-jump_b];
+      }
+      else if(i-jump_b==0){
+	FT2.ORB.vx[i]= FT2.ORB.vx[i+jump_f];
+	FT2.ORB.vy[i]= FT2.ORB.vy[i+jump_f];
+	FT2.ORB.vz[i]= FT2.ORB.vz[i+jump_f];
+      }else{
+	//!!! Average velocity
+	FT2.ORB.vx[i]= (FT2.ORB.vx[i-jump_b]+FT2.ORB.vx[i+jump_f])*0.5;
+	FT2.ORB.vy[i]= (FT2.ORB.vy[i-jump_b]+FT2.ORB.vy[i+jump_f])*0.5;
+	FT2.ORB.vz[i]= (FT2.ORB.vz[i-jump_b]+FT2.ORB.vz[i+jump_f])*0.5;
+      }
+
+      if(FT2.verbose){
+	printf("--------------------------\n");
+	printf("Interpolation of ORB Vel\n");
+	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+	
+	printf("jump_b=%d i=%d vx_b=%e\n",jump_b,i,FT2.ORB.vx[i-jump_b]);
+	printf("jump_f=%d i=%d vx_f=%e\n",jump_f,i,FT2.ORB.vx[i+jump_f]);
+	printf("vx interp=%e\n",FT2.ORB.vx[i]);
+	printf("--------------------------\n");
+      }
+    }
+    
+  }
+  
+  i=FT2.ORB.entr.size()-1;
+  if(FT2.ORB.vx[i]==0){
+     //printf("Interpolation of ORB\n");
+     //looks for the first entries wiht non zero velocities
+     jump_b=1;
+     while(FT2.ORB.vx[i -jump_b]==0){
+       jump_b++;
+     }
+ 
+     //!!!!I reply velocities at the end
+     FT2.ORB.vx[i]= FT2.ORB.vx[i-jump_b];
+     FT2.ORB.vy[i]= FT2.ORB.vy[i-jump_b];
+     FT2.ORB.vz[i]= FT2.ORB.vz[i-jump_b];
+     printf("jump_b=%d i=%d vx=%e\n",jump_b,i,FT2.ORB.vx[i-jump_b]);
+   }
+
+}
+
 //-------------Interplates ORB if entr=0------------------
 void FT2::Interp_ORB_Entries(FT2 &FT2){
   double deltat ;
-  
- for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
-   if(FT2.verbose){
-     std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-   }
-   if(FT2.ORB.entr[i]==0 && i>0){
-      deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
+  printf("----------- Interplates ORB if entr=0 -----------------\n");
+  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+   
+   
+    
+    
+    if(FT2.ORB.entr[i]==0 && i>0){
+      printf("Interpolation of ORB\n");
+           
+      
+      deltat=FT2_T.Tstart[i]-FT2_T.Tstart[i-1];
       std::cout<<"deltat = "<<deltat<<"\n";
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-      FT2.ORB.x[i]=ORB.x[i-1]+ORB.vx[i-1]*deltat;
-      FT2.ORB.y[i]=ORB.y[i-1]+ORB.vy[i-1]*deltat;
-      FT2.ORB.z[i]=ORB.z[i-1]+ORB.vz[i-1]*deltat;
-      FT2.ORB.CM[i]= ORB.CM[i-1];
-      FT2.ORB.SAA[i]=ORB.SAA[i-1];
+      FT2.ORB.x[i]=FT2.ORB.x[i-1]+FT2.ORB.vx[i-1]*deltat;
+      FT2.ORB.y[i]=FT2.ORB.y[i-1]+FT2.ORB.vy[i-1]*deltat;
+      FT2.ORB.z[i]=FT2.ORB.z[i-1]+FT2.ORB.vz[i-1]*deltat;
+      
+    
 
+     //!!!!E qui come la mettiamo???? da dove prende questi valori
+     //!!!!Non si possono interpolare
+      FT2.ORB.CM[i] = FT2.ORB.CM[i-1];
+      FT2.ORB.SAA[i]= FT2.ORB.SAA[i-1];
+  
+      if(FT2.verbose){
+	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+	printf("deltat=%e corrx=%e corry=%e corrz=%e\n",deltat,FT2.ORB.vx[i-1]*deltat,FT2.ORB.vy[i-1]*deltat,FT2.ORB.vz[i-1]*deltat);
+      }
    }
    
    if(FT2.ORB.entr[i]==0 && i==0){
-      deltat=FT2_T.Tstop[i]-FT2_T.Tstart[i];
+      deltat=FT2_T.Tstart[i+1]-FT2_T.Tstart[i];
       std::cout<<"deltat = "<<deltat<<"\n";
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-      FT2.ORB.x[i]=ORB.x[i+1]-ORB.vx[i+1]*deltat;
-      FT2.ORB.y[i]=ORB.y[i+1]-ORB.vy[i+1]*deltat;
-      FT2.ORB.z[i]=ORB.z[i+1]-ORB.vz[i+1]*deltat;
-      FT2.ORB.CM[i]= ORB.CM[i+1];
-      FT2.ORB.SAA[i]=ORB.SAA[i+1];
+      FT2.ORB.x[i]= FT2.ORB.x[i+1]- FT2.ORB.vx[i+1]*deltat;
+      FT2.ORB.y[i]= FT2.ORB.y[i+1]- FT2.ORB.vy[i+1]*deltat;
+      FT2.ORB.z[i]= FT2.ORB.z[i+1]- FT2.ORB.vz[i+1]*deltat;
+
+      //!!!!E qui come la mettiamo???? da dove prende questi valori
+      //!!!!Non si possono interpolare
+      FT2.ORB.CM[i] =  FT2.ORB.CM[i+1];
+      FT2.ORB.SAA[i]= FT2.ORB.SAA[i+1];
    }
+
+   
+   
 
  }
  
 }
 
 
+
+//-------------Interplates ORB entry to Tstart------------------
+void FT2::Interp_ORB_Tstart(FT2 &FT2){
+  double deltat ;
+  printf("--------------- Interplates ORB entry to Tstart -------------\n");
+  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+    if(FT2.verbose){
+      std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+    }
+    
+    deltat=-(FT2.ORB.Tstart[i]-FT2_T.Tstart[i]);
+    
+    //!!!Interpolate entry to Tstart
+    
+   
+    FT2.ORB.x[i]= FT2.ORB.x[i]+ FT2.ORB.vx[i]*deltat;
+    FT2.ORB.y[i]= FT2.ORB.y[i]+ FT2.ORB.vy[i]*deltat;
+    FT2.ORB.z[i]= FT2.ORB.z[i]+ FT2.ORB.vz[i]*deltat;
+    if(FT2.verbose){
+      printf("--- Interpolate to Tstart\n");
+      printf("deltat=%e deltax=%e\n",deltat, FT2.ORB.vx[i]*deltat);
+    }
+ }
+}
 
 //-------------Interplates ATT if entr=0------------------
 void FT2::Interp_ATT_Entries(FT2 &FT2){
@@ -932,7 +1130,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
      FT2.ATT.w[i]=FT2.ATT.w[i+1];
      FT2.ATT.vx[i]=FT2.ATT.vx[i+1];
      FT2.ATT.vy[i]=FT2.ATT.vy[i+1];
-      FT2.ATT.vz[i]=FT2.ATT.vz[i+1];
+     FT2.ATT.vz[i]=FT2.ATT.vz[i+1];
    }
    
  }
@@ -991,6 +1189,7 @@ void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
 
 void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry){     
   Att.entr[entry]++;
+  
   //Update only if the entry is the first for the time bin
   if( Att.entr[entry]==1){
     Att.Tstart[entry]=FT2::Get_M7_Time(tokens[3],tokens[4]);
@@ -1001,6 +1200,8 @@ void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &
     Att.vx[entry]=atof(tokens[9].c_str());
     Att.vy[entry]=atof(tokens[10].c_str());
     Att.vz[entry]=atof(tokens[11].c_str());
+
+   
   }
 }
 
@@ -1018,8 +1219,9 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
 }
 
 
-void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry){  
+void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned int entry, double Entry_Tstart){  
   Orb.entr[entry]++;
+  double deltat;
   //Update only if the entry is the first for the time bin
   if (Orb.entr[entry]==1){
     //printf("--\n");
@@ -1032,6 +1234,8 @@ void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned
     Orb.vz[entry]=atof(tokens[10].c_str());
     Orb.CM[entry]=atoi(tokens[11].c_str());
     Orb.SAA[entry]=atoi(tokens[12].c_str());
+    
+    
   }
 
 }
