@@ -921,26 +921,30 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
     for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
       printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i],FT2.FT2_T.bin[i]);
     }
-  }
-
-  FT2.Interp_ORB_Vel_Entries(FT2);
-  FT2.Interp_ORB_Entries(FT2);
-  FT2.Interp_ORB_Tstart(FT2);
-  FT2.Interp_ATT_Entries(FT2);
-  if(FT2.verbose){
-    printf("---------------------------------------------------------\n");
-  }
+   }
+   
+   FT2.Interp_ORB_Vel_Entries(FT2);
+   FT2.Interp_ORB_Entries(FT2);
+   FT2.Interp_ORB_Tstart(FT2); 
+   
+   FT2.Interp_ATT_Entries(FT2);
+  
+   if(FT2.verbose){
+     printf("---------------------------------------------------------\n");
+   }
 }
 
 
 //-------------Interplates ORB if Vel=0------------------
 void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
   double deltat ;
-  unsigned int jump_b, jump_f;
+  unsigned int jump_b,jump_b1,jump_f,jump_f1;
+  double t,t1,t2,v1,v2;
+
   printf("--------------------------- Interplates ORB if Vel=0 ---------------------------\n");
 
   unsigned int i=0;
-  if(FT2.ORB.vx[i]==0){
+  if(FT2.ORB.vx[i]==0 && FT2.ORB.entr[i]>0 ){
      //printf("Interpolation of ORB\n");
      //looks for the first entries wiht non zero velocities
      jump_f=1;
@@ -948,18 +952,27 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
        jump_f++;
      }
  
-     //!!!!I reply velocities at the beginning
-     FT2.ORB.vx[i]= FT2.ORB.vx[i+jump_f];
-     FT2.ORB.vy[i]= FT2.ORB.vy[i+jump_f];
-     FT2.ORB.vz[i]= FT2.ORB.vz[i+jump_f];
-     printf("jump_f=%d i=%d vx=%e\n",jump_f,i,FT2.ORB.vx[i+jump_f]);
+     jump_f1=jump_f+1;
+     while(FT2.ORB.vx[i+jump_f1]==0){
+       jump_f1++;
+     }
+     //FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+     t1= FT2.ORB.Tstart[i+jump_f];
+     t2= FT2.ORB.Tstart[i+jump_f1];
+     t = FT2.ORB.Tstart[i];
+     FT2.ORB.vx[i]= FT2.lininterp(FT2.ORB.vx[i+jump_f],FT2.ORB.vx[i+jump_f1],t1,t2,t);
+     FT2.ORB.vy[i]= FT2.lininterp(FT2.ORB.vy[i+jump_f],FT2.ORB.vy[i+jump_f1],t1,t2,t);
+     FT2.ORB.vz[i]= FT2.lininterp(FT2.ORB.vz[i+jump_f],FT2.ORB.vz[i+jump_f1],t1,t2,t);
+     
+     printf("jump_f=%d jump_f1=%d vx=%e vy=%e vz=%e\n",jump_f,jump_f1,FT2.ORB.vx[i],FT2.ORB.vy[i],FT2.ORB.vz[i]);
    }
 
   unsigned int max= FT2.ORB.entr.size()-1;
+  
   for (unsigned int i = 1; i < FT2.ORB.entr.size()-1; ++i){
    
     
-    if(FT2.ORB.vx[i]==0){
+    if(FT2.ORB.vx[i]==0 && FT2.ORB.entr[i]>0 ){
     
       //looks for the first entries wiht non zero velocities
       jump_b=1;
@@ -972,6 +985,8 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 	jump_f++;
       }
 
+      //FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+
       if(i+jump_f==max){
 	FT2.ORB.vx[i]= FT2.ORB.vx[i-jump_b];
 	FT2.ORB.vy[i]= FT2.ORB.vy[i-jump_b];
@@ -983,9 +998,12 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 	FT2.ORB.vz[i]= FT2.ORB.vz[i+jump_f];
       }else{
 	//!!! Average velocity
-	FT2.ORB.vx[i]= (FT2.ORB.vx[i-jump_b]+FT2.ORB.vx[i+jump_f])*0.5;
-	FT2.ORB.vy[i]= (FT2.ORB.vy[i-jump_b]+FT2.ORB.vy[i+jump_f])*0.5;
-	FT2.ORB.vz[i]= (FT2.ORB.vz[i-jump_b]+FT2.ORB.vz[i+jump_f])*0.5;
+	t1= FT2.ORB.Tstart[i-jump_b];
+	t2= FT2.ORB.Tstart[i+jump_f];
+	t = FT2.ORB.Tstart[i];
+	FT2.ORB.vx[i]= FT2.lininterp(FT2.ORB.vx[i-jump_b],FT2.ORB.vx[i+jump_f],t1,t2,t);
+	FT2.ORB.vy[i]= FT2.lininterp(FT2.ORB.vy[i-jump_b],FT2.ORB.vy[i+jump_f],t1,t2,t);
+	FT2.ORB.vz[i]= FT2.lininterp(FT2.ORB.vz[i-jump_b],FT2.ORB.vz[i+jump_f],t1,t2,t);
       }
 
       if(FT2.verbose){
@@ -993,9 +1011,9 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 	printf("Interpolation of ORB Vel\n");
 	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
 	
-	printf("jump_b=%d i=%d vx_b=%e\n",jump_b,i,FT2.ORB.vx[i-jump_b]);
-	printf("jump_f=%d i=%d vx_f=%e\n",jump_f,i,FT2.ORB.vx[i+jump_f]);
-	printf("vx interp=%e\n",FT2.ORB.vx[i]);
+	printf("jump_b=%d i=%d vx_b=%20.18g\n",jump_b,i,FT2.ORB.vx[i-jump_b]);
+	printf("jump_f=%d i=%d vx_f=%20.18g\n",jump_f,i,FT2.ORB.vx[i+jump_f]);
+	printf("vx lin interp=%20.18g\n",FT2.ORB.vx[i]);
 	printf("--------------------------\n");
       }
     }
@@ -1003,43 +1021,65 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
   }
   
   i=FT2.ORB.entr.size()-1;
-  if(FT2.ORB.vx[i]==0){
+  if(FT2.ORB.vx[i]==0 && FT2.ORB.entr[i]>0 ){
      //printf("Interpolation of ORB\n");
      //looks for the first entries wiht non zero velocities
-     jump_b=1;
-     while(FT2.ORB.vx[i -jump_b]==0){
-       jump_b++;
-     }
- 
-     //!!!!I reply velocities at the end
-     FT2.ORB.vx[i]= FT2.ORB.vx[i-jump_b];
-     FT2.ORB.vy[i]= FT2.ORB.vy[i-jump_b];
-     FT2.ORB.vz[i]= FT2.ORB.vz[i-jump_b];
-     printf("jump_b=%d i=%d vx=%e\n",jump_b,i,FT2.ORB.vx[i-jump_b]);
+    jump_b=1;
+    while(FT2.ORB.vx[i-jump_b]==0){
+      jump_b++;
+    }
+    jump_b1=jump_b+1;
+
+    while(FT2.ORB.vx[i-jump_b1]==0){
+      jump_b1++;
+    }
+    
+    //FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+    
+    t1= FT2.ORB.Tstart[i-jump_b1];
+    t2= FT2.ORB.Tstart[i-jump_b];
+    t = FT2.ORB.Tstart[i];
+    FT2.ORB.vx[i]= FT2.lininterp(FT2.ORB.vx[i-jump_b1],FT2.ORB.vx[i-jump_b],t1,t2,t);
+    FT2.ORB.vy[i]= FT2.lininterp(FT2.ORB.vy[i-jump_b1],FT2.ORB.vy[i-jump_b],t1,t2,t);
+    FT2.ORB.vz[i]= FT2.lininterp(FT2.ORB.vz[i-jump_b1],FT2.ORB.vz[i-jump_b],t1,t2,t);
+    
+
+    printf("jump_b=%d jump_b1=%d \n",jump_b,jump_b1);
    }
+ 
 
 }
 
 //-------------Interplates ORB if entr=0------------------
 void FT2::Interp_ORB_Entries(FT2 &FT2){
-  double deltat ;
+  double deltat, acc;
+  unsigned int jump_b,jump_b1,jump_f,jump_f1;
   printf("----------- Interplates ORB if entr=0 -----------------\n");
-  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
+  
+
+  unsigned int max= FT2.ORB.entr.size()-1;
+
+  for (unsigned int i = 0; i < FT2.ORB.entr.size()-1; ++i){
    
-   
+    printf("Interpolation of ORB\n");
     
-    
-    if(FT2.ORB.entr[i]==0 && i>0){
-      printf("Interpolation of ORB\n");
-           
+    if(FT2.ORB.entr[i]==0){
       
-      deltat=FT2_T.Tstart[i]-FT2_T.Tstart[i-1];
+      jump_f=1;
+      while(FT2.ORB.entr[i+jump_f]==0 && (i+jump_f<max) ){
+	jump_f++;
+      }
+      
+          
+
+      deltat=FT2.ORB.Tstart[i+jump_f]-FT2_T.Tstart[i];
       std::cout<<"deltat = "<<deltat<<"\n";
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-      FT2.ORB.x[i]=FT2.ORB.x[i-1]+FT2.ORB.vx[i-1]*deltat;
-      FT2.ORB.y[i]=FT2.ORB.y[i-1]+FT2.ORB.vy[i-1]*deltat;
-      FT2.ORB.z[i]=FT2.ORB.z[i-1]+FT2.ORB.vz[i-1]*deltat;
       
+      
+      FT2.ORB.x[i]=FT2.ORB.x[i+jump_f]+FT2.ORB.vx[i+jump_f]*(-deltat);  
+      FT2.ORB.y[i]=FT2.ORB.y[i+jump_f]+FT2.ORB.vy[i+jump_f]*(-deltat);
+      FT2.ORB.z[i]=FT2.ORB.z[i+jump_f]+FT2.ORB.vz[i+jump_f]*(-deltat);
     
 
      //!!!!E qui come la mettiamo???? da dove prende questi valori
@@ -1049,29 +1089,42 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
   
       if(FT2.verbose){
 	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-	printf("deltat=%e corrx=%e corry=%e corrz=%e\n",deltat,FT2.ORB.vx[i-1]*deltat,FT2.ORB.vy[i-1]*deltat,FT2.ORB.vz[i-1]*deltat);
+	printf("deltat=%e corrx=%e\n",deltat,FT2.ORB.vx[i+jump_f]*(-deltat));
       }
    }
-   
-   if(FT2.ORB.entr[i]==0 && i==0){
-      deltat=FT2_T.Tstart[i+1]-FT2_T.Tstart[i];
-      std::cout<<"deltat = "<<deltat<<"\n";
-      FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-      FT2.ORB.x[i]= FT2.ORB.x[i+1]- FT2.ORB.vx[i+1]*deltat;
-      FT2.ORB.y[i]= FT2.ORB.y[i+1]- FT2.ORB.vy[i+1]*deltat;
-      FT2.ORB.z[i]= FT2.ORB.z[i+1]- FT2.ORB.vz[i+1]*deltat;
-
-      //!!!!E qui come la mettiamo???? da dove prende questi valori
-      //!!!!Non si possono interpolare
-      FT2.ORB.CM[i] =  FT2.ORB.CM[i+1];
-      FT2.ORB.SAA[i]= FT2.ORB.SAA[i+1];
-   }
-
-   
-   
-
- }
+    
+  }
+  
+  if(FT2.ORB.entr[max]==0 ){
+    unsigned int i=max;
+    printf("Interpolation of ORB\n");
+    
+     jump_b=1;
+     while(FT2.ORB.entr[i-jump_b]==0){
+       jump_f++;
+     }
  
+    deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
+    std::cout<<"deltat = "<<deltat<<"\n";
+    FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+    
+    
+    FT2.ORB.x[i]=FT2.ORB.x[i-jump_b]+FT2.ORB.vx[i-jump_b]*(-deltat);  
+    FT2.ORB.y[i]=FT2.ORB.y[i-jump_b]+FT2.ORB.vy[i-jump_b]*(-deltat);
+    FT2.ORB.z[i]=FT2.ORB.z[i-jump_b]+FT2.ORB.vz[i-jump_b]*(-deltat);
+    
+    //!!!!E qui come la mettiamo???? da dove prende questi valori
+    //!!!!Non si possono interpolare
+    FT2.ORB.CM[i] =  FT2.ORB.CM[i+1];
+    FT2.ORB.SAA[i]= FT2.ORB.SAA[i+1];
+  
+     if(FT2.verbose){
+	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+	printf("jump=%d deltat=%e corrx=%e \n",jump_b,deltat,FT2.ORB.vx[i-jump_b]);
+     }
+  }
+
+
 }
 
 
@@ -1084,22 +1137,24 @@ void FT2::Interp_ORB_Tstart(FT2 &FT2){
     if(FT2.verbose){
       std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
     }
-    
-    deltat=-(FT2.ORB.Tstart[i]-FT2_T.Tstart[i]);
-    
-    //!!!Interpolate entry to Tstart
-    
-   
-    FT2.ORB.x[i]= FT2.ORB.x[i]+ FT2.ORB.vx[i]*deltat;
-    FT2.ORB.y[i]= FT2.ORB.y[i]+ FT2.ORB.vy[i]*deltat;
-    FT2.ORB.z[i]= FT2.ORB.z[i]+ FT2.ORB.vz[i]*deltat;
-    if(FT2.verbose){
-      printf("--- Interpolate to Tstart\n");
-      printf("deltat=%e deltax=%e\n",deltat, FT2.ORB.vx[i]*deltat);
-    }
- }
-}
 
+    //if(FT2.ORB.entr[i]>0){
+      deltat=-(FT2.ORB.Tstart[i]-FT2_T.Tstart[i]);
+      
+      //!!!Interpolate entry to Tstart
+      
+   
+      FT2.ORB.x[i]= FT2.ORB.x[i]+ FT2.ORB.vx[i]*deltat;
+      FT2.ORB.y[i]= FT2.ORB.y[i]+ FT2.ORB.vy[i]*deltat;
+      FT2.ORB.z[i]= FT2.ORB.z[i]+ FT2.ORB.vz[i]*deltat;
+      if(FT2.verbose){
+	printf("--- Interpolate to Tstart\n");
+	printf("deltat=%e deltax=%e\n",deltat, FT2.ORB.vx[i]*deltat);
+      }
+      //}
+
+  }
+}
 //-------------Interplates ATT if entr=0------------------
 void FT2::Interp_ATT_Entries(FT2 &FT2){
   double deltat ;
@@ -1241,7 +1296,10 @@ void FT2::Update_ORB(ORBIT &Orb,const std::vector<std::string> &tokens, unsigned
 }
 
 
-
+double FT2::lininterp(double x1, double x2, double t1, double t2,double t){
+  
+  return x1+((x2-x1)/(t2-t1))*(t-t1);
+}
 
 
 

@@ -171,6 +171,8 @@ public:
   void WriteTextFile(FT2 &FT2);
 
  
+  //Math
+  double lininterp(double x1, double x2, double t1, double t2,double t);
 
 private:
   bool OutOfRange;
