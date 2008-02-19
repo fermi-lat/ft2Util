@@ -54,7 +54,7 @@ int main(int argc, char **argv){
     //std::string FT2_fits_File;
     
 
-    printf("v1r1p35\n");
+    printf("v1r1p37\n");
     
     //--- Get File Names ---
 
