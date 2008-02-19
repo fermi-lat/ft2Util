@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Mon Feb 18 17:35:31 PST 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+isses on interpolation and Gaps in M7
+    *
+------------------------------------------------------------
+User: tramacer  Mon Feb 18 17:35:31 PST 2008
 ft2Util/apps
 
 Modified Files:
