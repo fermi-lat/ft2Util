@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Fri Feb 22 11:43:13 PST 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx DigiMC.cxx FITS.cxx FT2.cxx FT2_TXT.cxx 
+Log Message:
+fixed issue on M7 longer then Digi, Fits file now respect Digi Start and Stop
+    *
+------------------------------------------------------------
+User: tramacer  Fri Feb 22 11:43:13 PST 2008
 ft2Util/ft2Util
 
 Modified Files:
