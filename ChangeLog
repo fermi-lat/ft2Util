@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Feb 22 13:08:56 PST 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+Gleam.cxx called the wrong  method to write fits file
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p38, operation: add
 Package: ft2Util
