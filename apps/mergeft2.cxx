@@ -65,7 +65,7 @@ int main(int iargc, char **argv){
     
     FT2 FT2;
     
-    printf("v1r1p37\n");
+    printf("v1r1p38\n");
     
     //File Handlign
     std::string FT2File;
@@ -216,7 +216,7 @@ int main(int iargc, char **argv){
     
     //Write Fits File
     FT2.FT2_fits_File=fitsFile;
-    FT2.WriteFitsFile(FT2);
+    FT2.WriteFitsFileMerged(FT2);
  
   }catch (std::exception & eObj) {
     std::cout << eObj.what() << std::endl;

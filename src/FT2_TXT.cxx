@@ -26,10 +26,12 @@ void FT2::WriteTextFile(FT2 &FT2) {
   FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime\n";
   
 
+  unsigned int START,STOP;
+  FT2.Get_FT2_Entry_Index(FT2, FT2.DT.RunStart,START);
+  FT2.Get_FT2_Entry_Index(FT2, FT2.DT.RunStop ,STOP);
+  printf("START=%d STOP=%d\n",START,STOP);
   
-  
-  
-  for(unsigned int i=0;i<FT2_ENTR;i++){
+  for(unsigned int i=START;i<STOP;i++){
     
     FT2F<<FT2.FT2_T.bin[i]
 	<<","

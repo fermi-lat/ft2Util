@@ -88,7 +88,7 @@ void FT2::DigiMC_FT2(FT2 &FT2){
   
   //-----------------------------------------------------------------------------------
   
-  
+  std::cout<<"DIGI MC"<<std::endl;
   
   //-------- WORK ON  M7 FILE ---------------------------------------------------------
   std::cout<<"M-7 file"<<std::endl;
@@ -208,7 +208,12 @@ void FT2::DigiMC_FT2(FT2 &FT2){
   FT2.Merge_M7_Digi_Entries(FT2,Tstart_Run ,Tstop_Run);
   
   //--------------------------------------------------------------------
+   
+  FT2.DT.RunStart=Tstart_Run;
+  FT2.DT.RunStop=Tstop_Run;
   
+  printf("START=%30.28g STOP=%30.28g\n",FT2.DT.RunStart,FT2.DT.RunStop);
+
   //-------- Fill the M7 Entries ---------------------------------------
   FT2.Fill_M7_Entries(FT2);
   if(FT2.verbose){
@@ -360,7 +365,9 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 	//	}
 	//FT2.FT2_T.LiveTime[Current_FT2_Entry]+=Current_LiveTime-Old_LiveTime;
       }else{
-	printf("Coorect DigiEvtID=%d Old_DigiEventID= %d\n",Digi_EvtId,Old_Digi_EvtId);
+	 if(FT2.verbose){
+	   printf("Coorect DigiEvtID=%d Old_DigiEventID= %d\n",Digi_EvtId,Old_Digi_EvtId);
+	 }
 	FT2.DT.DeadTime[Current_FT2_Entry]+=(Digi_EvtId-(Digi_EvtId/GEMID_rollover)*GEMID_rollover)*evt_dead_time;
 
       }
@@ -390,7 +397,9 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 	//	}
 	//FT2.FT2_T.LiveTime[Current_FT2_Entry]+=Current_LiveTime-Old_LiveTime;
 	}else{
-	  printf("Correct at beginning of bin DigiEvtID=%d Old_DigiEventID= %d\n",Digi_EvtId,Old_Digi_EvtId);
+	  if(FT2.verbose){
+	    printf("Correct at beginning of bin DigiEvtID=%d Old_DigiEventID= %d\n",Digi_EvtId,Old_Digi_EvtId);
+	  }
 	  FT2.DT.DeadTime[Current_FT2_Entry]=0;
 	}
 	
@@ -403,43 +412,46 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 
 	
 	//Print last Entry Values
-	printf("Start a New Entry\n");
-	printf("Current %d  Old Entry %d\n",Current_FT2_Entry,Current_FT2_Entry-1);
-	printf("Old Entry Results\n");
-	printf("DigiTime=%20.18e \n",DigiTime);
-	printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
-	       FT2.DT.Tstart_LiveTime[Current_FT2_Entry-1],FT2.DT.Tstop_LiveTime[Current_FT2_Entry-1]);
-	std::cout<<setprecision(20)
-		 <<"DT.Tstart "
-		 <<FT2.DT.Tstart[Current_FT2_Entry-1]
-		 <<" DT.Tstop "
-		 <<FT2.DT.Tstop[Current_FT2_Entry-1]
-		 <<" Delta T "
-		 <<FT2.DT.Tstop[Current_FT2_Entry-1] - FT2.DT.Tstart[Current_FT2_Entry-1]
-		 <<"\nFT.Tstart "
-		 <<FT2.FT2_T.Tstart[Current_FT2_Entry-1]
-		 <<" FT.Tstop "
-		 <<FT2.FT2_T.Tstop[Current_FT2_Entry-1]
-		 <<" Live Time "
-		 <<FT2.FT2_T.LiveTime[Current_FT2_Entry-1]
-		 <<" Dead Time "
-		 <<FT2.DT.DeadTime[Current_FT2_Entry-1]
-		 <<endl
-		 <<"EvID_Tstart_Live "
-		 <<EvID_Tstart_Live
-		 <<" EvID_Tstop_Live "
-		 <<EvID_Tstop_Live	
-		 <<std::endl;
+	if(FT2.verbose){
+	  printf("Start a New Entry\n");
+	  printf("Current %d  Old Entry %d\n",Current_FT2_Entry,Current_FT2_Entry-1);
+	  printf("Old Entry Results\n");
+	  printf("DigiTime=%20.18e \n",DigiTime);
+	  printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+		 FT2.DT.Tstart_LiveTime[Current_FT2_Entry-1],FT2.DT.Tstop_LiveTime[Current_FT2_Entry-1]);
+	  std::cout<<setprecision(20)
+		   <<"DT.Tstart "
+		   <<FT2.DT.Tstart[Current_FT2_Entry-1]
+		   <<" DT.Tstop "
+		   <<FT2.DT.Tstop[Current_FT2_Entry-1]
+		   <<" Delta T "
+		   <<FT2.DT.Tstop[Current_FT2_Entry-1] - FT2.DT.Tstart[Current_FT2_Entry-1]
+		   <<"\nFT.Tstart "
+		   <<FT2.FT2_T.Tstart[Current_FT2_Entry-1]
+		   <<" FT.Tstop "
+		   <<FT2.FT2_T.Tstop[Current_FT2_Entry-1]
+		   <<" Live Time "
+		   <<FT2.FT2_T.LiveTime[Current_FT2_Entry-1]
+		   <<" Dead Time "
+		   <<FT2.DT.DeadTime[Current_FT2_Entry-1]
+		   <<endl
+		   <<"EvID_Tstart_Live "
+		   <<EvID_Tstart_Live
+		   <<" EvID_Tstop_Live "
+		   <<EvID_Tstop_Live	
+		   <<std::endl;
+	}
       }
     
       //--- if a new bin start ------
       if((first_bin)||(New_FT2_Entry)){
  	
 	first_bin=false;
-	
-	printf("New Entry %d\n",Current_FT2_Entry);
-	cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
-      
+	if ( Current_FT2_Entry % 100 == 0 ) {
+	  printf("New Entry %d\n",Current_FT2_Entry);
+	  cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
+	}
+
 	//Set true update value
 	FT2.DT.update[Current_FT2_Entry]=1;
       
@@ -466,19 +478,20 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 	New_FT2_Entry=0;
 	Total_Dead_Time+=DeadTime;	
 	DeadTime=0;
-	
-	std::cout<<"New FT2 Entry, #="
-		 <<Current_FT2_Entry
-		 <<" DigiTime="
-		 <<DigiTime
-		 <<"FT2 Id="
-		 <<FT2.Get_FT2_Time_Bin(DigiTime,Tstart_Run)
-		 <<"Digi EvtId"
-		 <<Digi_EvtId
-		 <<std::endl
-		 <<"--------------------------------------------------------"
-		 <<std::endl
-		 <<std::endl;
+	if(FT2.verbose){
+	  std::cout<<"New FT2 Entry, #="
+		   <<Current_FT2_Entry
+		   <<" DigiTime="
+		   <<DigiTime
+		   <<"FT2 Id="
+		   <<FT2.Get_FT2_Time_Bin(DigiTime,Tstart_Run)
+		   <<"Digi EvtId"
+		   <<Digi_EvtId
+		   <<std::endl
+		   <<"--------------------------------------------------------"
+		   <<std::endl
+		   <<std::endl;
+	}
       }
 
 
@@ -524,55 +537,58 @@ void FT2::DigiMC_FT2(FT2 &FT2){
     FT2.DT.DeadTime[Current_FT2_Entry-1];
  
   //Print last Entry Values
-  printf("Old Entry %d\n",Current_FT2_Entry);
-  printf("Old Entry Results\n");
-  printf("DigiTime=%20.18e \n",DigiTime);
-  printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
-	 FT2.DT.Tstart_LiveTime[Current_FT2_Entry],FT2.DT.Tstop_LiveTime[Current_FT2_Entry]);
-  std::cout<<setprecision(20)
-	   <<"DT.Tstart "
-	   <<FT2.DT.Tstart[Current_FT2_Entry]
-	   <<" DT.Tstop "
-	   <<FT2.DT.Tstop[Current_FT2_Entry]
-	   <<" Delta T "
-	   <<FT2.DT.Tstop[Current_FT2_Entry] - FT2.DT.Tstart[Current_FT2_Entry]
+  if(FT2.verbose){
+    printf("Old Entry %d\n",Current_FT2_Entry);
+    printf("Old Entry Results\n");
+    printf("DigiTime=%20.18e \n",DigiTime);
+    printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+	   FT2.DT.Tstart_LiveTime[Current_FT2_Entry],FT2.DT.Tstop_LiveTime[Current_FT2_Entry]);
+    std::cout<<setprecision(20)
+	     <<"DT.Tstart "
+	     <<FT2.DT.Tstart[Current_FT2_Entry]
+	     <<" DT.Tstop "
+	     <<FT2.DT.Tstop[Current_FT2_Entry]
+	     <<" Delta T "
+	     <<FT2.DT.Tstop[Current_FT2_Entry] - FT2.DT.Tstart[Current_FT2_Entry]
 	     <<"\nFT.Tstart "
-	   <<FT2.FT2_T.Tstart[Current_FT2_Entry]
-	   <<" FT.Tstop "
-	   <<FT2.FT2_T.Tstop[Current_FT2_Entry]
-	   <<" Live Time "
-	   <<FT2.FT2_T.LiveTime[Current_FT2_Entry]
-	   <<" Dead Time "
-	   <<FT2.DT.DeadTime[Current_FT2_Entry]
-	   <<endl
-	   <<"EvID_Tstart_Live "
-	   <<EvID_Tstart_Live
-	   <<" EvID_Tstop_Live "
-	   <<EvID_Tstop_Live	
-	   <<std::endl;
-    
+	     <<FT2.FT2_T.Tstart[Current_FT2_Entry]
+	     <<" FT.Tstop "
+	     <<FT2.FT2_T.Tstop[Current_FT2_Entry]
+	     <<" Live Time "
+	     <<FT2.FT2_T.LiveTime[Current_FT2_Entry]
+	     <<" Dead Time "
+	     <<FT2.DT.DeadTime[Current_FT2_Entry]
+	     <<endl
+	     <<"EvID_Tstart_Live "
+	     <<EvID_Tstart_Live
+	     <<" EvID_Tstop_Live "
+	     <<EvID_Tstop_Live	
+	     <<std::endl;
+  }
     
   
     
     unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
     std::cout<<"======================================================"<<std::endl;
-    for(unsigned int i=0;i<FT2_ENTR;i++){
-      printf("Current Entry %d\n",i);
-      printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
-	     FT2.DT.Tstart_LiveTime[i],FT2.DT.Tstop_LiveTime[i]);
-      std::cout<<setprecision(20)
-	       <<"Tstart "
-	       <<FT2.DT.Tstart[i]
-	       <<" Tstop "
-	       <<FT2.DT.Tstop[i]
-	       <<" Delta T "
-	       <<FT2.DT.Tstop[i] - FT2.DT.Tstart[i]
-	       <<" Live Time "
-	       <<FT2.FT2_T.LiveTime[i]
-	       <<" Dead Time "
-	       <<FT2.DT.DeadTime[i]
-	       <<"\n--------------------------------------------------------"
-	       <<std::endl;
+    if(FT2.verbose){
+      for(unsigned int i=0;i<FT2_ENTR;i++){
+	printf("Current Entry %d\n",i);
+	printf("TstartLiveTime %20.18e TstopLiveTime%20.18e\n",
+	       FT2.DT.Tstart_LiveTime[i],FT2.DT.Tstop_LiveTime[i]);
+	std::cout<<setprecision(20)
+		 <<"Tstart "
+		 <<FT2.DT.Tstart[i]
+		 <<" Tstop "
+		 <<FT2.DT.Tstop[i]
+		 <<" Delta T "
+		 <<FT2.DT.Tstop[i] - FT2.DT.Tstart[i]
+		 <<" Live Time "
+		 <<FT2.FT2_T.LiveTime[i]
+		 <<" Dead Time "
+		 <<FT2.DT.DeadTime[i]
+		 <<"\n--------------------------------------------------------"
+		 <<std::endl;
+      }
     }
     std::cout<<"======================================================"<<std::endl;
     
@@ -612,6 +628,13 @@ void FT2::DigiMC_FT2(FT2 &FT2){
 	<<Total_Dead_Time
 	<<endl;  
     //------------------------------------------------------------
+
+    //------------------------------------------------------------
+    
+    //FT2.RunCut(FT2,Tstart_Run ,Tstop_Run);
+    
+    FT2.DT.RunStart=Tstart_Run;
+    FT2.DT.RunStop=Tstop_Run;
 
 
     //--------------Write FT2 fits file---------------------------
