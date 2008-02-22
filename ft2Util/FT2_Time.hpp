@@ -46,6 +46,7 @@ class DigiTime {
  public:
   std::vector<double> Tstart, Tstop, LiveTime,DeadTime,Tstart_LiveTime,Tstop_LiveTime; 
   std::vector<int> update;  
+  double RunStart, RunStop;
   DigiTime();
   void Set_DigiTime_Size(DigiTime &DigiT, unsigned long size);
 };
@@ -135,6 +136,7 @@ public:
   void Update_FT2_Entries(FT2 &FT2, int i);
   unsigned int Get_FT2_Entries(FT2 &FT2);
   void Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run);
+  void FT2::RunCut(FT2 &FT2,double Tstart,double Tstop);
   unsigned int DigiFileLineNumber;
   void Set_OutOfRange_TRUE(FT2 &FT2);
   void Set_OutOfRange_FALSE(FT2 &FT2);
@@ -166,7 +168,8 @@ public:
   
   //Fits 
   void WriteFitsFile(FT2 &FT2);
-  
+  void FT2::WriteFitsFileMerged(FT2 &FT2);
+
   //Text
   void WriteTextFile(FT2 &FT2);
 

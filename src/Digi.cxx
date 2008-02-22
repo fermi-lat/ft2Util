@@ -505,6 +505,15 @@ void FT2::Digi_FT2(FT2 &FT2){
     //------------------------------------------------------------
 
 
+
+    //------------------------------------------------------------
+    
+    //FT2.RunCut(FT2,Tstart_Run ,Tstop_Run);
+
+    FT2.DT.RunStart=Tstart_Run;
+    FT2.DT.RunStop=Tstop_Run;
+    
+    
     //--------------Write FT2 fits file---------------------------
     FT2.WriteTextFile(FT2);
 

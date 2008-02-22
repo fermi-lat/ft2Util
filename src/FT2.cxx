@@ -449,14 +449,15 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2,double Tstart_Run ,double Tstop_Run){
   printf("---------------------------------------------------------\n");
 
   printf("---------------------------------------------------------\n");
-  for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
-     FT2.FT2_T.LiveTime[i]=0;
-     FT2.FT2_T.bin[i]=i;
+  if(FT2.verbose){
+    for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
+      FT2.FT2_T.LiveTime[i]=0;
+      FT2.FT2_T.bin[i]=i;
      printf("Entry Id=%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
-  }
+    }
   printf("---------------------------------------------------------\n");
+  }
 }
-
 
 
 
@@ -499,7 +500,7 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 ,double time, unsigned int &i){
 
   //Look for the Entry index
   for(unsigned int l=0;l<Entries-1;l++){
-    if((time<FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
+    if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
       Set_OutOfRange_FALSE(FT2);
       i=l;
     }  
@@ -1048,8 +1049,9 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
     FT2.ORB.vy[i]= FT2.lininterp(FT2.ORB.vy[i-jump_b1],FT2.ORB.vy[i-jump_b],t1,t2,t);
     FT2.ORB.vz[i]= FT2.lininterp(FT2.ORB.vz[i-jump_b1],FT2.ORB.vz[i-jump_b],t1,t2,t);
     
-
-    printf("jump_b=%d jump_b1=%d \n",jump_b,jump_b1);
+    if(FT2.verbose){ 
+      printf("jump_b=%d jump_b1=%d \n",jump_b,jump_b1);
+    }
    }
  
 
@@ -1066,8 +1068,6 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
 
   for (unsigned int i = 0; i < FT2.ORB.entr.size()-1; ++i){
    
-    printf("Interpolation of ORB\n");
-    
     if(FT2.ORB.entr[i]==0){
       
       jump_f=1;
@@ -1078,7 +1078,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
           
 
       deltat=FT2.ORB.Tstart[i+jump_f]-FT2_T.Tstart[i];
-      std::cout<<"deltat = "<<deltat<<"\n";
+     
       FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
       
       
@@ -1093,6 +1093,8 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       FT2.ORB.SAA[i]= FT2.ORB.SAA[i-1];
   
       if(FT2.verbose){
+	printf("Interpolation of ORB\n");
+	std::cout<<"deltat = "<<deltat<<"\n";
 	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
 	printf("deltat=%e corrx=%e\n",deltat,FT2.ORB.vx[i+jump_f]*(-deltat));
       }
@@ -1103,7 +1105,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
   //Last Entry
   if(FT2.ORB.entr[max]==0 ){
     unsigned int i=max;
-    printf("Interpolation of ORB\n");
+    
     
      jump_b=1;
      while(FT2.ORB.entr[i-jump_b]==0){
@@ -1111,7 +1113,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
      }
  
     deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
-    std::cout<<"deltat = "<<deltat<<"\n";
+   
     FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
     
     
@@ -1125,8 +1127,10 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
     FT2.ORB.SAA[i]= FT2.ORB.SAA[i+1];
   
      if(FT2.verbose){
-	std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-	printf("jump=%d deltat=%e corrx=%e \n",jump_b,deltat,FT2.ORB.vx[i-jump_b]);
+       printf("Interpolation of ORB\n");
+       std::cout<<"deltat = "<<deltat<<"\n";
+       std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
+       printf("jump=%d deltat=%e corrx=%e \n",jump_b,deltat,FT2.ORB.vx[i-jump_b]);
      }
   }
 
@@ -1171,7 +1175,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
    }
    if(FT2.ATT.entr[i]==0 && i>0){
      deltat=FT2_T.Tstop[i-1]-FT2_T.Tstart[i-1];
-     std::cout<<"deltat = "<<deltat<<"\n";
+  
      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
      FT2.ATT.x[i]=FT2.ATT.x[i-1];
      FT2.ATT.y[i]=FT2.ATT.y[i-1];
@@ -1183,7 +1187,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
    } 
    if(FT2.ATT.entr[i]==0 && i==0){
      deltat=FT2_T.Tstop[i+1]-FT2_T.Tstart[i+1];
-     std::cout<<"deltat = "<<deltat<<"\n";
+  
      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
      FT2.ATT.x[i]=FT2.ATT.x[i+1];
      FT2.ATT.y[i]=FT2.ATT.y[i+1];
@@ -1192,6 +1196,11 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
      FT2.ATT.vx[i]=FT2.ATT.vx[i+1];
      FT2.ATT.vy[i]=FT2.ATT.vy[i+1];
      FT2.ATT.vz[i]=FT2.ATT.vz[i+1];
+   }
+   
+   if(FT2.verbose){
+     std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
+     std::cout<<"deltat = "<<deltat<<"\n";
    }
    
  }
@@ -1314,3 +1323,97 @@ double FT2::lininterp(double x1, double x2, double t1, double t2,double t){
 
 
 
+void FT2::RunCut(FT2 &FT2,double Tstart_Run,double Tstop_Run){
+   unsigned int Current_FT2_Entry,FT2_Entries;
+
+  printf("---------------------------------------------------------\n");
+  printf("Erase Extra Entries to fit Run lenght -\n");
+
+  //add new entry
+  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
+  FT2.Get_FT2_Entry_Index(FT2, Tstart_Run,Current_FT2_Entry);
+  printf("FT2 Entry of Digi Tstart =%d\n",Current_FT2_Entry);
+
+  if(!FT2.Get_OutOfRange(FT2) && Current_FT2_Entry>0){
+
+    //Erase FT2
+    FT2.FT2_T.Tstart.erase(FT2.FT2_T.Tstart.begin(),FT2.FT2_T.Tstart.begin()+Current_FT2_Entry);
+    FT2.FT2_T.Tstop.erase(FT2.FT2_T.Tstop.begin(),FT2.FT2_T.Tstop.begin()+Current_FT2_Entry);
+    FT2.FT2_T.LiveTime.erase(FT2.FT2_T.LiveTime.begin(),FT2.FT2_T.LiveTime.begin()+Current_FT2_Entry);
+    FT2.FT2_T.bin.erase(FT2.FT2_T.bin.begin(),FT2.FT2_T.bin.begin()+Current_FT2_Entry);
+
+    //Erase ATT
+    FT2.ATT.Tstart.erase(FT2.ATT.Tstart.begin(),FT2.ATT.Tstart.begin()+Current_FT2_Entry);
+    FT2.ATT.x.erase(FT2.ATT.x.begin(),FT2.ATT.x.begin()+Current_FT2_Entry);
+    FT2.ATT.y.erase(FT2.ATT.y.begin(),FT2.ATT.y.begin()+Current_FT2_Entry);
+    FT2.ATT.z.erase(FT2.ATT.z.begin(),FT2.ATT.z.begin()+Current_FT2_Entry);
+    FT2.ATT.w.erase(FT2.ATT.w.begin(),FT2.ATT.w.begin()+Current_FT2_Entry);
+    FT2.ATT.vx.erase(FT2.ATT.vx.begin(),FT2.ATT.vx.begin()+Current_FT2_Entry);
+    FT2.ATT.vy.erase(FT2.ATT.vy.begin(),FT2.ATT.vy.begin()+Current_FT2_Entry);
+    FT2.ATT.vz.erase(FT2.ATT.vz.begin(),FT2.ATT.vz.begin()+Current_FT2_Entry);
+    FT2.ATT.entr.erase(FT2.ATT.entr.begin(),FT2.ATT.entr.begin()+Current_FT2_Entry);
+
+    //Erase ORB
+    FT2.ORB.Tstart.erase(FT2.ORB.Tstart.begin(),FT2.ORB.Tstart.begin()+Current_FT2_Entry);
+    FT2.ORB.x.erase(FT2.ORB.x.begin(),FT2.ORB.x.begin()+Current_FT2_Entry);
+    FT2.ORB.y.erase(FT2.ORB.y.begin(),FT2.ORB.y.begin()+Current_FT2_Entry);
+    FT2.ORB.z.erase(FT2.ORB.z.begin(),FT2.ORB.z.begin()+Current_FT2_Entry);
+    FT2.ORB.vx.erase(FT2.ORB.vx.begin(),FT2.ORB.vx.begin()+Current_FT2_Entry);
+    FT2.ORB.vy.erase(FT2.ORB.vy.begin(),FT2.ORB.vy.begin()+Current_FT2_Entry);
+    FT2.ORB.vz.erase(FT2.ORB.vz.begin(),FT2.ORB.vz.begin()+Current_FT2_Entry);
+    FT2.ORB.CM.erase(FT2.ORB.CM.begin(),FT2.ORB.CM.begin()+Current_FT2_Entry);
+    FT2.ORB.SAA.erase(FT2.ORB.SAA.begin(),FT2.ORB.SAA.begin()+Current_FT2_Entry);
+    FT2.ORB.entr.erase(FT2.ORB.entr.begin(),FT2.ORB.entr.begin()+Current_FT2_Entry);
+
+    printf("Erased  entry from 0 to %d nwe FT2 entries size %d \n",Current_FT2_Entry,Get_FT2_Entries(FT2));
+    
+  }
+  
+  FT2.Get_FT2_Entry_Index(FT2, Tstop_Run,Current_FT2_Entry);
+  printf("FT2 Entry of Digi Tstop =%d\n",Current_FT2_Entry);
+  if(!FT2.Get_OutOfRange(FT2) ){
+    
+    //Erase FT2
+    FT2.FT2_T.Tstart.erase(FT2.FT2_T.Tstart.begin()+Current_FT2_Entry,FT2.FT2_T.Tstart.end());
+    FT2.FT2_T.Tstop.erase(FT2.FT2_T.Tstop.begin()+Current_FT2_Entry,FT2.FT2_T.Tstop.end());
+    FT2.FT2_T.LiveTime.erase(FT2.FT2_T.LiveTime.begin()+Current_FT2_Entry,FT2.FT2_T.LiveTime.end());
+    FT2.FT2_T.bin.erase(FT2.FT2_T.bin.begin()+Current_FT2_Entry,FT2.FT2_T.bin.end());
+
+    //Erase ATT
+    FT2.FT2_T.Tstart.erase(FT2.FT2_T.Tstart.begin()+Current_FT2_Entry,FT2.FT2_T.Tstart.end());
+    FT2.ATT.x.erase(FT2.ATT.x.begin()+Current_FT2_Entry,FT2.ATT.x.end());
+    FT2.ATT.y.erase(FT2.ATT.y.begin()+Current_FT2_Entry,FT2.ATT.y.end());
+    FT2.ATT.z.erase(FT2.ATT.z.begin()+Current_FT2_Entry,FT2.ATT.z.end());
+    FT2.ATT.w.erase(FT2.ATT.w.begin()+Current_FT2_Entry,FT2.ATT.w.end());
+    FT2.ATT.vx.erase(FT2.ATT.vx.begin()+Current_FT2_Entry,FT2.ATT.vx.end());
+    FT2.ATT.vy.erase(FT2.ATT.vy.begin()+Current_FT2_Entry,FT2.ATT.vy.end());
+    FT2.ATT.vz.erase(FT2.ATT.vz.begin()+Current_FT2_Entry,FT2.ATT.vz.end());
+    FT2.ATT.entr.erase(FT2.ATT.entr.begin()+Current_FT2_Entry,FT2.ATT.entr.end());
+
+    //Erase ORB
+    FT2.ORB.Tstart.erase(FT2.ORB.Tstart.begin()+Current_FT2_Entry,FT2.ORB.Tstart.end());
+    FT2.ORB.x.erase(FT2.ORB.x.begin()+Current_FT2_Entry,FT2.ORB.x.end());
+    FT2.ORB.y.erase(FT2.ORB.y.begin()+Current_FT2_Entry,FT2.ORB.y.end());
+    FT2.ORB.z.erase(FT2.ORB.z.begin()+Current_FT2_Entry,FT2.ORB.z.end());
+    FT2.ORB.vx.erase(FT2.ORB.vx.begin()+Current_FT2_Entry,FT2.ORB.vx.end());
+    FT2.ORB.vy.erase(FT2.ORB.vy.begin()+Current_FT2_Entry,FT2.ORB.vy.end());
+    FT2.ORB.vz.erase(FT2.ORB.vz.begin()+Current_FT2_Entry,FT2.ORB.vz.end());
+    FT2.ORB.CM.erase(FT2.ORB.CM.begin()+Current_FT2_Entry,FT2.ORB.CM.end());
+    FT2.ORB.SAA.erase(FT2.ORB.SAA.begin()+Current_FT2_Entry,FT2.ORB.SAA.end());
+    FT2.ORB.entr.erase(FT2.ORB.entr.begin()+Current_FT2_Entry,FT2.ORB.entr.end());
+    
+    printf("Erased  entry from End  to %d new FT2 entries size %d \n",Current_FT2_Entry,Get_FT2_Entries(FT2));
+    
+  }
+  
+  
+  printf("---------------------------------------------------------\n");
+
+  //printf("---------------------------------------------------------\n");
+  //for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
+  //   FT2.FT2_T.LiveTime[i]=0;
+  //   FT2.FT2_T.bin[i]=i;
+  //   printf("Entry Id=%d Tstart=%20.18g  Tstop=%20.18g\n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i]);
+  //}
+  printf("---------------------------------------------------------\n");
+}
