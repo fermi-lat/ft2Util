@@ -1,13 +1,4 @@
 ------------------------------------------------------------
-User: tramacer  Fri Feb 22 11:43:12 PST 2008
-ft2Util/apps
-
-Modified Files:
-	main.cxx mergeft2.cxx 
-Log Message:
-fixed issue on M7 longer then Digi, Fits file now respect Digi Start and Stop
-    *
-------------------------------------------------------------
 TAG
 Tag name: v1r1p37, operation: add
 Package: ft2Util
