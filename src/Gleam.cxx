@@ -94,9 +94,9 @@ void FT2::Gleam_FT2(FT2 &FT2){
    
   
   //Write FT2 Txt file
-  FT2.WriteTextFile(FT2);
-  
-  //Write FT2 fits file
-  FT2.WriteFitsFile(FT2);
+  FT2.WriteMergedTextFile(FT2);
+   
+  //Write FT2 fits file 
+  FT2.WriteFitsFileMerged(FT2);
 
 }
