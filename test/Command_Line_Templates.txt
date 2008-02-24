@@ -1,0 +1,12 @@
+#Gleam
+makeFT2Entries.exe -M7File magic7.txt  -FT2_txt_File ft2-out.txt -FT2_fits_File ft2.fits --Gleam 
+
+#MC
+makeFT2Entries.exe --MC  -DigiFile file_digi.root  -MeritFile file_merit.root  -M7File magic7.txt   -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit
+
+#Non MC
+makeFT2Entries.exe -DigiFile file_digi.root  -MeritFile file_merit.root  -M7File magic7.txt   -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit
+
+#Merge Entries
+mergeFT2Entries.exe  -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit
+
