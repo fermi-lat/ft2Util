@@ -653,15 +653,18 @@ void FT2::Set_M7_Entries(FT2 &FT2){
         NewTimeBin=1;
         
         //-----Put  empity entries if Delta_ID>1--------//
+        bool backjump=false;
+        if((TimeBin-OldTimeBin)<0) backjump=true;
+
         unsigned int Delta_Gap=(TimeBin-OldTimeBin);
-        if(Delta_Gap>1){
+        if(Delta_Gap>1 && !backjump){
           printf("---------------------------------------------------------\n");
           printf("Found Gap, Delta_Gap=%d\n", Delta_Gap);
           printf("Time=%20.20e Tstop previous entry=%20.20e\n", time, FT2.FT2_T.Tstop[Current_FT2_Entries-2]);
           for(unsigned int i=1;i<Delta_Gap;i++){
-            printf("---------------------------------------------------------\n");
-            printf("add an empty entry in the Gap N=%d\n", i);
             if(FT2.verbose){
+              printf("---------------------------------------------------------\n"); 
+              printf("add an empty entry in the Gap N=%d\n", i);
               std::cout<<"!!!GAP Previous Entry Time Id "
               <<std::setprecision(20)
               <<FT2.FT2_T.bin[Current_FT2_Entries-1]
@@ -701,6 +704,9 @@ void FT2::Set_M7_Entries(FT2 &FT2){
               
             }
           }
+        }
+        if(backjump){
+             printf("!!!!Back Jump = %d , M7 entries are not time ordered I will not add extra entries here\n",TimeBin-OldTimeBin);
         }
         //---------------------------------------------------------
         
