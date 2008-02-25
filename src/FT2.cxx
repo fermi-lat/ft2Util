@@ -1079,7 +1079,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       
       if(!failed){
         deltat=FT2.ORB.Tstart[i+jump_f]-FT2_T.Tstart[i];
-        printf("T1=%e T2=%e\n", FT2.ORB.Tstart[i+jump_f], FT2_T.Tstart[i]);
+        
         FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
         
         
@@ -1095,6 +1095,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
         
         if(FT2.verbose){
           printf("Interpolation of ORB\n");
+          printf("T1=%e T2=%e\n", FT2.ORB.Tstart[i+jump_f], FT2_T.Tstart[i]);
           std::cout<<"deltat = "<<deltat<<"\n";
           std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
           printf("jump=%d deltat=%e corrx=%e\n", jump_f, deltat, FT2.ORB.vx[i+jump_f]*(-deltat));
