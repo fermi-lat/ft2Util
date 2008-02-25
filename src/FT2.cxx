@@ -1128,8 +1128,9 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
           std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
           printf("jump=%d deltat=%e corrx=%e \n", jump_b, deltat, FT2.ORB.vx[i-jump_b]);
         }
+        printf("-----------------------------------------\n");
       }
-     printf("-----------------------------------------\n");
+     
     }  
   }
   
