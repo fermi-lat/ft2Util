@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Feb 25 11:48:21 PST 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+fixed bug with fitsgen and SC entries=0 
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p40, operation: add
 Package: ft2Util
