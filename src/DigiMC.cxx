@@ -5,11 +5,13 @@
  *
  */
 
-/*-------------------------------------------------------------------------------
- *DigiMc works on the Digi File for the MC data. Due to a bugous livetime counter
- *the Live time is evaluated in a different way wrt the Digi real file.
- *The Rollover is taken into account by the JUMP IN THE GEMID
- *-----------------------------------------------------------------------------*/
+/**
+ *-------------------------------------------------------------------------------
+ DigiMc works on the Digi File for the MC data. Due to a bugous livetime counter
+ the Live time is evaluated in a different way wrt the Digi real file.
+ The Rollover is taken into account by the JUMP IN THE GEMID
+ *-----------------------------------------------------------------------------
+ */
 
 //--------------------------- ROOT DECLARATIONS ---------------------------------
 
