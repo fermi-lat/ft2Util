@@ -1,4 +1,27 @@
 ------------------------------------------------------------
+TAG
+Tag name: v1r1p44, operation: add
+Package: ft2Util
+User: tramacer  Mon Feb 25 13:34:35 2008
+Files:
+  ft2Util/ChangeLog  1.177
+  ft2Util/apps/main.cxx  1.35
+  ft2Util/apps/mergeft2.cxx  1.14
+  ft2Util/cmt/requirements  1.8
+  ft2Util/doc/release.notes  1.2
+  ft2Util/ft2Util/FT2_Time.hpp  1.16
+  ft2Util/ft2Util/MergeFT2.hpp  1.2
+  ft2Util/src/FITS.cxx  1.8
+  ft2Util/src/Gleam.cxx  1.6
+  ft2Util/src/FT2.cxx  1.34
+  ft2Util/src/Digi.cxx  1.7
+  ft2Util/src/DigiMC.cxx  1.7
+  ft2Util/src/FT2_TXT.cxx  1.6
+  ft2Util/src/SC.cxx  1.8
+  ft2Util/test/Command_Line_Templates.txt  1.1
+
+    *
+------------------------------------------------------------
 User: tramacer  Mon Feb 25 13:34:07 PST 2008
 ft2Util/src
 
