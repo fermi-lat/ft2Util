@@ -1,13 +1,13 @@
 /** @file Digi.cxx
  * @brief
- *
+ *aaaa
  * @author Andrea Tramacere <tramacer@slac.stanford.edu>
  *
  */
 
 /*-------------------------------------------------------------------------------
  *FT2::Digi_FT2(FT2 &FT2) is the class to evaluate live time from Digi File.
- *It uses Merit File to fid recon craches and correc LiveTime Accrdingly
+ *It uses Merit File to find recon craches and correct LiveTime Accrdingly
  *It uses M7 file to generate FT2 time entries
  *-----------------------------------------------------------------------------*/
 //--------------------------- ROOT DECLARATIONS ---------------------------------
@@ -360,9 +360,7 @@ void FT2::Digi_FT2(FT2 &FT2){
             
             //---Update DigiTstart and others---
             FT2.DT.Tstart[Current_FT2_Entry]=DigiTime;
-            
-            
-            
+                        
             //------- Update LiveTime ----------------------------
             FT2.DT.Tstart_LiveTime[Current_FT2_Entry]=Current_LiveTime;;
             LiveTime_Tstart = Current_LiveTime;
