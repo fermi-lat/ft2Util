@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Feb 25 13:01:28 PST 2008
+ft2Util/src
+
+Modified Files:
+	FT2.cxx 
+Log Message:
+Now we check that M7 have ordered time entries
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p41, operation: add
 Package: ft2Util
