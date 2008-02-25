@@ -73,8 +73,11 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
   FT2.FT2_SC.Set_FT2SC_Size(FT2.FT2_SC,FT2_Entries);
 
   std::cout<<"----------------- Fill SC entries --------------------"<<std::endl;
+ 
   for (unsigned int i = 0; i < FT2.FT2_SC.RA_SCX.size(); ++i){   
     
+     //printf(" 1 entry=%d Size=%d\n",i,FT2.FT2_SC.RA_SCX.size()); 
+      
     //RA and DEC of SC X and Z axis
     static Hep3Vector xaxis(1,0,0), zaxis(0,0,1);
     Quaternion q(Hep3Vector(FT2.ATT.x[i],FT2.ATT.y[i],FT2.ATT.z[i]),FT2.ATT.w[i]);
