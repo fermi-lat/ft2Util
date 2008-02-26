@@ -3,13 +3,12 @@
 * @author Andrea Tramacere <tramacer@slac.stanford.edu>
 *
 * @section intro Introduction
-* Intro
-*
-*
+* ft2Util is a package used to build the FT2 files.
+
 * <hr>
 * @section makeFT2Entries makeFT2Entries
 *
-* bla bla
+* This command is used to generate FT2 file with 1 seconds entries.
 *
 * @subsection jobOptions jobOptions
 * -# --MC
@@ -23,9 +22,9 @@
 *
 * <hr>
 *
-* @section mergeFT2Entries.exe mergeFT2Entries.exe
+* @section mergeFT2Entries mergeFT2Entries
 *
-* bla bla
+* This command is used to merge 1 seconds entries in to 30 seconds entries
 *
 * @subsection jobOptions jobOptions
 *
