@@ -42,6 +42,10 @@ void FT2_SpaceCraft::Set_FT2SC_Size(FT2_SpaceCraft &SC, unsigned int size)
   SC.B_MCILWAIN.resize(size);
   SC.L_MCILWAIN.resize(size);
   SC.GEOMAG_LAT.resize(size);
+  SC.QS_J1.resize(size);
+  SC.QS_J2.resize(size);
+  SC.QS_J3.resize(size);
+  SC.QS_J4.resize(size);
 }
 
 

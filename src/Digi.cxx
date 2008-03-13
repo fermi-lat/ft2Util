@@ -1,6 +1,9 @@
 /** @file Digi.cxx
  * @brief
- *aaaa
+ * FT2::Digi_FT2(FT2 &FT2) is the used class to evaluate live time from Digi File.
+ * Digi file is used to evaluate the LiveTime for eache FT2 entry. The Merit File is used to find 
+ * recon crasches and correct LiveTime Accrdingly. The M7 file is used t o generate FT2 time entries
+ *
  * @author Andrea Tramacere <tramacer@slac.stanford.edu>
  *
  */

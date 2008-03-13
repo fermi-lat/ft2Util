@@ -31,6 +31,7 @@ class FT2_SpaceCraft {
   std::vector<double> RA_ZENITH,DEC_ZENITH;
   std::vector<double> LAT_GEO,LON_GEO,RAD_GEO;
   std::vector<double> B_MCILWAIN,L_MCILWAIN,GEOMAG_LAT;
+  std::vector<double> QS_J1,QS_J2,QS_J3,QS_J4;
   FT2_SpaceCraft();
 
   void Set_FT2SC_Size(FT2_SpaceCraft &FT2_SC,unsigned int size);
