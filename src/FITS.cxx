@@ -42,7 +42,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   std::cout<<"Start Instance of Ft2File\n";
   std::cout<<"The file name is "<<FT2.FT2_fits_File<<"\n";
   std::cout<<"The file lenght is "<<FT2_ENTR<<"\n";
-  fitsGen::Ft2File ft2(FT2.FT2_fits_File,FT2_ENTR);
+  fitsGen::Ft2File ft2(FT2.FT2_fits_File,FT2_ENTR);  
   std::cout<<"Instanced\n";
   
   //!!!!!!!!!!!!!!Verify this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -81,10 +81,10 @@ void FT2::WriteFitsFile(FT2 &FT2) {
     ft2["l_mcilwain"].set(FT2_SC.L_MCILWAIN[i]);
     ft2["livetime"].set(FT2_T.LiveTime[i]);
     ft2["lat_mode"].set(FT2.ORB.CM[i]);
-    ft2["qs_j1"].set(FT2.ORB.CM[i]);
-    ft2["qs_j2"].set(FT2.ORB.CM[i]);
-    ft2["qs_j3"].set(FT2.ORB.CM[i]);
-    ft2["qs_j4"].set(FT2.ORB.CM[i]);
+    ft2["qs_j1"].set(FT2.ATT.x[i]);
+    ft2["qs_j2"].set(FT2.ATT.y[i]);
+    ft2["qs_j3"].set(FT2.ATT.z[i]);
+    ft2["qs_j4"].set(FT2.ATT.w[i]);
     if (FT2.ORB.SAA[i]) {
       ft2["in_saa"].set(true);
     } else {
