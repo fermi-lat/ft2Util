@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Thu Mar 13 17:52:23 PDT 2008
+ft2Util/src
+
+Modified Files:
+	FITS.cxx FT2.cxx SC.cxx 
+Log Message:
+fitsGen v3r9
+    *
+------------------------------------------------------------
+User: tramacer  Thu Mar 13 17:52:23 PDT 2008
 ft2Util/cmt
 
 Modified Files:
