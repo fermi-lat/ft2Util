@@ -372,13 +372,20 @@ void FT2::Get_DigiFileLineNumber(FT2 &FT2, const std::string & infile){
 
 
 //------------------------------ Merge M7 and Digi Entries --------------------------------------------
+/*---------------------------------------------------------------------------
+ *             MERGE M7 and DIGI ENTRIES
+ *Merge The M7 entries with the entries in the Digi
+ *corresponding to the first and last event
+ *It cheks if the last and first DIGI entry actually fall inside
+ *the FT2 time spane, otherwise it adds entry according
+ *THIS SHOULD NEVER HAPPEN!!!!!!!!!!!!!!!!
+ *-------------------------------------------------------------------------*/
 void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run){
   unsigned int Current_FT2_Entry, FT2_Entries;
   
   printf("---------------------------------------------------------\n");
   printf("Merge M7 with Digi entries -\n");
   
-  //add new entry
   printf("FT2 entries %d \n", Get_FT2_Entries(FT2));
   FT2.Get_FT2_Entry_Index(FT2, Tstart_Run, Current_FT2_Entry);
   if(!FT2.Get_OutOfRange(FT2)){
@@ -655,7 +662,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
         //-----Put  empity entries if Delta_ID>1--------//
         bool backjump=false;
         if((TimeBin-OldTimeBin)<0) backjump=true;
-
+        
         unsigned int Delta_Gap=(TimeBin-OldTimeBin);
         if(Delta_Gap>1 && !backjump){
           printf("---------------------------------------------------------\n");
@@ -663,7 +670,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
           printf("Time=%20.20e Tstop previous entry=%20.20e\n", time, FT2.FT2_T.Tstop[Current_FT2_Entries-2]);
           for(unsigned int i=1;i<Delta_Gap;i++){
             if(FT2.verbose){
-              printf("---------------------------------------------------------\n"); 
+              printf("---------------------------------------------------------\n");
               printf("add an empty entry in the Gap N=%d\n", i);
               std::cout<<"!!!GAP Previous Entry Time Id "
               <<std::setprecision(20)
@@ -706,7 +713,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
           }
         }
         if(backjump){
-             printf("!!!!Back Jump = %d , M7 entries are not time ordered I will not add extra entries here\n",TimeBin-OldTimeBin);
+          printf("!!!!Back Jump = %d , M7 entries are not time ordered I will not add extra entries here\n", TimeBin-OldTimeBin);
         }
         //---------------------------------------------------------
         
@@ -913,10 +920,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   
   M7F.close();
   
-  //!!!!!!!!!!! WE DO NOT NEED ANYMORE THIS METHOD
-  //BECAUSE THE FT2 TEMPLATE REQUIRES VALUE AT
-  //THE BEGINNING OF THE TIME BIN !!!!!!!!!!!!!!!
-  //FT2.Average_M7_Entries(FT2);
+ 
   if(FT2.verbose){
     for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
       printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n", i, FT2.FT2_T.Tstart[i], FT2.FT2_T.Tstop[i], FT2.FT2_T.bin[i]);
@@ -1056,7 +1060,7 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
   
 }
 
-//-------------Interplates ORB if entr=0------------------
+//-------------Interpolates ORB if entr=0------------------
 void FT2::Interp_ORB_Entries(FT2 &FT2){
   double deltat, acc;
   unsigned int jump_b, jump_b1, jump_f, jump_f1;
@@ -1110,7 +1114,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
           jump_b++;
         }
         deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
-               
+        
         FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
         
         
@@ -1130,8 +1134,8 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
         }
         printf("-----------------------------------------\n");
       }
-     
-    }  
+      
+    }
   }
   
   //Last Entry
@@ -1140,12 +1144,12 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
     
     
     jump_b=1;
-   
+    
     while(FT2.ORB.entr[i-jump_b]==0 && (i-jump_b)>0 ){
       jump_b++;
     }
-   
-
+    
+    
     deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
     
     FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
@@ -1243,39 +1247,6 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
 }
 
 
-//-------------- Average M7 File  Entries  within a FT2 time bin -----------------------
-//!!!!!!!!!!! WE DO NOT NEED ANYMORE THIS METHOD
-//BECAUSE THE FT2 TEMPLATE REQUIRES VALUE AT
-//THE BEGINNING OF THE TIME BIN !!!!!!!!!!!!!!!
-//void FT2::Average_M7_Entries(FT2 &FT2){
-//
-//  for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){
-//    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-//    FT2.ATT.x[i]*=1.0/(double( FT2.ATT.entr[i]));
-//    FT2.ATT.y[i]*=1.0/(double( FT2.ATT.entr[i]));
-//    FT2.ATT.z[i]*=1.0/(double( FT2.ATT.entr[i]));
-//    FT2.ATT.w[i]*=1.0/(double( FT2.ATT.entr[i]));
-//    FT2.ATT.vx[i]*=1.0/(double( FT2.ATT.entr[i]));
-//    FT2.ATT.vy[i]*=1.0/(double( FT2.ATT.entr[i]));
-//    FT2.ATT.vz[i]*=1.0/(double( FT2.ATT.entr[i]));
-//  }
-//
-//  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
-//   std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-//
-//    if( FT2.ORB.entr.size()==0){
-//      //!!!!!!!!!!!Make interpolation
-//     //!!!!!!!!!!!FT2.interpolate(FT2.ORB);
-//  }
-//
-// FT2.ORB.x[i]*=1.0/(double(FT2.ORB.entr[i]));
-// FT2.ORB.y[i]*=1.0/(double(FT2.ORB.entr[i]));
-// FT2.ORB.z[i]*=1.0/(double(FT2.ORB.entr[i]));
-// FT2.ORB.vx[i]*=1.0/(double(FT2.ORB.entr[i]));
-// FT2.ORB.vy[i]*=1.0/(double(FT2.ORB.entr[i]));
-// FT2.ORB.vz[i]*=1.0/(double(FT2.ORB.entr[i]));
-//  }
-//}
 
 
 //-------------- Update and clean M7 fields in the FT2 Entries -----------------------
