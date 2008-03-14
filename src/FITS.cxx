@@ -81,10 +81,10 @@ void FT2::WriteFitsFile(FT2 &FT2) {
     ft2["l_mcilwain"].set(FT2_SC.L_MCILWAIN[i]);
     ft2["livetime"].set(FT2_T.LiveTime[i]);
     ft2["lat_mode"].set(FT2.ORB.CM[i]);
-    ft2["qs_j1"].set(FT2.ATT.x[i]);
-    ft2["qs_j2"].set(FT2.ATT.y[i]);
-    ft2["qs_j3"].set(FT2.ATT.z[i]);
-    ft2["qs_j4"].set(FT2.ATT.w[i]);
+    ft2["qsj_1"].set(FT2.FT2_SC.QS_J1[i]);
+    ft2["qsj_2"].set(FT2.FT2_SC.QS_J2[i]);
+    ft2["qsj_3"].set(FT2.FT2_SC.QS_J3[i]);
+    ft2["qsj_4"].set(FT2.FT2_SC.QS_J4[i]);
     if (FT2.ORB.SAA[i]) {
       ft2["in_saa"].set(true);
     } else {
@@ -153,6 +153,10 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
     ft2["l_mcilwain"].set(FT2_SC.L_MCILWAIN[i]);
     ft2["livetime"].set(FT2_T.LiveTime[i]);
     ft2["lat_mode"].set(FT2.ORB.CM[i]);
+    ft2["qsj_1"].set(FT2.FT2_SC.QS_J1[i]);
+    ft2["qsj_2"].set(FT2.FT2_SC.QS_J2[i]);
+    ft2["qsj_3"].set(FT2.FT2_SC.QS_J3[i]);
+    ft2["qsj_4"].set(FT2.FT2_SC.QS_J4[i]);
     if (FT2.ORB.SAA[i]) {
       ft2["in_saa"].set(true);
     } else {

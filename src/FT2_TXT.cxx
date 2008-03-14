@@ -23,7 +23,7 @@ void FT2::WriteTextFile(FT2 &FT2) {
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
   
   //----------- WRITE FT2 TXT FILE -----------------------------------------------------
-  FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime\n";
+  FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime Q1 Q2 Q3 Q4\n";
   
 
   unsigned int START,STOP;
@@ -80,6 +80,14 @@ void FT2::WriteTextFile(FT2 &FT2) {
 	<<FT2.ORB.CM[i]
 	<<","
 	<<FT2.FT2_T.LiveTime[i]
+    <<","
+    <<FT2_SC.QS_J1[i]   
+    <<","
+    <<FT2_SC.QS_J2[i]   
+    <<","
+    <<FT2_SC.QS_J3[i]
+    <<","
+    <<FT2_SC.QS_J4[i]   
 	<<std::endl;
     
   }  
@@ -94,7 +102,7 @@ void FT2::WriteMergedTextFile(FT2 &FT2) {
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
   
   //----------- WRITE FT2 TXT FILE -----------------------------------------------------
-  FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime\n";
+  FT2F<<"#Abs_FT2_ID FT2Tstart FT2tstop SC.x SY.y Sc.z lat_geo lon_geo rad_geo ra_zenith dec_zenith B_mcilwain L_mcilwain geom_lat is_saa ra_scz dec_scx ra_scx dec_scx lat_mode livetime Q1 Q2 Q3 Q4\n";
   
 
  
@@ -148,7 +156,15 @@ void FT2::WriteMergedTextFile(FT2 &FT2) {
 	<<FT2.ORB.CM[i]
 	<<","
 	<<FT2.FT2_T.LiveTime[i]
-	<<std::endl;
+    <<","
+    <<FT2_SC.QS_J1[i]   
+    <<","
+    <<FT2_SC.QS_J2[i]   
+    <<","
+    <<FT2_SC.QS_J3[i]
+    <<","
+    <<FT2_SC.QS_J4[i]   
+    <<std::endl;
     
   }  
   FT2F.close();
