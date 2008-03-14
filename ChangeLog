@@ -1,22 +1,4 @@
 ------------------------------------------------------------
-User: tramacer  Thu Mar 13 19:13:43 PDT 2008
-ft2Util/cmt
-
-Modified Files:
-	requirements 
-Log Message:
-quaternions added
-    *
-------------------------------------------------------------
-User: tramacer  Thu Mar 13 19:13:43 PDT 2008
-ft2Util/apps
-
-Modified Files:
-	main.cxx 
-Log Message:
-quaternions added
-    *
-------------------------------------------------------------
 User: tramacer  Thu Mar 13 17:52:23 PDT 2008
 ft2Util/src
 
