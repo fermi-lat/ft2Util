@@ -62,6 +62,9 @@ void DigiTime::Set_DigiTime_Size(DigiTime &DigiT, unsigned long size){
   DigiT.Tstop_LiveTime.resize(size);
   DigiT.LiveTime.resize(size);
   DigiT.DeadTime.resize(size);
+  DigiT.ReconDeadTime.resize(size);
+  DigiT.RealGapsDeadTime.resize(size);
+  DigiT.GapsDeadTime.resize(size);
   DigiT.update.resize(size);
   //DigiT.bin.resize(size);
   //DigiT.Tstart_evt.resize(size);
@@ -71,6 +74,21 @@ void DigiTime::Set_DigiTime_Size(DigiTime &DigiT, unsigned long size){
 //------------------------------------------------------------
 
 
+//---------------- Gaps CLASS ----------------------------------
+GAPS::GAPS() {
+  
+}
+
+void GAPS::Set_GAPS_Size(GAPS &GP, unsigned long size){
+  GP.GemStart.resize(size);
+  GP.GemStop.resize(size);
+  GP.Tstart.resize(size);
+  GP.Tstop.resize(size);
+  GP.LiveTstart.resize(size);
+  GP.LiveTstop.resize(size);
+}
+//------------------------------------------------------------
+//------------------------------------------------------------
 
 
 //---------------- ATTITTUDE CLASS --------------------------------
@@ -192,18 +210,32 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
   
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
   double fraction;//fraction_tot=0;
-  
+  double liveTot_sum(0);
+  double liveTot_elaps(0);
+  double deadTot(0),deadGapsTot(0),RealdeadTot(0);
+  double T1;
+  bool first(true);
   for(unsigned int i=0;i<FT2_ENTR;i++){
     
+    FT2.DT.DeadTime[i]+=FT2.DT.ReconDeadTime[i]+FT2.DT.GapsDeadTime[i];
+
+    deadTot+=FT2.DT.DeadTime[i];
     
+    RealdeadTot+=FT2.DT.ReconDeadTime[i]+FT2.DT.RealGapsDeadTime[i];
     
+    deadGapsTot+=FT2.DT.GapsDeadTime[i];
+
     //FT2.FT2_T.LiveTime[i]=0;
     
     if(FT2.DT.update[i]){
       
       
+      if(first) T1=FT2.DT.Tstart_LiveTime[i];
+      first=false;
+      
       FT2.FT2_T.LiveTime[i]=
-              (FT2.DT.Tstop_LiveTime[i] -  FT2.DT.Tstart_LiveTime[i]) - FT2.DT.DeadTime[i];
+              (FT2.DT.Tstop_LiveTime[i] -  FT2.DT.Tstart_LiveTime[i])- 
+              FT2.DT.DeadTime[i];
       
       if(FT2.verbose){
         printf("Entry %d \n", i);
@@ -219,8 +251,25 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
         <<FT2.DT.Tstart_LiveTime[i]
         <<"\nTstop Live "
         <<FT2.DT.Tstop_LiveTime[i]
+        <<"\ndead "
+        <<FT2.DT.DeadTime[i]
         <<"\nlive "<<FT2.FT2_T.LiveTime[i]
         <<std::endl;;
+      }
+      
+      
+      if(FT2.DT.update[i-1] && i>0){
+        fraction=1.0/(FT2.DT.Tstart[i]-FT2.DT.Tstop[i-1]);
+        fraction*=(FT2.DT.Tstart[i]-FT2.FT2_T.Tstart[i]);
+        fraction*=(FT2.DT.Tstart_LiveTime[i]-FT2.DT.Tstop_LiveTime[i-1]);
+        if(FT2.verbose){
+          std::cout<<"fraction back "
+          <<fraction
+          <<"\n";
+          printf("DT.Tstart_Live[i]=%30.28e DT.Tstop_Live[i-1]=%30.28e\n", FT2.DT.Tstart_LiveTime[i], FT2.DT.Tstop_LiveTime[i-1]);
+        }
+        FT2.FT2_T.LiveTime[i]+= fraction;
+        //fraction_tot+=fraction;
       }
       
       
@@ -231,27 +280,34 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
           std::cout<<"fraction fwd "
           <<fraction
           <<"\n";
-          //printf("%e %e\n",FT2.DT.Tstart_LiveTime[i+1],FT2.DT.Tstop_LiveTime[i]);
+          printf("DT.Tstart_Live[i+1]=%30.28e DT.Tstop_Live[i]=%30.28e\n", FT2.DT.Tstart_LiveTime[i+1], FT2.DT.Tstop_LiveTime[i]);
         }
         FT2.FT2_T.LiveTime[i]+= fraction;
         //fraction_tot+=fraction;
       }
       
-      if(FT2.DT.update[i-1] && i>0){
-        fraction=1.0/(FT2.DT.Tstart[i]-FT2.DT.Tstop[i-1]);
-        fraction*=(FT2.DT.Tstart[i]-FT2.FT2_T.Tstart[i]);
-        fraction*=(FT2.DT.Tstart_LiveTime[i]-FT2.DT.Tstop_LiveTime[i-1]);
-        if(FT2.verbose){
-          std::cout<<"fraction back "
-          <<fraction
-          <<"\n";
-          //printf("%e %e\n",FT2.DT.Tstart_LiveTime[i+1],FT2.DT.Tstop_LiveTime[i]);
-        }
-        FT2.FT2_T.LiveTime[i]+= fraction;
-        //fraction_tot+=fraction;
-      }
+      liveTot_sum+=FT2.FT2_T.LiveTime[i]-fraction;
       
       
+      
+      liveTot_elaps=FT2.DT.Tstop_LiveTime[i]-T1;
+      
+      printf("i=%d \nLivetime i-0 =%30.28g, summed up to now =%30.28g \n(Livetime i-0 - summed up to now )=%30.28g\n",
+              i,
+              liveTot_elaps, 
+              liveTot_sum,
+              liveTot_elaps-liveTot_sum);
+      
+      printf("Real dead up to now=%30.28g, dead subtr up to now=%30.28g, \ndead subtr from gaps up to now=%30.28g\n",
+              RealdeadTot,
+              deadTot,
+              deadGapsTot);
+
+      printf("(Livetime i-0 - summed up to now )-(Real dead up to now)=%30.28g\n",
+              (liveTot_elaps-liveTot_sum)-RealdeadTot
+              );
+      
+      liveTot_sum+=fraction;
     }
     
     
@@ -282,6 +338,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " -M7File <FileName>\n"
   " -FT2_txt_File <FileName>\n"
   " -FT2_fits_File <FileName> \n"
+  "-Gaps_File <FileName> \n"
   " -Version <vesion of the file>\n"
   " --Gleam \n"
   " --verbose\n"
@@ -302,6 +359,10 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
         if(par=="-M7File") FT2.M7File = std::string(argv[i+1]);
         if(par=="-FT2_txt_File") FT2.FT2_txt_File = std::string(argv[i+1]);
         if(par=="-FT2_fits_File") FT2.FT2_fits_File= std::string(argv[i+1]);
+        if(par=="-Gaps_File"){
+          FT2.DigiGAPS=true;
+          FT2.Gaps_File= std::string(argv[i+1]);
+        }
         if(par=="-Version")	  FT2.Version= std::string(argv[i+1]);
         
         if(par=="-h"){
@@ -327,18 +388,21 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
         
       }
     }
-    std::cout<<"Digi File "
+    std::cout<<"Digi File="
     <<FT2.DigiFile<<std::endl
-    <<"MeritFile"
+    <<"MeritFile="
     <<FT2.MeritFile<<std::endl
-    <<"M7 File "
+    <<"M7 File="
     <<FT2.M7File<<std::endl
-    <<"OUT FILE"
-    <<FT2.FT2_txt_File
-    <<" FITS FILE"
-    <<FT2.FT2_fits_File
-    <<" Gleam=="
-    <<FT2.Gleam
+    <<"OUT FILE="
+    <<FT2.FT2_txt_File<<std::endl
+    <<"FITS FILE="
+    <<FT2.FT2_fits_File<<std::endl
+    <<"Gleam="
+    <<FT2.Gleam<<std::endl
+    <<"Gaps File="
+    <<FT2.Gaps_File<<std::endl
+    <<"---------------------------------------------------------"
     <<std::endl;
     
   }
@@ -491,6 +555,7 @@ bool FT2::Get_OutOfRange(FT2 &FT2){
 //---------------Get FT2 Entry Index    ---------------------------------
 void FT2::Get_FT2_Entry_Index(FT2 &FT2 , double time, unsigned int &i){
   unsigned Entries ;
+  unsigned int l;
   
   //FT2 entries Number
   Entries=Get_FT2_Entries(FT2);
@@ -500,7 +565,7 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 , double time, unsigned int &i){
   FT2.Set_OutOfRange_TRUE(FT2);
   
   //Look for the Entry index
-  for(unsigned int l=0;l<Entries-1;l++){
+  for(l=0;l<Entries-1;l++){
     if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l])){
       Set_OutOfRange_FALSE(FT2);
       i=l;
@@ -557,6 +622,9 @@ double  FT2::Get_M7_Time(const std::string &Time, const std::string &Frac_Time){
   
   return (time+f_time);
 }
+
+
+
 
 
 //--------------------------------Set Entries According to M7 file -----------------------
@@ -820,6 +888,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
 
 
 
+
 //--------------  Fill M7 Entries from M7 File ----------------------------------
 void FT2::Fill_M7_Entries(FT2 &FT2){
   
@@ -920,7 +989,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   
   M7F.close();
   
- 
+  
   if(FT2.verbose){
     for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
       printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n", i, FT2.FT2_T.Tstart[i], FT2.FT2_T.Tstop[i], FT2.FT2_T.bin[i]);
@@ -937,6 +1006,124 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
     printf("---------------------------------------------------------\n");
   }
 }
+
+
+
+//--------------  Set Gaps ----------------------------------
+void FT2::Set_GAPS(FT2 &FT2){
+  unsigned int Entries(0);
+  printf("Set Gaps from file\n");
+  //File Handlign
+  std::string buf, comment; //buffer string
+  std::string line;
+  std::ifstream  GPF(FT2.Gaps_File.c_str());
+  
+  
+  //Read file
+  while (std::getline(GPF, line, '\n')) {
+    //A SIMPLE TOKENIZER
+    std::vector<std::string> tokens; // Create vector to hold our words
+    std::stringstream ss(line); // Insert the string into a stream
+    while (ss >> buf)	tokens.push_back(buf);
+    
+    //SKIP lines that start with # character
+    comment=line.substr(0, 1);
+    if(comment.find( "#", 0) == std::string::npos ){
+      //increase Gaps size
+      Entries++;
+      FT2.GP.Set_GAPS_Size(FT2.GP, Entries);
+      std::cout<<Entries<<"\n";
+      FT2.GP.GemStart[Entries-1]=std::strtoul(tokens[1].c_str(), NULL, 10);
+      FT2.GP.GemStop[Entries-1] =std::strtoul(tokens[2].c_str(), NULL, 10);
+      
+    }
+  }
+  
+  for (unsigned long i=0;i<Entries;i++){
+    std::cout<<"GemStart="
+    <<FT2.GP.GemStart[i]
+    <<" GemStop="
+    <<FT2.GP.GemStart[i]
+    <<"\n";
+  }
+  
+  GPF.close();
+}
+
+
+//--------------  Set Gaps ----------------------------------
+
+void FT2::Set_GAPS_DeadTime(FT2 &FT2){
+  unsigned int T1, T2, DeltaT;
+  double frac, GapTime, GapDeadTime, Total_GapDeadTime(0);
+  printf("Set Gaps Dead Time\n");
+  for (unsigned int i = 0; i < FT2.GP.Tstart.size(); ++i){
+    
+    Get_FT2_Entry_Index(FT2, FT2.GP.Tstart[i], T1);
+    Get_FT2_Entry_Index(FT2, FT2.GP.Tstop[i], T2);
+    printf("Gap=%d, TimeStart=%30.28e FT2_index=%d Tstop=%30.28e FT2_index=%d\n",
+            i, FT2.GP.Tstart[i], T1, FT2.GP.Tstop[i], T2);
+    
+    DeltaT=T2-T1;
+    
+    GapTime=FT2.GP.Tstop[i]-FT2.GP.Tstart[i];
+    
+    GapDeadTime=FT2.GP.LiveTstop[i]-FT2.GP.LiveTstart[i];
+    
+    Total_GapDeadTime+=GapDeadTime;
+    
+    if(DeltaT==0){
+      FT2.DT.GapsDeadTime[T1]+=GapDeadTime;
+      FT2.DT.RealGapsDeadTime[T1]+=GapDeadTime;
+      printf("DeltaT=0 dead time=%e\n", FT2.DT.DeadTime[T1]);
+    }
+    
+    if(DeltaT==1){
+      frac=(FT2.FT2_T.Tstop[T1]-FT2.GP.Tstart[i])/GapTime;
+      FT2.DT.GapsDeadTime[T1]+=frac*GapDeadTime; 
+      FT2.DT.RealGapsDeadTime[T1]+=frac*GapDeadTime; 
+      printf("DeltaT=1 dead time=%e\n", FT2.DT.DeadTime[T1]);
+      
+      frac=(FT2.GP.Tstop[i]-FT2.FT2_T.Tstart[T2])/GapTime;
+      FT2.DT.GapsDeadTime[T2]+=frac*GapDeadTime;
+      FT2.DT.RealGapsDeadTime[T1]+=frac*GapDeadTime; 
+      printf("DeltaT=1 dead time=%e\n", FT2.DT.DeadTime[T2]);
+    }
+    
+    if(DeltaT>1){
+      double d1, d2, d;
+      double test;
+      printf("GapDeadTime=%e\n", GapDeadTime);
+      frac=(FT2.FT2_T.Tstop[T1]-FT2.GP.Tstart[i])/GapTime;
+      d1=frac*GapDeadTime;
+      //!!!THIS DEAD TIME MUST NOT BE SUBTRACTED
+      //FT2.DT.GapsDeadTime[T1]+=d1;
+      FT2.DT.RealGapsDeadTime[T1]+=d1;
+      printf("DeltaT>1 dead time=%e\n", FT2.DT.DeadTime[T1]);
+      printf("d1=%e\n", d1);
+      
+      frac=(FT2.GP.Tstop[i]-FT2.FT2_T.Tstart[T2])/GapTime;
+      d2=frac*GapDeadTime;
+      //!!!THIS DEAD TIME MUST NOT BE SUBTRACTED
+      //FT2.DT.GapsDeadTime[T2]+=d2;
+      FT2.DT.RealGapsDeadTime[T2]+=d2;
+      printf("DeltaT>1 dead time=%e\n", FT2.DT.DeadTime[T2]);
+      printf("d2=%e\n", d2);
+      
+      d=(GapDeadTime-d1-d2)/(DeltaT-1);
+      
+      for(unsigned l=1;l<DeltaT;l++){         
+        FT2.DT.GapsDeadTime[T1+l]+=d;
+        FT2.DT.RealGapsDeadTime[T1+l]+=d;
+        printf("DeltaT>1 dead time=%e\n", FT2.DT.DeadTime[T1+l]);
+      }
+      printf("d=%e\n", d);
+    }
+    
+  }
+  printf("Total Gaps Dead Time=%e\n", Total_GapDeadTime);
+}
+
 
 
 //-------------Interplates ORB if Vel=0------------------
