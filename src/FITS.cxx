@@ -43,7 +43,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   std::cout<<"The file name is "<<FT2.FT2_fits_File<<"\n";
   std::cout<<"The file lenght is "<<FT2_ENTR<<"\n";
   fitsGen::Ft2File ft2(FT2.FT2_fits_File,FT2_ENTR);  
-  std::cout<<"Instanced\n";
+  //std::cout<<"Instanced\n";
   
   //!!!!!!!!!!!!!!Verify this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //ft2.header().addHistory("Input pointing history file: " + pointingFile);
@@ -51,16 +51,16 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   //std::ifstream d2(pointingFile.c_str()); 
   //std::string line;
   //std::vector<std::string> dataFields;
-  std::cout<<"SC vector\n";
+  //std::cout<<"SC vector\n";
   std::vector<float> scPosition(3);
-  std::cout<<"done\n";
+  //std::cout<<"done\n";
   
   
 
-  std::cout<<"Loop over fields\n";
+  std::cout<<"Loop over ft2 fields\n";
   
   
-  for(unsigned int i=START;i<STOP;i++){
+  for(unsigned int i=START;i<=STOP;i++){
     ft2["start"].set(FT2_T.Tstart[i]);
     ft2["stop"].set(FT2.FT2_T.Tstop[i]);
     scPosition[0] = FT2.ORB.x[i];

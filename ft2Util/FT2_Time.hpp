@@ -132,6 +132,7 @@ public:
   void Interp_ORB_Entries(FT2 &FT2);
   void Interp_ATT_Entries(FT2 &FT2);
   void Interp_ORB_Tstart(FT2 &FT2);
+  void Interp_ATT_Tstart(FT2 &FT2);
   void Interp_ORB_Vel_Entries(FT2 &FT2);
   unsigned int M7_Entries;
   
@@ -139,6 +140,8 @@ public:
   bool DigiGAPS;
   void Set_GAPS(FT2 &FT2);
   void Set_GAPS_DeadTime(FT2 &FT2);
+  void Fix_Fake_GAPS(FT2 &FT2);
+
   //FT2_Time
   //void Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries, unsigned int bin);
   
