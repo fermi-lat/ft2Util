@@ -174,47 +174,56 @@ void FT2::Digi_FT2(FT2 &FT2){
   //-----------------------------------------------------------
   //Find Tstart and Tstop od the Digi File
   //-----------------------------------------------------------
-  
-  printf("Find Tstart and Tstop of the Digi File\n");
+  printf("---------------------------------------------------\n");  
+  printf("Check on Tstart and Tstop of the Digi File and M& file \n");
   Digi_i=0;
   Digi_Start=0;
   //Takes the first Digi Element
   //that falls within the M7 time span
+  double DeltaT;
   do{
+    
     T->GetEntry(Digi_i);
     DigiTime=evt->getTimeStamp();
     //printf("DigiTime=%30.28g\n", DigiTime);
     FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
+    DeltaT=DigiTime-FT2.FT2_T.Tstart[0];
     evt->Clear();
     Digi_i++;
-  }while(FT2.Get_OutOfRange(FT2));
+  }while(FT2.Get_OutOfRange(FT2)&&DeltaT>=1.0&& Digi_i<Digi_nEvt-1);
   Digi_i--;
   
   T->GetEntry(Digi_i);
   Tstart_Run=evt->getTimeStamp();
   Digi_Start=Digi_i;
-  printf("ID of firtst Digi evt within the M7 file %d\n", Digi_Start);
-  
+  printf("ID of firtst Digi evt within 1 s gap from second the M7 file %d\n", Digi_Start);
+  printf("Time of the firtst Digi evt within 1 s gap from second the M7 file %30.28g\n",DigiTime);
+  printf("Tstart of the the M7 file %30.28g\n",FT2.FT2_T.Tstart[0]);
   
   //Takes the Last Digi Element
   //that falls within the M7 time span
   Digi_i=Digi_nEvt-1;
+  unsigned int FT2Entries=Get_FT2_Entries(FT2);
   do{
+       
     T->GetEntry(Digi_i);
     DigiTime=evt->getTimeStamp();
-    printf("DigiTime=%30.28g Digi_i=%d\n", DigiTime, Digi_i);
+    //printf("DigiTime=%30.28g Digi_i=%d\n", DigiTime, Digi_i);
     FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
+    DeltaT=FT2.FT2_T.Tstop[FT2Entries]-DigiTime;
     evt->Clear();
     Digi_i--;
-  }while(FT2.Get_OutOfRange(FT2) && Digi_i>0);
+  }while(FT2.Get_OutOfRange(FT2) && Digi_i>0 &&DeltaT>=1.0);
   Digi_i++;
   //Digi_i=Digi_nEvt-1;
   T->GetEntry(Digi_i);
   Tstop_Run=evt->getTimeStamp();
   Digi_Stop=Digi_i;
-  printf("ID of the last Digi evt within the M7 file %d\n", Digi_Stop);
+  printf("ID of the last Digi evt within 1 s gap from the M7 file %d\n", Digi_Stop);
+  printf("Tstop of the the M7 file %30.28g\n",FT2.FT2_T.Tstop[FT2Entries-1]);
+  printf("Time of the last Digi evt within 1 s gap from second the M7 file %30.28g\n",DigiTime);
   printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
-  
+  printf("---------------------------------------------------\n"); 
   
   
   
@@ -265,6 +274,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   //---!!! Merit Starts from First Digi ---
   Merit_i=Digi_Start;
   unsigned int Gap_i(0);
+  bool on_gaps=false; 
   for (Digi_i = Digi_Start; Digi_i < Digi_nEvt; Digi_i++){
     
     // ---Get the Entries---;
@@ -329,23 +339,29 @@ void FT2::Digi_FT2(FT2 &FT2){
      *---------------------------------------------------------------------*/
     DigiTime=evt->getTimeStamp();
     Current_LiveTime=curr_live*conv;
+    FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
     
-    
+   
     //----Find Tstart and Tstop for each Gap-----------
+   
     if(FT2.DigiGAPS){
       if(Digi_EvtId==FT2.GP.GemStart[Gap_i]){
         FT2.GP.Tstart[Gap_i]=DigiTime;
         FT2.GP.LiveTstart[Gap_i]=Current_LiveTime;
+        on_gaps=true;
       }
       if(Digi_EvtId==FT2.GP.GemStop[Gap_i]){
         FT2.GP.Tstop[Gap_i]=DigiTime;
         FT2.GP.LiveTstop[Gap_i]=Current_LiveTime;
         Gap_i++;
+        on_gaps=false;
       }
     }
+    if(on_gaps) FT2.DT.gap[Current_FT2_Entry]=true;
+    else FT2.DT.gap[Current_FT2_Entry]=false;
     //-------------------------------------------------
     
-    FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
+     
     
     if(Digi_i==Digi_Start){
       //check-up
@@ -534,7 +550,8 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   /*--------------------------------------------------------------------------
    *
-   *Evaluate Live Time tacking into account edge effects
+   *Evaluate LIVE TIME tacking into account edge effects 
+   *DEAD TIME form Recon Crash, Gaps and Fake Gaps
    *
    *------------------------------------------------------------------------*/
   for(unsigned int i=0;i<FT2_ENTR;i++){
@@ -542,9 +559,11 @@ void FT2::Digi_FT2(FT2 &FT2){
   }
   printf("Total Recon crushes Dead Time=%30.28e\n", Total_Dead_Time);
   
+  //---------------LIVE TIME CALCULATIONS ---------------------------
   if(FT2.DigiGAPS)FT2.Set_GAPS_DeadTime(FT2);
   FT2.Evaluate_Live_Time(FT2);
-  
+  FT2.Fix_Fake_GAPS(FT2);
+  //-----------------------------------------------------------------
   
   
   /*-------------------------------------------------------------------------*/
