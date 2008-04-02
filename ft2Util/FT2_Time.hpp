@@ -84,6 +84,7 @@ public:
   void Print_ORB_Entries(ORBIT &ORB);
   std::vector<double> Tstart;
   std::vector<double> x, y, z, vx, vy, vz;
+  std::vector<bool> gap;
   std::vector<unsigned int>  entr, CM, SAA;
 };
 
