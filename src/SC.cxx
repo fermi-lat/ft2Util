@@ -14,7 +14,7 @@
 // Headers from this package
 #include "ft2Util/FT2_Time.hpp"
 
-// Headers from astrp package
+// Headers from astro package
 #include "astro/Quaternion.h"
 #include "astro/SkyDir.h"
 #include "astro/EarthCoordinate.h"

@@ -20,6 +20,9 @@
 // Headers from this package
 #include "ft2Util/FT2_Time.hpp"
 
+// Headers from astro package
+#include "astro/Quaternion.h"
+#include "astro/SkyDir.h"
 
 //---------------- ATTITTUDE CLASS --------------------------------
 ATTITUDE::ATTITUDE() {
@@ -240,117 +243,163 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 
 //-------------Interpolates ORB if entr=0------------------
 void FT2::Interp_ORB_Entries(FT2 &FT2){
-  double deltat, acc;
-  unsigned int jump_b, jump_b1, jump_f, jump_f1;  
+  //using namespace  ParabInterp;
+  double deltat;
+  unsigned int jump_b, jump_f, jump_tot, jump_min, size, N;
+  
+  //Min points to make parabolic regression
+  jump_min=3;
+  
+  //Number of points to make parabolic regression
+  jump_tot=10;
   
   unsigned int max= FT2.ORB.entr.size()-1;
+  
   printf("----------- Interpolates ORB if entr=0 -----------------\n");
-  for (unsigned int i = 0; i < FT2.ORB.entr.size()-1; ++i){
+  
+  for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
     
     if(FT2.ORB.entr[i]==0){
+      printf("------------------------------------------------\n");
+      printf("Entry =%d\n", i);
       
-      jump_f=1;
-      bool failed = false;
-      while(FT2.ORB.entr[i+jump_f]==0 && (i+jump_f<max) ){
-        jump_f++;
+      FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
+      
+      ParabInterp P;
+      
+      
+      size=0;
+      
+      bool failed_f = false;
+      bool failed_b = false;
+      std::vector<double> x, y, z, t;
+      std::vector<double> xr, yr, zr, tr;
+      //cerca i punti indietro
+      
+      jump_b=0;
+      for(unsigned int l=0;i-l>0 && jump_b<5;l++){
+        
+        if(FT2.ORB.entr[i-l]>0){
+          size++;
+          jump_b++;
+          
+          
+          
+          xr.resize(size);
+          yr.resize(size);
+          zr.resize(size);
+          tr.resize(size);
+          
+          xr[size-1]= FT2.ORB.x[i-l];
+          yr[size-1]= FT2.ORB.y[i-l];
+          zr[size-1]= FT2.ORB.z[i-l];
+          tr[size-1]= FT2.ORB.Tstart[i-l];
+          printf("t=%20.18g, x=%e, y=%e, z=%e \n",
+                  tr[size-1],
+                  xr[size-1],
+                  yr[size-1],
+                  zr[size-1]);
+          FT2.ORB.CM[i] =  FT2.ORB.CM[i-l];
+          FT2.ORB.SAA[i]= FT2.ORB.SAA[i-l];
+          printf("jump_b in lopp=%d\n", jump_b);
+        }
+      }
+      
+      //ordino temporalmente le ascisse
+      if(size>0){
+        x.resize(size);
+        y.resize(size);
+        z.resize(size);
+        t.resize(size);
+        for(unsigned int l=0;l<size;l++){
+          x[l]=xr[size-1-l];
+          y[l]=yr[size-1-l];
+          z[l]=zr[size-1-l];
+          t[l]=tr[size-1-l];;
+        }
+      }
+      printf("jump_b out of the loop=%d\n", jump_b);
+      
+      if(jump_b==0){
+        failed_b=true;
+        printf("failing bkw interpolation\n");
+      }
+      
+      //cerca i punti avanti
+      jump_f=0;
+      for(unsigned int l=0;i+l<max && jump_f<jump_tot-jump_b;l++){
+        
+        
+        if(FT2.ORB.entr[i+l]>0){
+          jump_f++;
+          size++;
+          x.resize(size);
+          y.resize(size);
+          z.resize(size);
+          t.resize(size);
+          x[size-1]= FT2.ORB.x[i+l];
+          y[size-1]= FT2.ORB.y[i+l];
+          z[size-1]= FT2.ORB.z[i+l];
+          t[size-1]= FT2.ORB.Tstart[i+l];
+          printf("t=%20.18g, x=%e, y=%e, z=%e \n",
+                  t[size-1],
+                  x[size-1],
+                  y[size-1],
+                  z[size-1]);
+          
+          printf("jump_f in lopp=%d\n", jump_f);
+          FT2.ORB.CM[i] =  FT2.ORB.CM[i+l];
+          FT2.ORB.SAA[i]= FT2.ORB.SAA[i+l];
+        }
+      }
+      printf("jump_f out of the loop=%d\n", jump_f);
+      
+      if(jump_f==0) {
+        failed_f=true;
+        printf("failing fwd interpolation\n");
         
       }
-      if(i+jump_f==max) failed=true;
+      for(unsigned int l=0;l<size;l++){
+        printf("%20.18g %e %e %e\n",
+                t[l],
+                x[l],
+                y[l],
+                z[l]);
+      }
       
-      if(!failed){
-        deltat=FT2.ORB.Tstart[i+jump_f]-FT2_T.Tstart[i];
-        
-        FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-        
-        
-        FT2.ORB.x[i]=FT2.ORB.x[i+jump_f]+FT2.ORB.vx[i+jump_f]*(-deltat);
-        FT2.ORB.y[i]=FT2.ORB.y[i+jump_f]+FT2.ORB.vy[i+jump_f]*(-deltat);
-        FT2.ORB.z[i]=FT2.ORB.z[i+jump_f]+FT2.ORB.vz[i+jump_f]*(-deltat);
-        
-        
-        //!!!!E qui come la mettiamo???? da dove prende questi valori
-        //!!!!Non si possono interpolare
-        FT2.ORB.CM[i] = FT2.ORB.CM[i+jump_f];
-        FT2.ORB.SAA[i]= FT2.ORB.SAA[i+jump_f];
-        
+      
+      if(failed_b & failed_f){
+        printf("Interpolation of ORB\n");
+        printf("Interpolation FAILED !!!!!\n");
+      }
+      else{
+        //interpola
+        //y=c*x^2+b*c+a
+        for(unsigned int l=0;l<size;l++){
+                t[l]=t[l]-t[0];
+        }
+        N=t.size();
+        P.Interp(t, x);
+        P.GetInterp(P, FT2.ORB.Tstart[i], FT2.ORB.x[i]);
+        P.Interp(t, y);
+        P.GetInterp(P, FT2.ORB.Tstart[i], FT2.ORB.y[i]);
+        P.Interp(t, z);
+        P.GetInterp(P, FT2.ORB.Tstart[i], FT2.ORB.z[i]);
+        printf("Successful  FT2.ORB.x=%e\n", FT2.ORB.x[i]);
+        printf("------------------------------------------------\n");
+        printf("Successful  T=%e FT2.ORB.x=%e\n",FT2.ORB.Tstart[i], FT2.ORB.x[i]);
         if(FT2.verbose){
           printf("Interpolation of ORB\n");
-          printf("T1=%e T2=%e\n", FT2.ORB.Tstart[i+jump_f], FT2_T.Tstart[i]);
-          std::cout<<"deltat = "<<deltat<<"\n";
-          std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-          printf("jump=%d deltat=%e corrx=%e\n", jump_f, deltat, FT2.ORB.vx[i+jump_f]*(-deltat));
+          
           
         }
       }
-      if(failed){
-        printf("!!!! forward Interpolation failed, Now try backward\n");
-        
-        jump_b=1;
-        while(FT2.ORB.entr[i-jump_b]==0 && (i-jump_b)>0){
-          jump_b++;
-        }
-        deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
-        
-        FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-        
-        
-        FT2.ORB.x[i]=FT2.ORB.x[i-jump_b]+FT2.ORB.vx[i-jump_b]*(-deltat);
-        FT2.ORB.y[i]=FT2.ORB.y[i-jump_b]+FT2.ORB.vy[i-jump_b]*(-deltat);
-        FT2.ORB.z[i]=FT2.ORB.z[i-jump_b]+FT2.ORB.vz[i-jump_b]*(-deltat);
-        
-        //!!!!E qui come la mettiamo???? da dove prende questi valori
-        //!!!!Non si possono interpolare
-        FT2.ORB.CM[i] =  FT2.ORB.CM[i-jump_b];
-        FT2.ORB.SAA[i]= FT2.ORB.SAA[i-jump_b];
-        if(FT2.verbose){
-          printf("Interpolation of ORB\n");
-          std::cout<<"deltat = "<<deltat<<"\n";
-          std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-          printf("jump=%d deltat=%e corrx=%e \n", jump_b, deltat, FT2.ORB.vx[i-jump_b]);
-        }
-        printf("-----------------------------------------\n");
-      }
       
     }
   }
-  
-  //Last Entry
-  if(FT2.ORB.entr[max]==0 ){
-    unsigned int i=max;
-    
-    
-    jump_b=1;
-    
-    while(FT2.ORB.entr[i-jump_b]==0 && (i-jump_b)>0 ){
-      jump_b++;
-    }
-    
-    
-    deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
-    
-    FT2.ORB.Tstart[i]=FT2_T.Tstart[i];
-    
-    
-    FT2.ORB.x[i]=FT2.ORB.x[i-jump_b]+FT2.ORB.vx[i-jump_b]*(-deltat);
-    FT2.ORB.y[i]=FT2.ORB.y[i-jump_b]+FT2.ORB.vy[i-jump_b]*(-deltat);
-    FT2.ORB.z[i]=FT2.ORB.z[i-jump_b]+FT2.ORB.vz[i-jump_b]*(-deltat);
-    
-    //!!!!E qui come la mettiamo???? da dove prende questi valori
-    //!!!!Non si possono interpolare
-    FT2.ORB.CM[i] =  FT2.ORB.CM[i-jump_b];
-    FT2.ORB.SAA[i]= FT2.ORB.SAA[i-jump_b];
-    
-    if(FT2.verbose){
-      printf("Interpolation of ORB\n");
-      std::cout<<"deltat = "<<deltat<<"\n";
-      std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-      printf("jump=%d deltat=%e corrx=%e \n", jump_b, deltat, FT2.ORB.vx[i-jump_b]);
-      printf("-----------------------------------------\n");
-    }
-  }
-  
-  
 }
+
+
 
 
 
@@ -402,8 +451,8 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
     FT2.ATT.y[i]= FT2.ATT.y[i]+ FT2.ATT.vy[i]*deltat;
     FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
     FT2.ATT.w[i]=sqrt(1- FT2.ATT.x[i]* FT2.ATT.x[i]-
-                FT2.ATT.y[i]*FT2.ATT.y[i]-
-                FT2.ATT.z[i]*FT2.ATT.z[i]);
+            FT2.ATT.y[i]*FT2.ATT.y[i]-
+            FT2.ATT.z[i]*FT2.ATT.z[i]);
     if(FT2.verbose){
       printf("--- Interpolate to Tstart\n");
       printf("deltat=%e deltax=%e\n", deltat, FT2.ATT.vx[i]*deltat);
@@ -417,13 +466,12 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
 
 
 
-
-
-
-
 //-------------Interplates ATT if entr=0------------------
 void FT2::Interp_ATT_Entries(FT2 &FT2){
-  double deltat;
+  using namespace astro;
+  using CLHEP::Hep3Vector;
+  
+  double deltat, fraction;
   unsigned int jump_b, jump_b1, jump_f, jump_f1;
   
   unsigned int max= FT2.ATT.entr.size()-1;
@@ -433,108 +481,63 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
     
     if(FT2.ATT.entr[i]==0){
       
+      FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+      
       jump_f=1;
       bool failed = false;
+      
       while(FT2.ATT.entr[i+jump_f]==0 && (i+jump_f<max) ){
         jump_f++;
-        
       }
-      if(i+jump_f==max) failed=true;
+      
+      if(i+jump_f>=max) failed=true;
+      
+      jump_b=1;
+      while(FT2.ATT.entr[i-jump_b]==0 && (i-jump_b)>0){
+        jump_b++;
+      }
+      
+      if(i-jump_b<0) failed=true;
       
       if(!failed){
-        deltat=FT2.ATT.Tstart[i+jump_f]-FT2_T.Tstart[i];
+        deltat = FT2_T.Tstart[i+jump_f]-FT2.ATT.Tstart[i-jump_b];
         
-        FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+        fraction = (FT2_T.Tstart[i]-FT2.ATT.Tstart[i-jump_b])/deltat;
         
-        
-        FT2.ATT.x[i]=FT2.ATT.x[i+jump_f]+FT2.ATT.vx[i+jump_f]*(-deltat);
-        FT2.ATT.y[i]=FT2.ATT.y[i+jump_f]+FT2.ATT.vy[i+jump_f]*(-deltat);
-        FT2.ATT.z[i]=FT2.ATT.z[i+jump_f]+FT2.ATT.vz[i+jump_f]*(-deltat);
-        FT2.ATT.w[i]=sqrt(1- FT2.ATT.x[i]* FT2.ATT.x[i]-
-                FT2.ATT.y[i]*FT2.ATT.y[i]-
-                FT2.ATT.z[i]*FT2.ATT.z[i]);
-        
- 
-        
-        if(FT2.verbose){
-          printf("Interpolation of ATT\n");
-          printf("T1=%e T2=%e\n", FT2.ATT.Tstart[i+jump_f], FT2_T.Tstart[i]);
-          std::cout<<"deltat = "<<deltat<<"\n";
-          std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-          printf("jump=%d deltat=%e corrx=%e\n", jump_f, deltat, FT2.ATT.vx[i+jump_f]*(-deltat));
-          
-        }
-      }
-      if(failed){
-        printf("!!!! forward Interpolation failed, Now try backward\n");
-        
-        jump_b=1;
-        while(FT2.ATT.entr[i-jump_b]==0 && (i-jump_b)>0){
-          jump_b++;
-        }
-        deltat=FT2.ATT.Tstart[i-jump_b]-FT2_T.Tstart[i];
-        
-        FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
+        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_f], FT2.ATT.z[i-jump_f]), FT2.ATT.w[i-jump_f]);
+        Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
+        Quaternion interp(q1.interpolate(q2, fraction));
         
         
-        FT2.ATT.x[i]=FT2.ATT.x[i-jump_b]+FT2.ATT.vx[i-jump_b]*(-deltat);
-        FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
-        FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
-        FT2.ATT.w[i]=sqrt(1- FT2.ATT.x[i]* FT2.ATT.x[i]-
-                FT2.ATT.y[i]*FT2.ATT.y[i]-
-                FT2.ATT.z[i]*FT2.ATT.z[i]);
         
+        FT2.ATT.x[i]=interp.vector().x();
+        FT2.ATT.y[i]=interp.vector().y();
+        FT2.ATT.z[i]=interp.vector().z();
         
         if(FT2.verbose){
+          printf("----------------------------------------------------------\n");
           printf("Interpolation of ATT\n");
-          std::cout<<"deltat = "<<deltat<<"\n";
+          printf("ATT.x-1=%e ATT.x+1=%e interp=%e\n",
+                  FT2.ATT.x[i-jump_b],
+                  FT2.ATT.x[i+jump_f],
+                  interp.vector().x());
+          printf("i-jump_b=%d i-jump_b=%d\n", i-jump_b, i+jump_f);
+          std::cout<<"deltat  "<<deltat<<"\n";
+          std::cout<<"fraction  "<<fraction<<"\n";
           std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-          printf("jump=%d deltat=%e corrx=%e \n", jump_b, deltat, FT2.ATT.vx[i-jump_b]);
+          printf("jump_f=%d jump_b=%d delta-_ATT_x=%e delta+_ATT_x=%e\n",
+                  jump_f,
+                  jump_b,
+                  FT2.ATT.x[i]- FT2.ATT.x[i-jump_b],
+                  FT2.ATT.x[i+jump_f]-FT2.ATT.x[i]);
+          printf("----------------------------------------------------------\n");
         }
-        printf("-----------------------------------------\n");
       }
-      
-    }
-  }
-  
-  //Last Entry
-  if(FT2.ATT.entr[max]==0 ){
-    unsigned int i=max;
-    
-    
-    jump_b=1;
-    
-    while(FT2.ATT.entr[i-jump_b]==0 && (i-jump_b)>0 ){
-      jump_b++;
-    }
-    
-    
-    deltat=FT2.ATT.Tstart[i-jump_b]-FT2_T.Tstart[i];
-    
-    FT2.ATT.Tstart[i]=FT2_T.Tstart[i];
-    
-    
-    FT2.ATT.x[i]=FT2.ATT.x[i-jump_b]+FT2.ATT.vx[i-jump_b]*(-deltat);
-    FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
-    FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
-    FT2.ATT.w[i]=sqrt(1- FT2.ATT.x[i]* FT2.ATT.x[i]-
-            FT2.ATT.y[i]*FT2.ATT.y[i]-
-            FT2.ATT.z[i]*FT2.ATT.z[i]);
-        
-    if(FT2.verbose){
-      printf("Interpolation of ATT\n");
-      std::cout<<"deltat = "<<deltat<<"\n";
-      std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-      printf("jump=%d deltat=%e corrx=%e \n", jump_b, deltat, FT2.ATT.vx[i-jump_b]);
-      printf("-----------------------------------------\n");
+      if(failed) printf("ATT Interpolation failed\n");
     }
   }
   
   
-  if(FT2.verbose){
-    std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-    std::cout<<"deltat = "<<deltat<<"\n";
-  }
 }
 
 

@@ -197,6 +197,8 @@ public:
   //Math
   double lininterp(double x1, double x2, double t1, double t2, double t);
   
+  
+  
 private:
   bool OutOfRange;
   unsigned int CurrentEntry;
@@ -205,5 +207,18 @@ private:
 };
 
 //const string FT2::Version = {"none"};
+
+
+//----------------------Parabolic Interpolation Class---------------------------
+class ParabInterp{
+public:
+  void   Interp(std::vector<double> &x, std::vector<double> &y);
+  void   GetCoeff(ParabInterp p, double &a, double &b, double &c);
+  void   GetInterp(ParabInterp p, double x, double &y);
+private:
+ //y=c*x^2+b*c+a
+  double  pa,pb,pc;
+};
+
 
 #endif

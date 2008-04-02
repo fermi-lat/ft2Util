@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <iomanip
+#include <iomanip>
 
 // Headers from this package
 #include "ft2Util/FT2_Time.hpp"
