@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Tue Apr  1 18:11:50 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx FT2.cxx SC.cxx utils.cxx 
+Log Message:
+parabolic interpolation
+    *
+------------------------------------------------------------
+User: tramacer  Tue Apr  1 18:11:50 PDT 2008
 ft2Util/ft2Util
 
 Modified Files:
