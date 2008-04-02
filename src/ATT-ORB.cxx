@@ -84,6 +84,7 @@ void ORBIT::Set_ORB_Size(ORBIT &ORB, unsigned int size){
   ORB.CM.resize(size);
   ORB.SAA.resize(size);
   ORB.entr.resize(size);
+  ORB.gap.resize(size);
 }
 //------------------------------------------------------------
 
@@ -245,13 +246,13 @@ void FT2::Interp_ORB_Vel_Entries(FT2 &FT2){
 void FT2::Interp_ORB_Entries(FT2 &FT2){
   //using namespace  ParabInterp;
   double deltat;
-  unsigned int jump_b, jump_f, jump_tot, jump_min, size, N;
+  unsigned int jump_b, jump_f, jump_tot, jump_min, size;
   
   //Min points to make parabolic regression
   jump_min=3;
   
   //Number of points to make parabolic regression
-  jump_tot=10;
+  jump_tot=50;
   
   unsigned int max= FT2.ORB.entr.size()-1;
   
@@ -279,12 +280,12 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       jump_b=0;
       for(unsigned int l=0;i-l>0 && jump_b<5;l++){
         
-        if(FT2.ORB.entr[i-l]>0){
+        if(FT2.ORB.entr[i-l]>0 && !FT2.ORB.gap[i-l]){
           size++;
           jump_b++;
           
           
-          
+          std::cout<<"gap "<<FT2.ORB.gap[i-l]<<"\n";
           xr.resize(size);
           yr.resize(size);
           zr.resize(size);
@@ -330,7 +331,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       for(unsigned int l=0;i+l<max && jump_f<jump_tot-jump_b;l++){
         
         
-        if(FT2.ORB.entr[i+l]>0){
+        if(FT2.ORB.entr[i+l]>0 && !FT2.ORB.gap[i+l] ){
           jump_f++;
           size++;
           x.resize(size);
@@ -375,17 +376,31 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       else{
         //interpola
         //y=c*x^2+b*c+a
+        double Tshift=t[0];
+        
         for(unsigned int l=0;l<size;l++){
-                t[l]=t[l]-t[0];
+                printf("t=%20.8g\n",t[l]);
+                t[l]=t[l]-Tshift;
+                printf("t=%20.8g\n",t[l]);
+                x[l]=x[l]/1e3;
+                y[l]=y[l]/1e3;
+                z[l]=z[l]/1e3;
         }
-        N=t.size();
+        
+        //N=t.size();
         P.Interp(t, x);
-        P.GetInterp(P, FT2.ORB.Tstart[i], FT2.ORB.x[i]);
+        
+        double time=FT2.ORB.Tstart[i]-Tshift;
+        P.GetInterp(P, time, FT2.ORB.x[i]);
+        FT2.ORB.x[i]*=1e3;
         P.Interp(t, y);
-        P.GetInterp(P, FT2.ORB.Tstart[i], FT2.ORB.y[i]);
+        P.GetInterp(P, time, FT2.ORB.y[i]);
+        FT2.ORB.y[i]*=1e3;
         P.Interp(t, z);
-        P.GetInterp(P, FT2.ORB.Tstart[i], FT2.ORB.z[i]);
-        printf("Successful  FT2.ORB.x=%e\n", FT2.ORB.x[i]);
+        P.GetInterp(P, time, FT2.ORB.z[i]);
+        FT2.ORB.z[i]*=1e3;
+     
+        printf("Successful time=%e  FT2.ORB.x=%e\n",time, FT2.ORB.x[i]);
         printf("------------------------------------------------\n");
         printf("Successful  T=%e FT2.ORB.x=%e\n",FT2.ORB.Tstart[i], FT2.ORB.x[i]);
         if(FT2.verbose){
@@ -586,6 +601,7 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
   Orb.vz[entry]=0;
   Orb.CM[entry]=0;
   Orb.SAA[entry]=0;
+  Orb.gap[entry]=true;
 }
 
 
@@ -604,7 +620,7 @@ void FT2::Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, unsigne
     Orb.vz[entry]=atof(tokens[10].c_str());
     Orb.CM[entry]=atoi(tokens[11].c_str());
     Orb.SAA[entry]=atoi(tokens[12].c_str());
-    
+    Orb.gap[entry]=false;
     
   }
   
