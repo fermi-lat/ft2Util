@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Tue Apr  1 22:44:38 PDT 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+improved quadtratic fit algorithm
+    *
+------------------------------------------------------------
 User: tramacer  Tue Apr  1 22:44:37 PDT 2008
 ft2Util/apps
 
