@@ -200,3 +200,75 @@ double FT2::lininterp(double x1, double x2, double t1, double t2, double t){
   
   return x1+((x2-x1)/(t2-t1))*(t-t1);
 }
+
+
+
+//-------------------------- Parab Interpolation ------------------------------------------
+// @author Andrea Tramacere <tramacer@slac.stanford.edu>
+//
+// Adpted from
+//
+// GNU General Public License Agreement
+// Copyright (C) 2004-2007 CodeCogs, Zyba Ltd, Broadwood, Holford, TA5 1DU, England.
+//
+// This program is free software; you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by CodeCogs.
+// You must retain a copy of this licence in all copies.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+// PARTICULAR PURPOSE. See the GNU General Public License for more details.
+// ---------------------------------------------------------------------------------
+//! Approximates an arbitrary function using parabolic least squares fitting.
+
+void ParabInterp::GetCoeff(ParabInterp p, double &a, double &b, double &c) {
+  //y=c*x^2+b*c+a
+  a=p.pa;
+  b=p.pb;
+  c=p.pc;
+}
+
+
+void ParabInterp::Interp(std::vector <double> &x, std::vector <double> &y) {
+  //y=c*x^2+b*x+a
+  
+  unsigned int n;
+  n=x.size();
+ 
+  double a0(1), a1(0), a2(0), a3(0), a4(0);
+  double b0(0), b1(0), b2(0);
+  
+  for (unsigned int m = 0; m < n; m++) {
+    
+    double xx = x[m], yy = y[m];
+    
+    a1 += xx; xx *= x[m];
+    a2 += xx; xx *= x[m];
+    a3 += xx; xx *= x[m];
+    a4 += xx; xx  = x[m];
+    
+    b0 += yy;
+    b1 += yy * xx;
+    b2 += yy * xx * xx;
+    
+  }
+  a1 /= n; a2 /= n; a3 /= n; a4 /= n;
+  b0 /= n; b1 /= n; b2 /= n;
+  
+  double d = a0 * (a2 * a4 - a3 * a3) - a1 * (a1 * a4 - a2 * a3) + a2 * (a1 * a3 - a2 * a2);
+  
+  pa = b0 * (a2 * a4 - a3 * a3) + b1 * (a2 * a3 - a1 * a4) + b2 * (a1 * a3 - a2 * a2);
+  pb = b0 * (a2 * a3 - a1 * a4) + b1 * (a0 * a4 - a2 * a2) + b2 * (a1 * a2 - a0 * a3);
+  pc = b0 * (a1 * a3 - a2 * a2) + b1 * (a2 * a1 - a0 * a3) + b2 * (a0 * a2 - a1 * a1);
+  pa /= d; pb /= d; pc /= d;
+  
+}
+
+void ParabInterp::GetInterp(ParabInterp p, double x, double &y){
+  //y=c*x^2+b*x+a
+  double a, b, c;
+  p.GetCoeff(p, a, b, c);
+  printf("c=%e b=%e a=%e\n",c,b,a);
+  y=x*x*c + x*b + a;
+}
+
