@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Tue Apr  1 22:44:38 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx 
+Log Message:
+improved quadtratic fit algorithm
+    *
+------------------------------------------------------------
+User: tramacer  Tue Apr  1 22:44:38 PDT 2008
 ft2Util/ft2Util
 
 Modified Files:
