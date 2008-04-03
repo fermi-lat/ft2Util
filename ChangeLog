@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Apr  2 20:01:13 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx 
+Log Message:
+fixed txt output file slerp
+    *
+------------------------------------------------------------
 User: tramacer  Wed Apr  2 18:26:26 PDT 2008
 ft2Util/src
 
