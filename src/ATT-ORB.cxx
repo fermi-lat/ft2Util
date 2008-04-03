@@ -327,7 +327,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
           t[l]=tr[size-1-l];;
         }
       }
-      printf("jump_b out of the loop=%d\n", jump_b);
+      //printf("jump_b out of the loop=%d\n", jump_b);
       
       if(jump_b==0){
         failed_b=true;
@@ -365,7 +365,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
           FT2.ORB.SAA[i]= FT2.ORB.SAA[i+l];
         }
       }
-      printf("jump_f out of the loop=%d\n", jump_f);
+      //printf("jump_f out of the loop=%d\n", jump_f);
       
       if(jump_f==0) {
         failed_f=true;

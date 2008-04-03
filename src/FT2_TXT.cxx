@@ -35,10 +35,11 @@ void FT2::WriteTextFile(FT2 &FT2) {
     
     FT2F<<FT2.FT2_T.bin[i]
 	<<" "
-	<<std::setprecision(20)
+	<<std::setprecision(30)
       //<<scientific
 	<<FT2.FT2_T.Tstart[i]
 	<<" "
+    <<std::setprecision(30)        
 	<<FT2.FT2_T.Tstop[i]
 	<<" "
       //<<FT2.ATT.Tstart[i]
@@ -111,10 +112,11 @@ void FT2::WriteMergedTextFile(FT2 &FT2) {
     
     FT2F<<FT2.FT2_T.bin[i]
 	<<" "
-	<<std::setprecision(20)
+	<<std::setprecision(30)
       //<<scientific
 	<<FT2.FT2_T.Tstart[i]
 	<<" "
+    <<std::setprecision(30)       
 	<<FT2.FT2_T.Tstop[i]
 	<<" "
       //<<FT2.ATT.Tstart[i]
