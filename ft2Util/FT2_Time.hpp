@@ -72,6 +72,8 @@ public:
   std::vector<double> Tstart;
   std::vector<double> x, y, z, w, vx, vy, vz;
   std::vector<unsigned int>  entr;
+  std::vector<bool> gap;
+  void Eval_w(ATTITUDE &Att, unsigned int i);
 };
 
 
@@ -217,7 +219,7 @@ public:
   void   GetCoeff(ParabInterp p, double &a, double &b, double &c);
   void   GetInterp(ParabInterp p, double x, double &y);
 private:
- //y=c*x^2+b*c+a
+ //y=c*x^2+b*x+a
   double  pa,pb,pc;
 };
 

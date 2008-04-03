@@ -34,59 +34,59 @@ void FT2::WriteTextFile(FT2 &FT2) {
   for(unsigned int i=START;i<STOP;i++){
     
     FT2F<<FT2.FT2_T.bin[i]
-	<<","
+	<<" "
 	<<std::setprecision(20)
       //<<scientific
 	<<FT2.FT2_T.Tstart[i]
-	<<","
+	<<" "
 	<<FT2.FT2_T.Tstop[i]
-	<<","
+	<<" "
       //<<FT2.ATT.Tstart[i]
       //<<","
       //<<FT2.ORB.Tstart[i]
       //<<","
 	<<FT2.ORB.x[i]
-	<<","
+	<<" "
 	<<FT2.ORB.y[i]
-	<<","
+	<<" "
 	<<FT2.ORB.z[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RA_SCZ[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.DEC_SCZ[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RA_SCX[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.DEC_SCX[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RA_ZENITH[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.DEC_ZENITH[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.LON_GEO[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.LAT_GEO[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RAD_GEO[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.GEOMAG_LAT[i]
-	<<","
-	<< FT2.ORB.SAA[i]
-	<<","
+	<<" "
+	<<FT2.ORB.SAA[i]
+	<<" "
 	<<FT2.FT2_SC.B_MCILWAIN[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.L_MCILWAIN[i]
-	<<","
+	<<" "
 	<<FT2.ORB.CM[i]
-	<<","
+	<<" "
 	<<FT2.FT2_T.LiveTime[i]
-    <<","
+    <<" "
     <<FT2_SC.QS_J1[i]   
-    <<","
+    <<" "
     <<FT2_SC.QS_J2[i]   
-    <<","
+    <<" "
     <<FT2_SC.QS_J3[i]
-    <<","
+    <<" "
     <<FT2_SC.QS_J4[i]   
 	<<std::endl;
     
@@ -110,59 +110,59 @@ void FT2::WriteMergedTextFile(FT2 &FT2) {
   for(unsigned int i=0;i<FT2_ENTR ;i++){
     
     FT2F<<FT2.FT2_T.bin[i]
-	<<","
+	<<" "
 	<<std::setprecision(20)
       //<<scientific
 	<<FT2.FT2_T.Tstart[i]
-	<<","
+	<<" "
 	<<FT2.FT2_T.Tstop[i]
-	<<","
+	<<" "
       //<<FT2.ATT.Tstart[i]
       //<<","
       //<<FT2.ORB.Tstart[i]
       //<<","
 	<<FT2.ORB.x[i]
-	<<","
+	<<" "
 	<<FT2.ORB.y[i]
-	<<","
+	<<" "
 	<<FT2.ORB.z[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RA_SCZ[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.DEC_SCZ[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RA_SCX[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.DEC_SCX[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RA_ZENITH[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.DEC_ZENITH[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.LON_GEO[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.LAT_GEO[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.RAD_GEO[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.GEOMAG_LAT[i]
-	<<","
+	<<" "
 	<< FT2.ORB.SAA[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.B_MCILWAIN[i]
-	<<","
+	<<" "
 	<<FT2.FT2_SC.L_MCILWAIN[i]
-	<<","
+	<<" "
 	<<FT2.ORB.CM[i]
-	<<","
+	<<" "
 	<<FT2.FT2_T.LiveTime[i]
-    <<","
+    <<" "
     <<FT2_SC.QS_J1[i]   
-    <<","
+    <<" "
     <<FT2_SC.QS_J2[i]   
-    <<","
+    <<" "
     <<FT2_SC.QS_J3[i]
-    <<","
+    <<" "
     <<FT2_SC.QS_J4[i]   
     <<std::endl;
     
