@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Apr  2 17:52:12 PDT 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+fixed bug in if condition in orb interpolation function
+    *
+------------------------------------------------------------
 User: tramacer  Tue Apr  1 22:44:38 PDT 2008
 ft2Util/src
 
