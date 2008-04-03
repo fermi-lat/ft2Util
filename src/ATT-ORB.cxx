@@ -517,9 +517,9 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
       
       while(FT2.ATT.entr[i+jump_f]==0 && ((i+jump_f)<max) || FT2.ATT.gap[i+jump_f]){
         jump_f++;
-        printf("jump_f in lopp=%d\n", jump_f);
+        //printf("jump_f in lopp=%d\n", jump_f);
       }
-      printf("jump_f out of the loop=%d jump_f+i=%d max=%d\n", jump_f, jump_f+i, max);
+      //printf("jump_f out of the loop=%d jump_f+i=%d max=%d\n", jump_f, jump_f+i, max);
       
       if(((i+jump_f)>max)||(jump_f==0)) failed_f=true;
       
@@ -527,9 +527,9 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
       jump_b=0;
       while(FT2.ATT.entr[i-jump_b]==0 && (i-jump_b)>0 || FT2.ATT.gap[i+jump_f]){
         jump_b++;
-        printf("jump_b in lopp=%d\n", jump_b);
+        //printf("jump_b in lopp=%d\n", jump_b);
       }
-      printf("jump_b out of the loop=%d, i-jump_b=%d \n", jump_b, i-jump_b);
+      //printf("jump_b out of the loop=%d, i-jump_b=%d \n", jump_b, i-jump_b);
       
       if((jump_b>i)||(jump_b==0)) failed_b=true;
       
@@ -576,7 +576,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         
        
 
-        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_f], FT2.ATT.z[i-jump_f]), FT2.ATT.w[i-jump_f]);
+        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
         Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
         Quaternion interp(q1.interpolate(q2, fraction));
         
