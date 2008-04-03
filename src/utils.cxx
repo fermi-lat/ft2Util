@@ -234,7 +234,7 @@ void ParabInterp::Interp(std::vector <double> &x, std::vector <double> &y) {
   
   unsigned int n;
   n=x.size();
- 
+  
   double a0(1), a1(0), a2(0), a3(0), a4(0);
   double b0(0), b1(0), b2(0);
   
@@ -268,7 +268,17 @@ void ParabInterp::GetInterp(ParabInterp p, double x, double &y){
   //y=c*x^2+b*x+a
   double a, b, c;
   p.GetCoeff(p, a, b, c);
-  printf("c=%e b=%e a=%e\n",c,b,a);
+  //printf("c=%e b=%e a=%e\n",c,b,a);
   y=x*x*c + x*b + a;
 }
 
+//------------------------------- Eval W-------------------------------------------
+
+void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int i){
+  double ax, ay, az, aw;
+  ax=Att.x[i]*Att.x[i];
+  ay=Att.y[i]*Att.y[i];
+  az=Att.z[i]*Att.z[i];
+  aw=sqrt(1.0-(ax+ay+az));
+  Att.w[i]=aw;
+}
