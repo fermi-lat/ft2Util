@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Tue Apr  8 18:27:02 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx Digi.cxx 
+Log Message:
+added time calibration and splitting of dead time from recon crash
+    *
+------------------------------------------------------------
 User: tramacer  Wed Apr  2 20:01:13 PDT 2008
 ft2Util/src
 
