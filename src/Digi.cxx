@@ -51,7 +51,10 @@
 
 void FT2::Digi_FT2(FT2 &FT2){
   
+  //!!! These values are very important
   double conv=50.0/1e9;
+  double RollOver = 33554432.0
+  
   double curr_live, curr_elapsed;
   ULong64_t currentElapsed;
   ULong64_t previousElapsed;
@@ -174,7 +177,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   //-----------------------------------------------------------
   //Find Tstart and Tstop od the Digi File
   //-----------------------------------------------------------
-  printf("---------------------------------------------------\n");  
+  printf("---------------------------------------------------\n");
   printf("Check on Tstart and Tstop of the Digi File and M& file \n");
   Digi_i=0;
   Digi_Start=0;
@@ -197,15 +200,15 @@ void FT2::Digi_FT2(FT2 &FT2){
   Tstart_Run=evt->getTimeStamp();
   Digi_Start=Digi_i;
   printf("ID of firtst Digi evt within 1 s gap from second the M7 file %d\n", Digi_Start);
-  printf("Time of the firtst Digi evt within 1 s gap from second the M7 file %30.28g\n",DigiTime);
-  printf("Tstart of the the M7 file %30.28g\n",FT2.FT2_T.Tstart[0]);
+  printf("Time of the firtst Digi evt within 1 s gap from second the M7 file %30.28g\n", DigiTime);
+  printf("Tstart of the the M7 file %30.28g\n", FT2.FT2_T.Tstart[0]);
   
   //Takes the Last Digi Element
   //that falls within the M7 time span
   Digi_i=Digi_nEvt-1;
   unsigned int FT2Entries=Get_FT2_Entries(FT2);
   do{
-       
+    
     T->GetEntry(Digi_i);
     DigiTime=evt->getTimeStamp();
     //printf("DigiTime=%30.28g Digi_i=%d\n", DigiTime, Digi_i);
@@ -220,10 +223,10 @@ void FT2::Digi_FT2(FT2 &FT2){
   Tstop_Run=evt->getTimeStamp();
   Digi_Stop=Digi_i;
   printf("ID of the last Digi evt within 1 s gap from the M7 file %d\n", Digi_Stop);
-  printf("Tstop of the the M7 file %30.28g\n",FT2.FT2_T.Tstop[FT2Entries-1]);
-  printf("Time of the last Digi evt within 1 s gap from second the M7 file %30.28g\n",DigiTime);
+  printf("Tstop of the the M7 file %30.28g\n", FT2.FT2_T.Tstop[FT2Entries-1]);
+  printf("Time of the last Digi evt within 1 s gap from second the M7 file %30.28g\n", DigiTime);
   printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
-  printf("---------------------------------------------------\n"); 
+  printf("---------------------------------------------------\n");
   
   
   
@@ -274,7 +277,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   //---!!! Merit Starts from First Digi ---
   Merit_i=Digi_Start;
   unsigned int Gap_i(0);
-  bool on_gaps=false; 
+  bool on_gaps=false;
   for (Digi_i = Digi_Start; Digi_i < Digi_nEvt; Digi_i++){
     
     // ---Get the Entries---;
@@ -338,12 +341,51 @@ void FT2::Digi_FT2(FT2 &FT2){
      * later (at the end of Digi loop)
      *---------------------------------------------------------------------*/
     DigiTime=evt->getTimeStamp();
-    Current_LiveTime=curr_live*conv;
+    
     FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
     
-   
+    ///!!!!TIME CALIBRATION
+    if((first_bin)||(New_FT2_Entry)){
+      // Verify that the two TimeTones are OK:
+      if (!(evt->metaEvent.time().current().incomplete()) &&
+              !(evt->(metaEvent.time().current().flywheeling()) &&
+              !(evt->metaEvent.time().current().missingCpuPps()) &&
+              !(evt->metaEvent.time().current().missingLatPps()) &&
+              !(evt->metaEvent.time().current().missingTimeTone()) &&
+              !(evt->metaEvent.time().previous().incomplete()) &&
+              !(evt->metaEvent.time().previous().flywheeling()) &&
+              !(evt->metaEvent.time().previous().missingCpuPps()) &&
+              !(evt->metaEvent.time().previous().missingLatPps()) &&
+              !(evt->metaEvent.time().previous().missingTimeTone()) &&
+              // Avoid 1/0 error:
+              (evt->metaEvent.time().current().timeHack().ticks() !=
+              evt->metaEvent.time().previous().timeHack().ticks()) &&
+              // If there is more than a second between 1-PPS I can
+              // only use the nominal value for the LAT clock anyway!
+              ((evt->metaEvent.time().current().timeSecs() -
+              evt->metaEvent.time().previous().timeSecs()) == 1)) {
+        
+        // Number of ticks between the current and the previous time tone:
+        double clockTicksDelta1PPS =
+        double (evt->metaEvent.time().current().timeHack().ticks()) -
+        double (evt->metaEvent.time().previous().timeHack().ticks());
+        
+        // Rollover?
+        if (clockTicksDelta1PPS < 0) {
+          clockTicksDelta1PPS = clockTicksDelta1PPS + RollOver;
+        }
+        
+        // This is what you want:
+        conv = clockTicksDelta1PPS;
+      } else {
+        conv=50.0/1e9;
+      }
+    }
+    
+    Current_LiveTime=curr_live*conv;
+    
+    
     //----Find Tstart and Tstop for each Gap-----------
-   
     if(FT2.DigiGAPS){
       if(Digi_EvtId==FT2.GP.GemStart[Gap_i]){
         FT2.GP.Tstart[Gap_i]=DigiTime;
@@ -361,21 +403,30 @@ void FT2::Digi_FT2(FT2 &FT2){
     else FT2.DT.gap[Current_FT2_Entry]=false;
     //-------------------------------------------------
     
-     
     
     if(Digi_i==Digi_Start){
       //check-up
       First_Live_Time=Current_LiveTime;
       Old_LiveTime = Current_LiveTime;
       first_bin=true;
-    }
-    
+    } 
     
     //--- Increase dead time   ------------------------
     //---Correction for the dead time given by crush---
     if(Digi_EvtId!=Merit_EvtId){
       printf("Recon Crash\n");
-      FT2.DT.ReconDeadTime[Current_FT2_Entry]+=Current_LiveTime-Old_LiveTime;
+      double RecDead=Current_LiveTime-Old_LiveTime;
+      double fraction=0.0;
+      
+      //Split Dead Time if a New Entry starts
+      if(New_FT2_Entry){
+        fraction= FT2.FT2_T.Tstop[Current_FT2_Entry-1]-FT2.DT.Tstop[Current_FT2_Entry-1];
+        fraction*=1.0/(DigiTime-FT2.DT.Tstop[Current_FT2_Entry-1]);
+        FT2.DT.ReconDeadTime[Current_FT2_Entry-1]+=RecDead*(fraction);
+      }
+      FT2.DT.ReconDeadTime[Current_FT2_Entry]+=RecDead*(1.0-fraction);
+      
+      
     }
     
     if(Current_FT2_Entry!=Old_FT2_Entry && !first_bin ){
@@ -550,7 +601,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   /*--------------------------------------------------------------------------
    *
-   *Evaluate LIVE TIME tacking into account edge effects 
+   *Evaluate LIVE TIME tacking into account edge effects
    *DEAD TIME form Recon Crash, Gaps and Fake Gaps
    *
    *------------------------------------------------------------------------*/

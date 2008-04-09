@@ -576,8 +576,10 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         
        
 
-        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
-        Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
+        //Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
+        //Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
+        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]));
+        Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]));
         Quaternion interp(q1.interpolate(q2, fraction));
         
         
@@ -621,6 +623,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
 void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
   Att.entr[entry]=0;
   Att.Tstart[entry]=0;
+  Att.x[entry]=0;
   Att.y[entry]=0;
   Att.z[entry]=0;
   Att.w[entry]=0;
