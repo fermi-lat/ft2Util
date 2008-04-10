@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Apr  9 19:31:27 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx Digi.cxx FT2.cxx M7.cxx utils.cxx 
+Log Message:
+choose the first M7 entry with the same ATT and ORB tstamp
+    *
+------------------------------------------------------------
 User: tramacer  Wed Apr  9 19:31:26 PDT 2008
 ft2Util/ft2Util
 
