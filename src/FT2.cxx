@@ -32,9 +32,6 @@ void FT2_Time::Set_FT2Time_Size(FT2_Time &FT2_T, unsigned int size) {
   FT2_T.bin.resize(size);
 }
 
-
-
-
 double FT2_Time::Get_Tstart( unsigned int  timebin ){
   return double(timebin)*30.0;
 }
@@ -45,8 +42,6 @@ double FT2_Time::Get_Tstop(  unsigned int  timebin ){
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-
-
 
 //---------------- DigiTime CLASS ----------------------------------
 DigiTime::DigiTime() {
@@ -102,12 +97,9 @@ unsigned int FT2::Get_FT2_Entries(FT2 &FT2){
   return FT2.Entries;
 }
 
-
-
 void FT2::Set_OutOfRange_TRUE(FT2 &FT2){
   FT2.OutOfRange=true;
 }
-
 
 void FT2::Set_OutOfRange_FALSE(FT2 &FT2){
   FT2.OutOfRange=false;
