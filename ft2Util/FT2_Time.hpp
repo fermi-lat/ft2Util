@@ -73,6 +73,7 @@ public:
   std::vector<double> x, y, z, w, vx, vy, vz;
   std::vector<unsigned int>  entr;
   std::vector<bool> gap;
+  std::vector<int> interp_flag;
   void Eval_w(ATTITUDE &Att, unsigned int i);
 };
 
@@ -87,6 +88,7 @@ public:
   std::vector<double> Tstart;
   std::vector<double> x, y, z, vx, vy, vz;
   std::vector<bool> gap;
+  std::vector<int> interp_flag;
   std::vector<unsigned int>  entr, CM, SAA;
 };
 
@@ -115,6 +117,8 @@ public:
   FT2_Time FT2_T;
   FT2_SpaceCraft FT2_SC;
   
+  unsigned int M7ShiftStart;
+  
   
   //File Names
   bool verbose;
@@ -128,13 +132,15 @@ public:
   double Get_M7_Time(const std::string &Time, const std::string &Frac_Time);
   void Fill_M7_Entries(FT2 &FT2);
   void Average_M7_Entries(FT2 &FT2);
-  void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens, unsigned int entry);
-  void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, unsigned int entry, double  Tstart);
+  void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens ,double time, unsigned int entry);
+  void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, double time,unsigned int entry);
   void Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry);
   void Clean_ORB(ORBIT &Orb, unsigned int entry);
   void Interp_ORB_Entries(FT2 &FT2);
+  void Interp_ORB_Entries_PARAB_FW(FT2 &FT2, unsigned int i, bool &failed);
+  void Interp_ORB_Entries_PARAB_BW(FT2 &FT2, unsigned int i, bool &failed);
   void Interp_ATT_Entries(FT2 &FT2);
-  void Interp_ORB_Tstart(FT2 &FT2);
+  void Interp_ORB_Tstart(FT2 &FT2); 
   void Interp_ATT_Tstart(FT2 &FT2);
   void Interp_ORB_Vel_Entries(FT2 &FT2);
   unsigned int M7_Entries;
@@ -172,12 +178,9 @@ public:
   int Get_FT2_Time_Bin(double time, double Tstart);
   void Evaluate_Live_Time(FT2 &FT2);
   
-  
-  
   //FT2_SpaceCraft
   void Fill_SC_Entries(FT2 &FT2);
-  
-  
+ 
   //Digi
   void Digi_FT2(FT2 &FT2);
   
@@ -201,7 +204,6 @@ public:
   double lininterp(double x1, double x2, double t1, double t2, double t);
   
   
-  
 private:
   bool OutOfRange;
   unsigned int CurrentEntry;
@@ -223,5 +225,11 @@ private:
   double  pa,pb,pc;
 };
 
+class OrbInterp{
+public:
+  void   Interp(double time, ORBIT &Orb, unsigned int i1, unsigned int i2, unsigned int interp);
+  double inner_product(double vect_x[], double vect_y[]);
+  double outer_product(double vect_x[], double vect_y[], double vect_z[]) ;
+};
 
 #endif

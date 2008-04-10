@@ -53,7 +53,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   //!!! These values are very important
   double conv=50.0/1e9;
-  double RollOver = 33554432.0
+  double RollOver = 33554432.0;
   
   double curr_live, curr_elapsed;
   ULong64_t currentElapsed;
@@ -345,30 +345,32 @@ void FT2::Digi_FT2(FT2 &FT2){
     FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
     
     ///!!!!TIME CALIBRATION
-    if((first_bin)||(New_FT2_Entry)){
+    if(Current_FT2_Entry!=Old_FT2_Entry ){
+    //if((first_bin)||(New_FT2_Entry)){
+      
       // Verify that the two TimeTones are OK:
-      if (!(evt->metaEvent.time().current().incomplete()) &&
-              !(evt->(metaEvent.time().current().flywheeling()) &&
-              !(evt->metaEvent.time().current().missingCpuPps()) &&
-              !(evt->metaEvent.time().current().missingLatPps()) &&
-              !(evt->metaEvent.time().current().missingTimeTone()) &&
-              !(evt->metaEvent.time().previous().incomplete()) &&
-              !(evt->metaEvent.time().previous().flywheeling()) &&
-              !(evt->metaEvent.time().previous().missingCpuPps()) &&
-              !(evt->metaEvent.time().previous().missingLatPps()) &&
-              !(evt->metaEvent.time().previous().missingTimeTone()) &&
+      if (!(evt->getMetaEvent().time().current().incomplete()) &&
+              !(evt->getMetaEvent().time().current().flywheeling()) &&
+              !(evt->getMetaEvent().time().current().missingCpuPps()) &&
+              !(evt->getMetaEvent().time().current().missingLatPps()) &&
+              !(evt->getMetaEvent().time().current().missingTimeTone()) &&
+              !(evt->getMetaEvent().time().previous().incomplete()) &&
+              !(evt->getMetaEvent().time().previous().flywheeling()) &&
+              !(evt->getMetaEvent().time().previous().missingCpuPps()) &&
+              !(evt->getMetaEvent().time().previous().missingLatPps()) &&
+              !(evt->getMetaEvent().time().previous().missingTimeTone()) &&
               // Avoid 1/0 error:
-              (evt->metaEvent.time().current().timeHack().ticks() !=
-              evt->metaEvent.time().previous().timeHack().ticks()) &&
+              (evt->getMetaEvent().time().current().timeHack().ticks() !=
+              evt->getMetaEvent().time().previous().timeHack().ticks()) &&
               // If there is more than a second between 1-PPS I can
               // only use the nominal value for the LAT clock anyway!
-              ((evt->metaEvent.time().current().timeSecs() -
-              evt->metaEvent.time().previous().timeSecs()) == 1)) {
+              ((evt->getMetaEvent().time().current().timeSecs() -
+              evt->getMetaEvent().time().previous().timeSecs()) == 1)) {
         
         // Number of ticks between the current and the previous time tone:
         double clockTicksDelta1PPS =
-        double (evt->metaEvent.time().current().timeHack().ticks()) -
-        double (evt->metaEvent.time().previous().timeHack().ticks());
+        double (evt->getMetaEvent().time().current().timeHack().ticks()) -
+        double (evt->getMetaEvent().time().previous().timeHack().ticks());
         
         // Rollover?
         if (clockTicksDelta1PPS < 0) {
@@ -380,6 +382,7 @@ void FT2::Digi_FT2(FT2 &FT2){
       } else {
         conv=50.0/1e9;
       }
+      printf("conv=%20.18e\n",conv);
     }
     
     Current_LiveTime=curr_live*conv;
@@ -424,16 +427,11 @@ void FT2::Digi_FT2(FT2 &FT2){
         fraction*=1.0/(DigiTime-FT2.DT.Tstop[Current_FT2_Entry-1]);
         FT2.DT.ReconDeadTime[Current_FT2_Entry-1]+=RecDead*(fraction);
       }
-      FT2.DT.ReconDeadTime[Current_FT2_Entry]+=RecDead*(1.0-fraction);
-      
-      
+      FT2.DT.ReconDeadTime[Current_FT2_Entry]+=RecDead*(1.0-fraction);      
     }
     
     if(Current_FT2_Entry!=Old_FT2_Entry && !first_bin ){
       New_FT2_Entry=1;
-      
-      //FT2.FT2_T.LiveTime[Current_FT2_Entry-1]=
-      //(FT2.DT.Tstop_LiveTime[Current_FT2_Entry-1] -  FT2.DT.Tstart_LiveTime[Current_FT2_Entry-1]);
       
       //--- Print last Entry Values ----
       if(FT2.verbose){

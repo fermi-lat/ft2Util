@@ -143,7 +143,7 @@ void FT2::Get_FT2_Entry_Index(FT2 &FT2 , double time, unsigned int &i){
   //Look for the Entry index
   bool stop=false;
   for(l=0;l<Entries;l++){
-    if((time<=FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l]) && !stop){
+    if((time<FT2.FT2_T.Tstop[l])&&(time>=FT2.FT2_T.Tstart[l]) && !stop){
       Set_OutOfRange_FALSE(FT2);
       i=l;
       stop=true;
@@ -271,6 +271,87 @@ void ParabInterp::GetInterp(ParabInterp p, double x, double &y){
   //printf("c=%e b=%e a=%e\n",c,b,a);
   y=x*x*c + x*b + a;
 }
+
+//-------------------------- Orb Interpolation Wrapper--------------------------
+// @author Andrea Tramacere <tramacer@slac.stanford.edu>
+// wrapper of the code from Lucas Guillemot,
+
+void OrbInterp::Interp(double t, ORBIT  &Orb, unsigned int i1, unsigned int i2, unsigned int interp){
+   
+  double sctime1 = Orb.Tstart[i1];
+  double sctime2 = Orb.Tstart[i2];
+  double intposn[3];
+  double scposn1[3] = { Orb.x[i1],Orb.y[i1],Orb.z[i1] };
+  double scposn2[3] = { Orb.x[i2],Orb.y[i2],Orb.z[i2] };
+  double fract = 0.;
+  int ii;
+  
+  /* Interpolate. */
+  fract = (t - sctime1) / (sctime2 - sctime1);
+  
+  double length1, length2, length12, intlength;
+  double vector12[3], vectprod_out[3];
+  
+  /* linear interpolation for vector length */
+  length1 = sqrt(inner_product(scposn1, scposn1));
+  length2 = sqrt(inner_product(scposn2, scposn2));
+  intlength = length1 + fract*(length2 - length1);
+  
+  /* compute a base vector on the orbital plane (vector12) */
+  outer_product(scposn1, scposn2, vectprod_out);
+  outer_product(vectprod_out, scposn1, vector12);
+  length12 = sqrt(inner_product(vector12, vector12));
+  
+  /* check vectors scposn1 and scposn2 */
+  if ((length1 == 0.0) && (length2 == 0.0)) {
+    /* both vectors are null */
+    for (ii = 0; ii < 3; ++ii) intposn[ii] = 0.0;
+    
+  } else if (length1 == 0.0) {
+    /* scposn1 is null, but scposn2 is not */
+    for (ii = 0; ii < 3; ++ii) {
+      intposn[ii] = scposn2[ii] / length2 * intlength;
+    }
+    
+  } else if ((length2 == 0.0) || (length12 == 0.0)) {
+    /* left:  scposn2 is null, but scposn1 is not */
+    /* right: either vector is not null, but they are parallel */
+    for (ii = 0; ii < 3; ++ii) {
+      intposn[ii] = scposn1[ii] / length1 * intlength;
+    }
+    
+  } else { /* both has a non-zero length, and they are not parallel */
+    double inttheta, factor_cos, factor_sin;
+    /* linear interpolation for orbital phase */
+    inttheta = fract * acos(inner_product(scposn1, scposn2)
+            / length1 / length2);
+    factor_cos = cos(inttheta);
+    factor_sin = sin(inttheta);
+    for (ii = 0; ii < 3; ++ii) {
+      intposn[ii] = intlength * (scposn1[ii] / length1 * factor_cos
+              + vector12[ii] / length12 * factor_sin);
+    }
+  }
+  Orb.x[interp]= intposn[0];
+  Orb.y[interp]= intposn[1];
+  Orb.z[interp]= intposn[2];
+}
+
+
+/* compute vector inner product */
+double OrbInterp:: inner_product(double vect_x[], double vect_y[]) {
+  return vect_x[0]*vect_y[0] + vect_x[1]*vect_y[1] + vect_x[2]*vect_y[2];
+}
+
+/* compute vector outer product */
+double OrbInterp::outer_product(double vect_x[], double vect_y[], double vect_z[]) {
+  vect_z[0] = vect_x[1]*vect_y[2] - vect_x[2]*vect_y[1];
+  vect_z[1] = vect_x[2]*vect_y[0] - vect_x[0]*vect_y[2];
+  vect_z[2] = vect_x[0]*vect_y[1] - vect_x[1]*vect_y[0];
+}
+
+
+
 
 //------------------------------- Eval W-------------------------------------------
 
