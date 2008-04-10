@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Apr  9 19:31:26 PDT 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+choose the first M7 entry with the same ATT and ORB tstamp
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r1p50, operation: add
 Package: ft2Util
