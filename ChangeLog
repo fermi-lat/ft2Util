@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Thu Apr 10 20:03:07 PDT 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+corrected tag printed on screen
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p1, operation: add
 Package: ft2Util
