@@ -1,3 +1,26 @@
+//--------------------------- ROOT DECLARATIONS ---------------------------------
+
+// ROOT Headers
+#include "TROOT.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TChain.h"
+#include "TMath.h"
+#include "TH1.h"
+#include "TStyle.h"
+#include "TCollection.h"  // Declares TIte
+
+// Enums
+#include "enums/Lsf.h"
+
+// Digi Classes
+#include "digiRootData/LsfTime.h"
+#include "digiRootData/RunInfo.h"
+#include "digiRootData/DatagramInfo.h"
+#include "digiRootData/GemScalers.h"
+#include "digiRootData/Configuration.h"
+#include "digiRootData/DigiEvent.h"
+
 // stl/c++ headers
 #include <cmath>
 #include <cstdlib>
@@ -18,13 +41,65 @@
 
 
 void FT2::Gleam_FT2(FT2 &FT2){
-  unsigned int Current_FT2_Entry,FT2_Entries;
+   double DigiTime;
+   double Tstart_Run, Tstop_Run;
+   unsigned int Digi_i, Digi_Start, Digi_Stop;
+  /*---------------------------------------------------------
+   *------------------ ROOT Start TTree DIGI ----------------
+   *---------------------------------------------------------*/
+  TFile *fDigi=new TFile(FT2.DigiFile.c_str());
+  TTree *T = (TTree*)fDigi->Get("Digi");
+  //--- ROOT Disable all branches DIGI ---
+  T->SetBranchStatus("*", 0);
+  //--- ROOT Enable only needed branch DIGI --
+  T->SetBranchStatus("m_eventId", 1);
+  T->SetBranchStatus("m_liveTime", 1);
+  T->SetBranchStatus("m_timeStamp", 1);
+  T->SetBranchStatus("m_metaEvent", 1);
+  T->SetBranchStatus("m_gem", 1);
+  //--- ROOT Digi Inizialization ---
+  DigiEvent * evt;
+  evt = 0;
+  T->SetBranchAddress("DigiEvent", &evt);
+  UInt_t Digi_nEvt = (UInt_t)T->GetEntries();
+  UInt_t Digi_EvtId;
+  //---------------------------------------------------------
+  
+  Digi_i=0;
+  Digi_Start=0;
+
+  T->GetEntry(Digi_i);
+  DigiTime=evt->getTimeStamp();
+  Tstart_Run=evt->getTimeStamp();
+  Digi_Start=Digi_i;
+  
+  
+  Digi_i=Digi_nEvt-1;
+  T->GetEntry(Digi_i);
+  DigiTime=evt->getTimeStamp();
+  Tstop_Run=evt->getTimeStamp();
+  Digi_Stop=Digi_i;
+  
+ 
 
   //-------- WORK ON  M7 FILE ---------------------------------------------------------
   std::cout<<"M-7 file"<<std::endl;
   //Read M-7 File and Set FT2 Entries
-  FT2.Set_M7_Entries(FT2); 
+  FT2.Set_M7_Entries(FT2,Tstart_Run,Tstop_Run); 
   std::cout<<"======================================================"<<std::endl;
+  
+  unsigned int FT2_Entries=Get_FT2_Entries(FT2);
+  
+  printf("ID of firtst Digi evt %d\n", Digi_Start);
+  printf("Time of the firtst Digi evt %30.28g\n", DigiTime);
+  printf("Tstart of the the M7 file %30.28g\n", FT2.FT2_T.Tstart[0]);
+  
+  printf("ID of the last Digi evt %d\n", Digi_Stop);
+  printf("Time of the last Digi evt %30.28g\n", DigiTime);
+  printf("Tstop of the the M7 %30.28g\n", FT2.FT2_T.Tstop[FT2_Entries-1]);
+  printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
+  printf("---------------------------------------------------\n");
+ 
   //-----------------------------------------------------------------------------------
  
    if(FT2.verbose){
@@ -73,7 +148,7 @@ void FT2::Gleam_FT2(FT2 &FT2){
 
 
   //-------- Fill the M7 Entries ---------------------------------------
-  FT2.Fill_M7_Entries(FT2);
+  FT2.Fill_M7_Entries(FT2,Tstart_Run,Tstop_Run);
   if(FT2.verbose){
     FT2.ATT.Print_ATT_Entries(FT2.ATT);
     FT2.ORB.Print_ORB_Entries(FT2.ORB);
@@ -92,7 +167,7 @@ void FT2::Gleam_FT2(FT2 &FT2){
     FT2.FT2_T.LiveTime[i]=0;
   }
    
-  
+  printf("write txt file\n");
   //Write FT2 Txt file
   FT2.WriteMergedTextFile(FT2);
    

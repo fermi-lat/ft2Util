@@ -21,9 +21,9 @@
 #include "ft2Util/FT2_Time.hpp"
 
 //--------------------------------Set Entries According to M7 file -----------------------
-void FT2::Set_M7_Entries(FT2 &FT2){
+void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
   
-  double time, old_time, Tstart,deltat;
+  double time, old_time, Tstart, deltat;
   //int new_entry(1);
   unsigned int M7LineCounter(0), M7ShiftLines(0);
   int  TimeBin(0), NewTimeBin(0), OldTimeBin(0), MODE(0), OLD_MODE;
@@ -39,6 +39,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
   M7F.open(FT2.M7File.c_str());
   
   if(M7F.fail()) {
+    printf(" FT2::Set_M7_Entries(FT2 &FT2)\n");
     std::cout<<"The file *** \'"
     <<FT2.M7File.c_str()
     <<"\' *** could not be opened!\n"
@@ -65,15 +66,10 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       
       //SKIP UP TO THE FIRST TWO LIENES THAT HAVE
       //THE SAME TSTAMP FOR ORB AND ATT
-      //std::cout<<time<<" "
-      //    <<old_time<<" "
-      //    <<tokens[2]
-      //    <<old_token
-      //    <<"\n"; 
-     
+      
       //printf("time=%20.18g old_time=%20.18g M7ShiftLine=%d\n",time,old_time, M7ShiftLines);
       
-      //!!!!!!! To avoid numeric issue the difference to be the same is set to
+      //!!!!!!! To avoid numeric issues the difference to be the same is set to
       //1 microsecond.
       deltat=fabs(time-old_time);
       if((deltat<1.0e-6) && tokens[2]=="ORB" && old_token=="ATT" &&M7ShiftLines>0 && !start){
@@ -85,7 +81,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       if(!start){
         M7ShiftLines++;
       }
-      if(start){
+      if(start &&time<Tstop_RUN &&time>Tstart_RUN){
         
         if(FT2.verbose){
           std::cout<<"Time="
@@ -140,9 +136,12 @@ void FT2::Set_M7_Entries(FT2 &FT2){
           
           //-----Put  empity entries if Delta_ID>1--------//
           bool backjump=false;
+          
           if((TimeBin-OldTimeBin)<0) backjump=true;
           
           unsigned int Delta_Gap=(TimeBin-OldTimeBin);
+          
+          //------------ Handling Gaps -----------------------------------------
           if(Delta_Gap>1 && !backjump){
             printf("---------------------------------------------------------\n");
             printf("Found Gap, Delta_Gap=%d\n", Delta_Gap);
@@ -173,6 +172,8 @@ void FT2::Set_M7_Entries(FT2 &FT2){
               //Update FT2_Time class
               FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
               FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
+              //Live Time set to zero!!!
+              FT2.FT2_T.LiveTime[Current_FT2_Entries-1]=0;
               
               if(FT2.verbose){
                 std::cout<<"New Entry, Current number of  FT2 Entries "
@@ -183,12 +184,12 @@ void FT2::Set_M7_Entries(FT2 &FT2){
                 <<M7LineCounter
                 <<std::endl;
                 std::cout<<Tstart <<" +"<<time<<std::endl;
-                
               }
             }
           }
+          //--------Handling Gaps ends -----------------------------------------
           if(backjump){
-            printf("!!!!Back Jump = %d , M7 entries are not time ordered I will not add extra entries here\n", TimeBin-OldTimeBin);
+            printf("Error::!!!!Back Jump = %d , M7 entries are not time ordered I will not add extra entries here\n", TimeBin-OldTimeBin);
           }
           //---------------------------------------------------------
           
@@ -204,6 +205,7 @@ void FT2::Set_M7_Entries(FT2 &FT2){
             <<std::endl;
           }
         }
+        //----------Handlign New Bins end---------------------------------------
         
         //IF we are at the beginning of a new TimeBin or
         //at the start UpadteSomeThing
@@ -225,18 +227,8 @@ void FT2::Set_M7_Entries(FT2 &FT2){
             
           }
           else{
-            //!!!!!!!! IF there is some missing data
-            //that makes the following entry distant
-            //in time more than one entry time span
-            //than tacke Tstart not form previous entry
-            //Tstop but from current M7 file time
-            //printf("(TimeBin-OldTimeBin=%d\n",TimeBin-OldTimeBin);
             
-            //if(TimeBin-OldTimeBin<=1){
             FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
-            //}else{
-            //FT2.FT2_T.Tstart[Current_FT2_Entries-1]=time;
-            ///	}
             
             FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
           }
@@ -256,12 +248,10 @@ void FT2::Set_M7_Entries(FT2 &FT2){
             std::cout<<Tstart <<" +"<<time<<std::endl;
           }
           
-          
         }
         else{
           //FT2.FT2_T.Tstop[Current_FT2_Entries-1]=time;
         }
-        
         M7LineCounter++;
       }
       //close if (start)
@@ -272,33 +262,35 @@ void FT2::Set_M7_Entries(FT2 &FT2){
       old_time=time;
       old_token=tokens[2];
       
-      
     }
-    //close  
+    //close
   }
   FT2.M7ShiftStart=M7ShiftLines-1;
   M7F.close();
-
-  printf("%d entries from M7 file\n",Current_FT2_Entries);
+  
+  printf("%d entries from M7 file\n", Current_FT2_Entries);
   if (Current_FT2_Entries==0){
+    printf("FT2::Set_M7_Entries(FT2 &FT2)");
     printf("!!!! Something wrong with the M7 file, no entries found\n");
     exit(0);
   }
-  
-  if(FT2.verbose){
-    for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
-      printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n", i, FT2.FT2_T.Tstart[i], FT2.FT2_T.Tstop[i], FT2.FT2_T.bin[i]);
-    }
+  if(M7ShiftLines>6){
+    printf("!!!!!Warning: M7ShiftLines=%d >6 Possible problems with the M7 file\n");
+    printf("Or when merging M7 and Digi file\n");
   }
-  
+  //if(FT2.verbose){
+  //  for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){
+  //    printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n", i, FT2.FT2_T.Tstart[i], FT2.FT2_T.Tstop[i], FT2.FT2_T.bin[i]);
+  //  }
+  //}
 }
 
 
 
 //--------------  Fill M7 Entries from M7 File ----------------------------------
-void FT2::Fill_M7_Entries(FT2 &FT2){
+void FT2::Fill_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN){
   
-  double time, Tstart,deltat;
+  double time, Tstart, deltat;
   //int new_entry(1);
   unsigned int M7LineCounter(0);
   bool  NewEntry(false);
@@ -329,10 +321,10 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
     if(comment.find( "#", 0) == std::string::npos ){
       
       time=FT2.Get_M7_Time(tokens[3], tokens[4]);
-       
+      
       //SKIP lines up to FT2.M7ShiftStart
-      if (M7LineCounter>=FT2.M7ShiftStart){
-       
+      if (M7LineCounter>=FT2.M7ShiftStart &&time<Tstop_RUN &&time>Tstart_RUN){
+        
         //FT2 Entry Index
         Get_FT2_Entry_Index(FT2, time, Current_FT2_Entry);
         
@@ -343,7 +335,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
             std::cout
             <<"-------------------------------------------------\n"
             <<"Token "
-            <<tokens[2]      
+            <<tokens[2]
             <<" M7 time"
             <<time
             <<"Current Entry "
@@ -365,17 +357,17 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
         if((M7LineCounter==FT2.M7ShiftStart-1)||(NewEntry)){
           NewEntry=false;
           FT2.Clean_ATT_Quaternions(FT2.ATT, Current_FT2_Entry);
-          FT2.Clean_ORB(FT2.ORB, Current_FT2_Entry); 
+          FT2.Clean_ORB(FT2.ORB, Current_FT2_Entry);
         }
         
         //printf("Entry=%d time=%20.18g FT2_Tstart=%20.18g\n",Current_FT2_Entry,time,FT2.FT2_T.Tstart[Current_FT2_Entry]);
         deltat=fabs(time-FT2.FT2_T.Tstart[Current_FT2_Entry]);
         //printf("deltat=%20.18g\n",deltat);
         if (tokens[2]=="ATT" && deltat<1.0e-6){
-          FT2.Update_ATT_Quaternions(FT2.ATT,tokens ,time, Current_FT2_Entry);
+          FT2.Update_ATT_Quaternions(FT2.ATT, tokens , time, Current_FT2_Entry);
         }
         if (tokens[2]=="ORB" && deltat<1.0e-6){
-          FT2.Update_ORB(FT2.ORB, tokens,time, Current_FT2_Entry);
+          FT2.Update_ORB(FT2.ORB, tokens, time, Current_FT2_Entry);
         }
         
         
@@ -398,10 +390,10 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
   
   ///!!!!!!!!MAY BE THAT WILL BE NO MOER USED
   ///FT2.Interp_ORB_Vel_Entries(FT2);
- 
+  
   FT2.Interp_ORB_Entries(FT2);
   FT2.Interp_ORB_Tstart(FT2);
-
+  
   FT2.Interp_ATT_Entries(FT2);
   FT2.Interp_ATT_Tstart(FT2);
   
@@ -421,17 +413,24 @@ void FT2::Fill_M7_Entries(FT2 &FT2){
  *the FT2 time spane, otherwise it adds entry according
  *THIS SHOULD NEVER HAPPEN!!!!!!!!!!!!!!!!
  *-------------------------------------------------------------------------*/
-void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run){
+void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run, bool &redo){
   
   unsigned int Current_FT2_Entry, FT2_Entries;
   
   //!!!!padding for new bins
-  double padding=1.0e-5;
+  double padding=1.0;
   
   printf("---------------------------------------------------------\n");
   printf("Merge M7 with Digi entries -\n");
   
-  printf("FT2 entries %d \n", Get_FT2_Entries(FT2));
+  FT2_Entries= Get_FT2_Entries(FT2);
+  
+  printf("FT2 entries %d \n", FT2_Entries);
+  double Tstart_M7=FT2.FT2_T.Tstart[0];
+  double Tstop_M7=FT2.FT2_T.Tstart[FT2_Entries-1];
+  
+  //add new entry
+  printf("Now check that the first Dig evt falls within the M7 entries\n");
   FT2.Get_FT2_Entry_Index(FT2, Tstart_Run, Current_FT2_Entry);
   if(!FT2.Get_OutOfRange(FT2)){
     printf("Entry index=%d \n", Current_FT2_Entry);
@@ -445,24 +444,41 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run){
     FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstart_Run ;
     FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_Run ;
   }else{
-    printf("Adding entries before that M7 file starts");
+    redo=true;
+    printf("Adding one entry before that M7 file starts up to cover the Digi File\n");
+    printf("Tstart run=%20.18g Tstart M7=%20.18g\n", Tstart_Run, Tstart_M7);
     FT2.Update_FT2_Entries(FT2, Get_FT2_Entries(FT2)+1);
     FT2_Entries= Get_FT2_Entries(FT2);
     FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T, FT2_Entries);
     printf("add entry, FT2 entries %d \n", Get_FT2_Entries(FT2));
-    printf("Entry index=0\n");
     //Here add the padding!!!
-    FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_Run-padding;
+    FT2.FT2_T.Tstart[FT2_Entries-1]=Tstart_M7-padding;
     FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[0];
+    Tstart_M7=FT2.FT2_T.Tstart[FT2_Entries-1];
+    printf("Tstart run=%20.18g Tstart M7=%20.18g\n", Tstart_Run, Tstart_M7);
+    
+    printf("If not enough add more entries\n");
+    while(Tstart_Run<Tstart_M7){
+      FT2.Update_FT2_Entries(FT2, Get_FT2_Entries(FT2)+1);
+      FT2_Entries= Get_FT2_Entries(FT2);
+      FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T, FT2_Entries);
+      printf("add entry, FT2 entries %d \n", Get_FT2_Entries(FT2));
+      //Here add the padding!!!
+      FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-2]-padding;
+      FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-2];
+      Tstart_M7=FT2.FT2_T.Tstart[FT2_Entries-1];
+    }
+    printf("Tstart run=%20.18g Tstart M7=%20.18g\n", Tstart_Run, Tstart_M7);
   }
   
-  
+  //SORTING
   std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
   std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
   
   
   //add new entry
   printf("FT2 entries %d \n", Get_FT2_Entries(FT2));
+  printf("Now check that the Last Dig evt falls within the M7 entries\n");
   FT2.Get_FT2_Entry_Index(FT2, Tstop_Run, Current_FT2_Entry);
   if(!FT2.Get_OutOfRange(FT2)){
     printf("Entry index=%d \n", Current_FT2_Entry);
@@ -476,24 +492,43 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run){
     FT2.FT2_T.Tstop[Current_FT2_Entry]=Tstop_Run ;
     FT2.FT2_T.Tstart[FT2_Entries-1]=Tstop_Run ;
   }else{
-    printf("Adding entries after that M7 file ends");
+    redo=true;
+    printf("Adding one entry after that M7 file ends up to cover the Digi File\n");
+    printf("Tstop run=%20.18g Tstop M7=%20.18g\n", Tstop_Run, Tstop_M7);
+    
     FT2.Update_FT2_Entries(FT2, Get_FT2_Entries(FT2)+1);
     FT2_Entries= Get_FT2_Entries(FT2);
     FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T, FT2_Entries);
     printf("add entry, FT2 entries %d \n", Get_FT2_Entries(FT2));
     printf("Entry index=%d \n", FT2_Entries-1);
-    FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2] ;
+    FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2];
     //Here add the padding!!!
-    FT2.FT2_T.Tstop[FT2_Entries-1]=Tstop_Run+padding;
+    FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-1]+padding;
+    Tstop_M7=FT2.FT2_T.Tstop[FT2_Entries-1];
+    printf("Tstop run=%20.18g Tstop M7=%20.18g\n", Tstop_Run, Tstop_M7);
+    
+    printf("If not enough add more entries\n");
+    while(Tstop_Run>Tstop_M7){
+      FT2.Update_FT2_Entries(FT2, Get_FT2_Entries(FT2)+1);
+      FT2_Entries= Get_FT2_Entries(FT2);
+      FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T, FT2_Entries); 
+      printf("Entry index=%d \n", FT2_Entries-1);
+      FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2] ;
+      //Here add the padding!!!
+      FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-1]+padding;
+      Tstop_M7=FT2.FT2_T.Tstop[FT2_Entries-1];
+    }
+    printf("Tstop run=%20.18g Tstart M7=%20.18g\n", Tstop_Run, Tstop_M7);
+    
   }
   
   
-  
+  //SORTING
   std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
   std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
   
-  //SORTING
-  //
+  
+  
   printf("---------------------------------------------------------\n");
   
   printf("---------------------------------------------------------\n");

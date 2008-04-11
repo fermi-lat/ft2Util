@@ -87,6 +87,17 @@ void GAPS::Set_GAPS_Size(GAPS &GP, unsigned long size){
 
 //-------------------- FT2_CLASS  -----------------------------------------------
 FT2::FT2() {
+  init();
+  
+}
+
+void FT2::init(){
+  verbose=false;
+  DigiGAPS=false;
+  Gleam=false;
+  MC=false;
+  TestQ=false;
+  printf("FT2 initialized\n");
 }
 //--------------  Update the private FT2  Entries ----------------------------
 void FT2::Update_FT2_Entries(FT2 &FT2, int i){
@@ -242,8 +253,17 @@ void FT2::Set_GAPS(FT2 &FT2){
   //File Handlign
   std::string buf, comment; //buffer string
   std::string line;
-  std::ifstream  GPF(FT2.Gaps_File.c_str());
+  std::ifstream  GPF;
+  GPF.open(FT2.Gaps_File.c_str());
   
+  if(GPF.fail()) {
+    printf(" FT2::Set_GAPS(FT2 &FT2) \n");
+    std::cout<<"The file *** \'"
+    <<FT2.Gaps_File.c_str()
+    <<"\' *** could not be opened!\n"
+    <<"Abnormal Exit !!!\n";
+    exit(1);
+  }
   
   //Read file
   while (std::getline(GPF, line, '\n')) {
@@ -264,7 +284,7 @@ void FT2::Set_GAPS(FT2 &FT2){
       
     }
   }
-  
+  printf("Digi Gaps Informations\n");
   for (unsigned long i=0;i<Entries;i++){
     std::cout<<"GemStart="
     <<FT2.GP.GemStart[i]

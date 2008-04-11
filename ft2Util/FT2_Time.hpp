@@ -128,9 +128,9 @@ public:
   
   
   //M-7
-  void Set_M7_Entries(FT2 &FT2);
+  void Set_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN);
   double Get_M7_Time(const std::string &Time, const std::string &Frac_Time);
-  void Fill_M7_Entries(FT2 &FT2);
+  void Fill_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN);
   void Average_M7_Entries(FT2 &FT2);
   void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens ,double time, unsigned int entry);
   void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, double time,unsigned int entry);
@@ -164,7 +164,7 @@ public:
   void Get_FT2_Entry_Index(FT2 &FT2, double time, unsigned int &i);
   void Update_FT2_Entries(FT2 &FT2, int i);
   unsigned int Get_FT2_Entries(FT2 &FT2);
-  void Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run);
+  void Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run, bool & redo);
   void FT2::RunCut(FT2 &FT2, double Tstart, double Tstop);
   unsigned int DigiFileLineNumber;
   void Set_OutOfRange_TRUE(FT2 &FT2);
@@ -203,11 +203,15 @@ public:
   //Math
   double lininterp(double x1, double x2, double t1, double t2, double t);
   
+  //Test Quaternion
+  bool TestQ;
+  void TestQuaternion();
   
 private:
   bool OutOfRange;
   unsigned int CurrentEntry;
   unsigned int Entries;
+  void init();
   
 };
 

@@ -120,7 +120,7 @@ int main(int iargc, char **argv){
 	  
 	  Entries++;
 	  
-	  //printf("new entries, entr=%d\n",Entries);
+	  printf("new entries, entr=%d\n",Entries);
 	  //--------------------!!!!!!! Very Important ------------------
 	  //Fills arrayes from FT2txt file 
 	  //!!!Attention the fields MUST be put in as
@@ -137,30 +137,31 @@ int main(int iargc, char **argv){
 	  FT2.ORB.Set_ORB_Size(FT2.ORB,Entries);
 	  FT2.FT2_SC.Set_FT2SC_Size(FT2.FT2_SC,Entries);
 	  
-	  //printf("arrays resized\n");
+	  printf("arrays resized\n");
 
 	 
 	  //store values
 	  FT2.FT2_T.Tstart[Entries-1]=atof(tokens[1].c_str());
-	  //printf("sono qui\n");
+	  std::cout<<"Tstart "<<tokens[1]<<"\n";
+      std::cout<<"Tstop " <<tokens[2]<<"\n";
 	  FT2.ORB.x[Entries-1]=atof(tokens[3].c_str());
-	  //std::cout<<tokens[3]<<" ";
+	  std::cout<<tokens[3]<<" ";
 	  FT2.ORB.y[Entries-1]=atof(tokens[4].c_str());
-	  //std::cout<<tokens[4]<<" ";
+	  std::cout<<tokens[4]<<" ";
 	  FT2.ORB.z[Entries-1]=atof(tokens[5].c_str());
-	  //std::cout<<tokens[5]<<" ";
+	  std::cout<<tokens[5]<<" ";
 	  FT2.FT2_SC.RA_SCZ[Entries-1]=atof(tokens[6].c_str());
-	  //std::cout<<tokens[6]<<" ";
+	  std::cout<<tokens[6]<<" ";
 	  FT2.FT2_SC.DEC_SCZ[Entries-1]=atof(tokens[7].c_str());
-	  //std::cout<<tokens[7]<<" ";
+	  std::cout<<tokens[7]<<" ";
 	  FT2.FT2_SC.RA_SCX[Entries-1]=atof(tokens[8].c_str());
-	  //std::cout<<tokens[8]<<" ";
+	  std::cout<<tokens[8]<<" ";
 	  FT2.FT2_SC.DEC_SCX[Entries-1]=atof(tokens[9].c_str());
-	  //std::cout<<tokens[9]<<" ";
+	  std::cout<<tokens[9]<<" ";
 	  FT2.FT2_SC.RA_ZENITH[Entries-1]=atof(tokens[10].c_str());
-	  //std::cout<<tokens[10]<<" ";
+	  std::cout<<tokens[10]<<" ";
 	  FT2.FT2_SC.DEC_ZENITH[Entries-1]=atof(tokens[11].c_str());
-	  //std::cout<<tokens[11]<<std::endl;
+	  std::cout<<tokens[11]<<std::endl;
 	  FT2.FT2_SC.LON_GEO[Entries-1]=atof(tokens[12].c_str());
 	  FT2.FT2_SC.LAT_GEO[Entries-1]=atof(tokens[13].c_str());
 	  FT2.FT2_SC.RAD_GEO[Entries-1]=atof(tokens[14].c_str());
@@ -173,7 +174,10 @@ int main(int iargc, char **argv){
 	  FT2.FT2_SC.B_MCILWAIN[Entries-1]=atof(tokens[17].c_str());
 	  FT2.FT2_SC.L_MCILWAIN[Entries-1]=atof(tokens[18].c_str());
 	  FT2.ORB.CM[Entries-1]=atoi(tokens[19].c_str());
-    	
+      FT2.FT2_SC.QS_J1[Entries-1]=atof(tokens[21].c_str());
+      FT2.FT2_SC.QS_J2[Entries-1]=atof(tokens[22].c_str());
+      FT2.FT2_SC.QS_J3[Entries-1]=atof(tokens[23].c_str());
+      FT2.FT2_SC.QS_J4[Entries-1]=atof(tokens[24].c_str());
 	}
 	//std::cout<<"tokens"
 	//	 <<tokens[18]
@@ -186,7 +190,9 @@ int main(int iargc, char **argv){
 	//printf("live time=%e\n",live_time);
 	time_elapsed+=(atof(tokens[2].c_str())-atof(tokens[1].c_str()));
 	
-	if(time_elapsed>=30.0){ 
+    //  printf("time elapsed=%e\n",time_elapsed);
+
+    if(time_elapsed>=30.0){ 
 	  FT2.FT2_T.Tstop[Entries-1]=atof(tokens[2].c_str());
 	  //store t_stop
 	  //store live_time

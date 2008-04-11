@@ -36,7 +36,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   printf("START=%d STOP=%d\n",START,STOP);
 
   //unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
-  unsigned long FT2_ENTR=STOP-START;
+  unsigned long FT2_ENTR=STOP-START-1;
 
 
   std::cout<<"Start Instance of Ft2File\n";
@@ -60,7 +60,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
   std::cout<<"Loop over ft2 fields\n";
   
   
-  for(unsigned int i=START;i<=STOP;i++){
+  for(unsigned int i=START;i<STOP;i++){
     ft2["start"].set(FT2_T.Tstart[i]);
     ft2["stop"].set(FT2.FT2_T.Tstop[i]);
     scPosition[0] = FT2.ORB.x[i];
