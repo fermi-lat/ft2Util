@@ -209,8 +209,8 @@ void FT2::Digi_FT2(FT2 &FT2){
   FT2.Set_M7_Entries(FT2,Tstart_Run,Tstop_Run);
   std::cout<<"======================================================"<<std::endl;
   //-------------------------------------------------------------------
+  
   unsigned int FT2Entries=Get_FT2_Entries(FT2);
-
   printf("ID of firtst Digi evt %d\n", Digi_Start);
   printf("Time of the firtst Digi evt %30.28g\n", DigiTime);
   printf("Tstart of the the M7 file %30.28g\n", FT2.FT2_T.Tstart[0]);
