@@ -49,7 +49,8 @@ int main(int argc, char **argv){
       FT2.Gleam_FT2(FT2);
     }
     else if(FT2.MC==true){
-     printf("No More supported\n");
+     DigiMC_FT2(FT2);
+     //printf("No More supported\n");
     }
     else if(FT2.TestQ==true){
       FT2.TestQuaternion();
