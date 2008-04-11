@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Apr 11 10:07:25 PDT 2008
+ft2Util/src
+
+Modified Files:
+	utils.cxx 
+Log Message:
+fixed typo and sign correction in quaternion slerp interpolation
+    *
+------------------------------------------------------------
 User: tramacer  Fri Apr 11 10:07:24 PDT 2008
 ft2Util/apps
 
