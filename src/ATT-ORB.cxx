@@ -623,11 +623,15 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         deltat = FT2.ATT.Tstart[i+jump_f]-FT2.ATT.Tstart[i-jump_b];
         
         fraction = (FT2.FT2_T.Tstart[i]-FT2.ATT.Tstart[i-jump_b])/deltat;
-                      
-        //Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
-        //Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
-        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]));
-        Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]));
+        unsigned int index;
+        index=i-jump_b;
+        FT2.ATT.Eval_w(FT2.ATT,index);
+        index=i+jump_f;
+        FT2.ATT.Eval_w(FT2.ATT,index);
+        Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
+        Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
+        //Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]));
+        //Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]));
         Quaternion interp(q1.interpolate(q2, fraction));
          
         FT2.ATT.x[i]=interp.vector().x();
@@ -643,8 +647,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
                   FT2.ATT.x[i+jump_f],
                   interp.vector().x());
           printf("i-jump_b=%d i+jump_f=%d\n", i-jump_b, i+jump_f);
-          std::cout<<"deltat  "<<deltat<<"\n";
-          std::cout<<"fraction  "<<fraction<<"\n";
+          printf("deltat=%20.18e fraction=%20.18e\n",deltat,fraction);
           std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
           printf("jump_f=%d jump_b=%d delta-_ATT_x=%e delta+_ATT_x=%e\n",
                   jump_f,

@@ -20,6 +20,11 @@
 // Headers from this package
 #include "ft2Util/FT2_Time.hpp"
 
+// Headers from astro package
+#include "astro/Quaternion.h"
+#include "astro/SkyDir.h"
+
+
 //-------------------Get Files Names -------------------------
 void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   const char usage[] =
@@ -34,8 +39,8 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " --Gleam \n"
   " --verbose\n"
   " -h --help\n";
-  
-  if (iargc < 8) {
+  printf("iargc=%d\n",iargc);
+  if (iargc < 2) {
     std::cout << usage;
     std::exit(0);
   }   else  {
@@ -45,16 +50,36 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
       std::string par = argv[i];
       if (argv[i][0] == '-'){
         std::cout<<argv[i]<<std::endl;
-        if(par=="-DigiFile") FT2.DigiFile = std::string(argv[i+1]);
-        if(par=="-MeritFile") FT2.MeritFile = std::string(argv[i+1]);
-        if(par=="-M7File") FT2.M7File = std::string(argv[i+1]);
-        if(par=="-FT2_txt_File") FT2.FT2_txt_File = std::string(argv[i+1]);
-        if(par=="-FT2_fits_File") FT2.FT2_fits_File= std::string(argv[i+1]);
+        if(par=="-DigiFile") {
+          FT2.DigiFile = std::string(argv[i+1]);
+          std::cout<<"Digi File="<<FT2.DigiFile<<std::endl;
+        }
+        if(par=="-MeritFile"){
+          FT2.MeritFile = std::string(argv[i+1]);
+          std::cout<<"MeritFile="<<FT2.MeritFile<<std::endl;
+        }
+        if(par=="-M7File"){
+          FT2.M7File = std::string(argv[i+1]);
+          std::cout<<"M7 File="<<FT2.M7File<<std::endl;
+        }
+        if(par=="-FT2_txt_File"){
+          FT2.FT2_txt_File = std::string(argv[i+1]);
+          std::cout<<"OUT TXT FILE="<<FT2.FT2_txt_File<<std::endl;
+        }
+        if(par=="-FT2_fits_File"){
+          FT2.FT2_fits_File= std::string(argv[i+1]);
+          std::cout<<"OUT FITS FILE="<<FT2.FT2_fits_File<<std::endl;
+        }
         if(par=="-Gaps_File"){
           FT2.DigiGAPS=true;
           FT2.Gaps_File= std::string(argv[i+1]);
+          std::cout<<"Gaps File="<<FT2.Gaps_File<<std::endl;
         }
-        if(par=="-Version")	  FT2.Version= std::string(argv[i+1]);
+        if(par=="-Version"){
+          FT2.Version= std::string(argv[i+1]);
+          
+          std::cout<<"-Version="<<FT2.Version<<std::endl;
+        }
         
         if(par=="-h"){
           std::cout << usage;
@@ -76,26 +101,14 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           std::cout<<"MonteCarlo \n";
           FT2.MC=true;
         }
+        if(par=="--test-quaternion"){
+          FT2.TestQ=true;
+        }
         
       }
     }
-    std::cout<<"Digi File="
-    <<FT2.DigiFile<<std::endl
-    <<"MeritFile="
-    <<FT2.MeritFile<<std::endl
-    <<"M7 File="
-    <<FT2.M7File<<std::endl
-    <<"OUT FILE="
-    <<FT2.FT2_txt_File<<std::endl
-    <<"FITS FILE="
-    <<FT2.FT2_fits_File<<std::endl
-    <<"Gleam="
-    <<FT2.Gleam<<std::endl
-    <<"Gaps File="
-    <<FT2.Gaps_File<<std::endl
-    <<"---------------------------------------------------------"
+    std::cout<<"---------------------------------------------------------"
     <<std::endl;
-    
   }
 }
 
@@ -277,12 +290,12 @@ void ParabInterp::GetInterp(ParabInterp p, double x, double &y){
 // wrapper of the code from Lucas Guillemot,
 
 void OrbInterp::Interp(double t, ORBIT  &Orb, unsigned int i1, unsigned int i2, unsigned int interp){
-   
+  
   double sctime1 = Orb.Tstart[i1];
   double sctime2 = Orb.Tstart[i2];
   double intposn[3];
-  double scposn1[3] = { Orb.x[i1],Orb.y[i1],Orb.z[i1] };
-  double scposn2[3] = { Orb.x[i2],Orb.y[i2],Orb.z[i2] };
+  double scposn1[3] = { Orb.x[i1], Orb.y[i1], Orb.z[i1] };
+  double scposn2[3] = { Orb.x[i2], Orb.y[i2], Orb.z[i2] };
   double fract = 0.;
   int ii;
   
@@ -362,4 +375,37 @@ void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int i){
   az=Att.z[i]*Att.z[i];
   aw=sqrt(1.0-(ax+ay+az));
   Att.w[i]=aw;
+}
+
+
+
+//------------------------- Test Quaternion ---------------------------------------
+void FT2::TestQuaternion(){
+  using namespace astro;
+  Quaternion q1(Hep3Vector( 0.305193, 0.431166, 0.161976));
+  Quaternion q2(Hep3Vector( 0.305161, 0.431174, 0.161991));
+  for(unsigned int i=0;i<100;i++){
+    double fraction=double(i)/100.0;
+    Quaternion interp(q1.interpolate(q2, fraction));
+    printf("%e %e %e\n",q1.vector().x(),q2.vector().x(),interp.vector().x() );
+  }
+  double a1x=q1.vector().x()*q1.vector().x();
+  double a1y=q1.vector().y()*q1.vector().y();
+  double a1z=q1.vector().z()*q1.vector().z();
+  double w1=sqrt(1.0-(a1x+a1y+a1z));
+  
+  Quaternion q3(Hep3Vector( 0.305193, 0.431166, 0.161976),w1);
+
+  double a2x=q2.vector().x()*q2.vector().x();
+  double a2y=q2.vector().y()*q2.vector().y();
+  double a2z=q2.vector().z()*q2.vector().z();
+  double w2=sqrt(1.0-(a2x+a2y+a2z));
+  
+  Quaternion q4(Hep3Vector( 0.305161, 0.431174, 0.161991),w2);
+  for(unsigned int i=0;i<100;i++){
+    double fraction=double(i)/100.0;
+    Quaternion interp1(q3.interpolate(q4, fraction));
+    printf("%e %e %e\n",q3.vector().x(),q4.vector().x(),interp1.vector().x() );
+  }
+  
 }
