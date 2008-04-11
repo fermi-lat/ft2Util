@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Thu Apr 10 19:49:26 PDT 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx 
+Log Message:
+re enabled DigiMC
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p0, operation: add
 Package: ft2Util
