@@ -374,6 +374,10 @@ void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int i){
   ay=Att.y[i]*Att.y[i];
   az=Att.z[i]*Att.z[i];
   aw=sqrt(1.0-(ax+ay+az));
+  //Sign Correction on the scalar component
+  if(Att.w[i]<0){
+    aw=-aw;
+  }
   Att.w[i]=aw;
 }
 

@@ -43,13 +43,11 @@ int main(int argc, char **argv){
     //--- Get File Names ---
     FT2.getFileNames(argc, argv, FT2);
     
-    
-    
     if(FT2.Gleam==true){
       FT2.Gleam_FT2(FT2);
     }
     else if(FT2.MC==true){
-     DigiMC_FT2(FT2);
+     FT2.DigiMC_FT2(FT2);
      //printf("No More supported\n");
     }
     else if(FT2.TestQ==true){
