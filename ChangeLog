@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: tramacer  Thu Apr 10 19:32:58 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx Digi.cxx FITS.cxx FT2.cxx FT2_TXT.cxx Gleam.cxx 
+	M7.cxx utils.cxx 
+Log Message:
+to release 2
+    *
+------------------------------------------------------------
+User: tramacer  Thu Apr 10 19:32:58 PDT 2008
 ft2Util/ft2Util
 
 Modified Files:
