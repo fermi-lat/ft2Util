@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Fri Apr 11 17:01:51 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx FT2.cxx Gleam.cxx M7.cxx utils.cxx 
+Log Message:
+tested ticks counter on Digi
+    *
+------------------------------------------------------------
+User: tramacer  Fri Apr 11 17:01:51 PDT 2008
 ft2Util/ft2Util
 
 Modified Files:
