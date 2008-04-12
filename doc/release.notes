@@ -5,9 +5,9 @@ package manager:Andrea Tramacere
 28 June 2007 v0r0 Initial Commit 
 
 v1r1p44 
-v1r2p2  04-10-2008 ORB interpolation via Parabola or the method used by gtbary
+v1r2p4  04-10-2008 ORB interpolation via Parabola or the method used by gtbary
                    ATT interpolation via SLERP
-                   Flag fora quality of the interpolations
+                   Flag for quality of the interpolations
 		   Digi Time calibration
 	           Handling of Digi file Gaps
 		   Magic7 read in order to have ATT and ORB entries right at Tstart of a FT2 bin
