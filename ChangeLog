@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Apr 11 17:01:51 PDT 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+tested ticks counter on Digi
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p3, operation: add
 Package: ft2Util
