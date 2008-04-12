@@ -157,7 +157,7 @@ public:
   //DIGI
   unsigned int DigiEntries;
   // void Update_Digi(FT2 &FT2);
-  
+  double GleamDigiTstart, GleamDigiTstop;
   
   
   //FT2

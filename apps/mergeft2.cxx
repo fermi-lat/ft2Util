@@ -65,7 +65,7 @@ int main(int iargc, char **argv){
     
     FT2 FT2;
     
-    printf("v1r2p2\n");
+    printf("v1r2p4\n");
     
     //File Handlign
     std::string FT2File;

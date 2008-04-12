@@ -82,6 +82,7 @@ void FT2::Digi_FT2(FT2 &FT2){
    *unsigned int DigiLineCounter(0), M7LineCounter(0);
    *---------------------------------------------------------------------------*/
   double DigiTime, Current_LiveTime, Old_LiveTime, LiveTime_Tstart, LiveTime_Tstop;
+  double clockTicks;
   double DeadTime(0);
   bool first_bin(true);
   unsigned int New_FT2_Entry(0), Current_FT2_Entry, Old_FT2_Entry;
@@ -119,7 +120,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   UInt_t Digi_nEvt = (UInt_t)T->GetEntries();
   UInt_t Digi_EvtId;
   //---------------------------------------------------------
-   
+  
   /*-------- WORK ON  M7 FILE ---------------------------------------------------------
    *Read the M7 file and generates FT2 time entries according to M7 file entries
    *----------------------------------------------------------------------------------*/
@@ -138,7 +139,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   brMT_EvId->SetAddress(&Merit_EvtId);
   UInt_t Merit_nEvt = (UInt_t)MT->GetEntries();
   //----------------------------------------------------------
-   
+  
   //----------------------------------------------------------
   //Warning if Digi and Merit Entries are not the same
   if(Merit_nEvt != Digi_nEvt  ){
@@ -151,26 +152,26 @@ void FT2::Digi_FT2(FT2 &FT2){
     
   }
   //----------------------------------------------------------
-    
+  
   //-----------------------------------------------------------
   //Find Tstart and Tstop od the Digi File
   //-----------------------------------------------------------
   printf("---------------------------------------------------\n");
-  printf("Check on Tstart and Tstop of the Digi File and M& file \n");
+  printf("Check on Tstart and Tstop of the Digi File and M7 file \n");
   Digi_i=0;
   Digi_Start=0;
   //Takes the first Digi Element
   //that falls within the M7 time span
   //double DeltaT;
   //do{
-    
-    //T->GetEntry(Digi_i);
-   // DigiTime=evt->getTimeStamp();
-    //printf("DigiTime=%30.28g\n", DigiTime);
-    //FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
-    //DeltaT=DigiTime-FT2.FT2_T.Tstart[0];
-    //evt->Clear();
-   // Digi_i++;
+  
+  //T->GetEntry(Digi_i);
+  // DigiTime=evt->getTimeStamp();
+  //printf("DigiTime=%30.28g\n", DigiTime);
+  //FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
+  //DeltaT=DigiTime-FT2.FT2_T.Tstart[0];
+  //evt->Clear();
+  // Digi_i++;
   // }while(FT2.Get_OutOfRange(FT2)&&DeltaT>=1.0&& Digi_i<Digi_nEvt-1);
   //Digi_i--;
   
@@ -185,14 +186,14 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   
   //do{
-    
-    //T->GetEntry(Digi_i);
-    //DigiTime=evt->getTimeStamp();
-    //printf("DigiTime=%30.28g Digi_i=%d\n", DigiTime, Digi_i);
-    //FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
-    //DeltaT=FT2.FT2_T.Tstop[FT2Entries]-DigiTime;
-    //evt->Clear();
-    //Digi_i--;
+  
+  //T->GetEntry(Digi_i);
+  //DigiTime=evt->getTimeStamp();
+  //printf("DigiTime=%30.28g Digi_i=%d\n", DigiTime, Digi_i);
+  //FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
+  //DeltaT=FT2.FT2_T.Tstop[FT2Entries]-DigiTime;
+  //evt->Clear();
+  //Digi_i--;
   //}while(FT2.Get_OutOfRange(FT2) && Digi_i>0 &&DeltaT>=1.0);
   //Digi_i++;
   //Digi_i=Digi_nEvt-1;
@@ -205,19 +206,20 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   std::cout<<"M-7 file"<<std::endl;
   //Read M-7 File and Set FT2 Entries
-  
-  FT2.Set_M7_Entries(FT2,Tstart_Run,Tstop_Run);
+  //Padding in reading M7 file
+  double M7padding=2.0;
+  FT2.Set_M7_Entries(FT2, Tstart_Run-M7padding, Tstop_Run+M7padding);
   std::cout<<"======================================================"<<std::endl;
   //-------------------------------------------------------------------
   
   unsigned int FT2Entries=Get_FT2_Entries(FT2);
   printf("ID of firtst Digi evt %d\n", Digi_Start);
-  printf("Time of the firtst Digi evt %30.28g\n", DigiTime);
-  printf("Tstart of the the M7 file %30.28g\n", FT2.FT2_T.Tstart[0]);
+  printf("Time of the firtst Digi evt %30.28g\n",Tstart_Run);
+  printf("Tstart of the the M7 file   %30.28g\n", FT2.FT2_T.Tstart[0]);
   
   printf("ID of the last Digi evt %d\n", Digi_Stop);
-  printf("Time of the last Digi evt %30.28g\n", DigiTime);
-  printf("Tstop of the the M7 %30.28g\n", FT2.FT2_T.Tstop[FT2Entries-1]);
+  printf("Time of the last Digi evt %30.28g\n", Tstop_Run);
+  printf("Tstop of the the M7       %30.28g\n\n", FT2.FT2_T.Tstop[FT2Entries-1]);
   printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
   printf("---------------------------------------------------\n");
   
@@ -226,7 +228,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   //------- Gaps ------------------------------------------------------
   if(FT2.DigiGAPS)FT2.Set_GAPS(FT2);
   //-------------------------------------------------------------------
-    
+  
   /*---------------------------------------------------------------------------
    *             MERGE M7 and DIGI ENTRIES
    *Merge The M7 entries with the entries in the Digi
@@ -246,7 +248,8 @@ void FT2::Digi_FT2(FT2 &FT2){
   //--------------------------------------------------------------------
   
   //-------- Fill the M7 Entries ---------------------------------------
-  FT2.Fill_M7_Entries(FT2,Tstart_Run,Tstop_Run);
+  
+  FT2.Fill_M7_Entries(FT2, Tstart_Run-M7padding, Tstop_Run+M7padding);
   if(FT2.verbose){
     FT2.ATT.Print_ATT_Entries(FT2.ATT);
     FT2.ORB.Print_ORB_Entries(FT2.ORB);
@@ -254,10 +257,10 @@ void FT2::Digi_FT2(FT2 &FT2){
   //--------------------------------------------------------------------
   //-------- Fill the SC Entries ---------------------------------------
   FT2.Fill_SC_Entries(FT2);
- 
+  
   /*-------------------M7 issues STOP here ------------------------------------
    *-------------------------------------------------------------------------*/
-   
+  
   /*--------------------------------------------------------------------------
    *                HRES START LOOP OVER DIGI & MERIT FILE
    *------------------------------------------------------------------------*/
@@ -377,11 +380,13 @@ void FT2::Digi_FT2(FT2 &FT2){
         }
         
         // This is what you want:
-        conv = clockTicksDelta1PPS;
+        clockTicks=clockTicksDelta1PPS;
+        conv = 1.0/clockTicksDelta1PPS;
+        //printf(" hola conv=%20.18e ticks=%e \n", conv,clockTicks);
       } else {
         conv=50.0/1e9;
       }
-      printf("conv=%20.18e\n", conv);
+      if(FT2.verbose) printf("conv=%20.18e ticks=%e \n", conv, clockTicks);
     }
     
     Current_LiveTime=curr_live*conv;
@@ -416,7 +421,7 @@ void FT2::Digi_FT2(FT2 &FT2){
     //--- Increase dead time   ------------------------
     //---Correction for the dead time given by crush---
     if(Digi_EvtId!=Merit_EvtId){
-      printf("Recon Crash\n");
+      if(FT2.verbose)printf("Recon Crash\n");
       double RecDead=Current_LiveTime-Old_LiveTime;
       double fraction=0.0;
       
@@ -471,10 +476,10 @@ void FT2::Digi_FT2(FT2 &FT2){
     if((first_bin)||(New_FT2_Entry)){
       
       first_bin=false;
-      
-      printf("New Entry %d\n", Current_FT2_Entry);
-      cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
-      
+      if ( Current_FT2_Entry % 100 == 0 ) {
+        printf("New Entry %d\n", Current_FT2_Entry);
+        cout<<"Digi File at " << double(Digi_i)/double(Digi_nEvt)*100.0 <<"% "<<endl;
+      }
       //---Set true update value---
       FT2.DT.update[Current_FT2_Entry]=true;
       

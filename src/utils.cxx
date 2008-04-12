@@ -34,11 +34,15 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " -M7File <FileName>\n"
   " -FT2_txt_File <FileName>\n"
   " -FT2_fits_File <FileName> \n"
-  "-Gaps_File <FileName> \n"
+  " -Gaps_File <FileName> \n"
+  " -DigiTstart <Time of first Digi event>\n "
+  " -DigiTstop <Time of last Digi event> \n "
   " -Version <vesion of the file>\n"
+  " --MC \n"
   " --Gleam \n"
   " --verbose\n"
-  " -h --help\n";
+  " -h --help\n"
+  " --test-quaternion \n";
   printf("iargc=%d\n",iargc);
   if (iargc < 2) {
     std::cout << usage;
@@ -79,8 +83,13 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           FT2.Version= std::string(argv[i+1]);
           
           std::cout<<"-Version="<<FT2.Version<<std::endl;
+        } 
+        if(par=="-DigiTstart"){
+          FT2.GleamDigiTstart=atof(std::string(argv[i+1]).c_str());
         }
-        
+        if(par=="-DigiTstop"){
+          FT2.GleamDigiTstop=atof(std::string(argv[i+1]).c_str());
+        }
         if(par=="-h"){
           std::cout << usage;
           std::exit(0);
@@ -104,7 +113,6 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
         if(par=="--test-quaternion"){
           FT2.TestQ=true;
         }
-        
       }
     }
     std::cout<<"---------------------------------------------------------"

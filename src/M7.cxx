@@ -462,12 +462,13 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run, 
       FT2.Update_FT2_Entries(FT2, Get_FT2_Entries(FT2)+1);
       FT2_Entries= Get_FT2_Entries(FT2);
       FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T, FT2_Entries);
-      printf("add entry, FT2 entries %d \n", Get_FT2_Entries(FT2));
+      
       //Here add the padding!!!
       FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-2]-padding;
       FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-2];
       Tstart_M7=FT2.FT2_T.Tstart[FT2_Entries-1];
     }
+    printf("add entries up to FT2 %d \n", FT2_Entries-1);
     printf("Tstart run=%20.18g Tstart M7=%20.18g\n", Tstart_Run, Tstart_M7);
   }
   
@@ -512,12 +513,13 @@ void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run, 
       FT2.Update_FT2_Entries(FT2, Get_FT2_Entries(FT2)+1);
       FT2_Entries= Get_FT2_Entries(FT2);
       FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T, FT2_Entries); 
-      printf("Entry index=%d \n", FT2_Entries-1);
+     
       FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2] ;
       //Here add the padding!!!
       FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[FT2_Entries-1]+padding;
       Tstop_M7=FT2.FT2_T.Tstop[FT2_Entries-1];
     }
+    printf("added entries up to Entry index=%d \n", FT2_Entries-1);
     printf("Tstop run=%20.18g Tstart M7=%20.18g\n", Tstop_Run, Tstop_M7);
     
   }

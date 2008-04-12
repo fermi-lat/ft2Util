@@ -212,20 +212,22 @@ void FT2::Evaluate_Live_Time(FT2 &FT2){
       
       liveTot_elaps=FT2.DT.Tstop_LiveTime[i]-T1;
       
-      printf("i=%d \nLivetime i-0 =%30.28g, summed up to now =%30.28g \n(Livetime i-0 - summed up to now )=%30.28g\n",
-              i,
-              liveTot_elaps,
-              liveTot_sum,
-              liveTot_elaps-liveTot_sum);
-      
-      printf("Real dead up to now=%30.28g, dead subtr up to now=%30.28g, \ndead subtr from gaps up to now=%30.28g\n",
-              RealdeadTot,
-              deadTot,
-              deadGapsTot);
-      
-      printf("(Livetime i-0 - summed up to now )-(Real dead up to now)=%30.28g\n",
-              (liveTot_elaps-liveTot_sum)-RealdeadTot
-              );
+      if(FT2.verbose){
+        printf("i=%d \nLivetime i-0 =%30.28g, summed up to now =%30.28g \n(Livetime i-0 - summed up to now )=%30.28g\n",
+                i,
+                liveTot_elaps,
+                liveTot_sum,
+                liveTot_elaps-liveTot_sum);
+        
+        printf("Real dead up to now=%30.28g, dead subtr up to now=%30.28g, \ndead subtr from gaps up to now=%30.28g\n",
+                RealdeadTot,
+                deadTot,
+                deadGapsTot);
+        
+        printf("(Livetime i-0 - summed up to now )-(Real dead up to now)=%30.28g\n",
+                (liveTot_elaps-liveTot_sum)-RealdeadTot
+                );
+      }
       
       liveTot_sum+=fraction;
     }
@@ -378,7 +380,7 @@ void FT2::Set_GAPS_DeadTime(FT2 &FT2){
 
 void FT2::Fix_Fake_GAPS(FT2 &FT2){
   unsigned long FT2_ENTR=FT2.Get_FT2_Entries(FT2);
-  double fwd, bkw, frac, frac1, span,live;
+  double fwd, bkw, frac, frac1, span, live;
   
   for(unsigned int i=1;i<FT2_ENTR-1;i++){
     if(!FT2.DT.update[i] && !FT2.DT.gap[i]){
