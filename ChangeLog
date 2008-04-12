@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Fri Apr 11 17:01:51 PDT 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+tested ticks counter on Digi
+    *
+------------------------------------------------------------
+User: tramacer  Fri Apr 11 17:01:51 PDT 2008
 ft2Util/apps
 
 Modified Files:
