@@ -412,7 +412,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       //cerca i punti avanti
       for(jump_f=0; (jump_f+i)<max-1  && FT2.ORB.entr[i+jump_f]==0;jump_f++){
       }
-      printf("jump_f=%d\n",jump_f);
+      printf("jump_f=%d\n", jump_f);
       if(jump_f==0 || FT2.ORB.entr[i+jump_f]==0) {
         failed_jump_f=true;
         failed_b=true;
@@ -430,7 +430,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
         printf("Interpolation FAILED !!!!!\n");
         FT2.ORB.interp_flag[i]=-1;
       }
-
+      
       if(failed_jump_b && !failed_jump_f){
         FT2.Interp_ORB_Entries_PARAB_BW(FT2, i, failed_b);
         FT2.ORB.interp_flag[i]=2;
@@ -625,15 +625,15 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         fraction = (FT2.FT2_T.Tstart[i]-FT2.ATT.Tstart[i-jump_b])/deltat;
         unsigned int index;
         index=i-jump_b;
-        FT2.ATT.Eval_w(FT2.ATT,index);
+        FT2.ATT.Eval_w(FT2.ATT, index);
         index=i+jump_f;
-        FT2.ATT.Eval_w(FT2.ATT,index);
+        FT2.ATT.Eval_w(FT2.ATT, index);
         Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
         Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
         //Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]));
         //Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]));
         Quaternion interp(q1.interpolate(q2, fraction));
-         
+        
         FT2.ATT.x[i]=interp.vector().x();
         FT2.ATT.y[i]=interp.vector().y();
         FT2.ATT.z[i]=interp.vector().z();
@@ -647,7 +647,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
                   FT2.ATT.x[i+jump_f],
                   interp.vector().x());
           printf("i-jump_b=%d i+jump_f=%d\n", i-jump_b, i+jump_f);
-          printf("deltat=%20.18e fraction=%20.18e\n",deltat,fraction);
+          printf("deltat=%20.18e fraction=%20.18e\n", deltat, fraction);
           std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
           printf("jump_f=%d jump_b=%d delta-_ATT_x=%e delta+_ATT_x=%e\n",
                   jump_f,
@@ -657,8 +657,10 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           
         }
       }
-      if(failed_b && failed_f) printf("ATT Interpolation failed\n");
-      FT2.ATT.interp_flag[i]=-1;
+      if(failed_b && failed_f){
+        printf("ATT Interpolation failed\n");
+        FT2.ATT.interp_flag[i]=-1;
+      }
       printf("----------------------------------------------------------\n");
     }
   }
@@ -686,7 +688,7 @@ void FT2::Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry){
 }
 
 
-void FT2::Update_ATT_Quaternions(ATTITUDE &Att,const std::vector<std::string> &tokens , double time, unsigned int entry){
+void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens , double time, unsigned int entry){
   Att.entr[entry]++;
   
   //Update only if the entry is the first for the time bin
@@ -721,7 +723,7 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
 }
 
 
-void FT2::Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens,double time, unsigned int entry){
+void FT2::Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, double time, unsigned int entry){
   Orb.entr[entry]++;
   double deltat;
   //Update only if the entry is the first for the time bin
