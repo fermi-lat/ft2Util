@@ -1,13 +1,4 @@
 ------------------------------------------------------------
-User: tramacer  Tue Apr 15 14:33:49 PDT 2008
-ft2Util/src
-
-Modified Files:
-	ATT-ORB.cxx Gleam.cxx 
-Log Message:
-avoid padding in Digi if SLERP is not available 
-    *
-------------------------------------------------------------
 User: tramacer  Fri Apr 11 18:11:39 PDT 2008
 ft2Util/doc
 
