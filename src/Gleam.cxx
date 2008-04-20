@@ -31,20 +31,22 @@ void FT2::Gleam_FT2(FT2 &FT2){
   //-------- WORK ON  M7 FILE ---------------------------------------------------------
   std::cout<<"M-7 file"<<std::endl;
   //Read M-7 File and Set FT2 Entries
-  FT2.Set_M7_Entries(FT2,Tstart_Run,Tstop_Run); 
+  double M7padding=2.0;
+
+  FT2.Set_M7_Entries(FT2,Tstart_Run-M7padding,Tstop_Run+M7padding); 
   std::cout<<"======================================================"<<std::endl;
   
   unsigned int FT2_Entries=Get_FT2_Entries(FT2);
   
-  double M7padding=2.0;
-  printf("Time of the firtst Digi evt %30.28g\n", Tstart_Run-M7padding);
-  printf("Tstart of the the M7 file %30.28g\n", FT2.FT2_T.Tstart[0]);
+  printf("Padding Time=%e\n",M7padding);
+  printf("Time of the firtst Digi evt %20.18g\n", Tstart_Run);
+  printf("Tstart of the the M7 file   %20.18g\n", FT2.FT2_T.Tstart[0]);
   
   
-  printf("Time of the last Digi evt %30.28g\n", Tstop_Run+M7padding);
-  printf("Tstop of the the M7 %30.28g\n", FT2.FT2_T.Tstop[FT2_Entries-1]);
+  printf("Time of the last Digi evt %20.18g\n", Tstop_Run);
+  printf("Tstop of the the M7       %20.18g\n", FT2.FT2_T.Tstop[FT2_Entries-1]);
   
-  printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
+  //printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
   printf("---------------------------------------------------\n");
  
   //-----------------------------------------------------------------------------------
@@ -54,6 +56,7 @@ void FT2::Gleam_FT2(FT2 &FT2){
       printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i],FT2.FT2_T.bin[i]);
     }
   }
+
   /*
   //-------- Add fake extra Entries at end and beginning ---------------
   printf("Adding entries before that M7 file starts");
@@ -91,6 +94,7 @@ void FT2::Gleam_FT2(FT2 &FT2){
     }
   }
 */
+
 //--------------------------------------------------------------------
 
 

@@ -48,6 +48,8 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
   }
   
   printf("----------- Set FT2 Entries from M7 file -----------\n");
+  printf("Tstart padded=%20.18g\n",Tstart_RUN);
+  printf("Tstop  padded=%20.18g\n",Tstop_RUN);
   start=false;
   //Read M-7 File
   while (std::getline(M7F, line, '\n')) {
@@ -72,7 +74,7 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
       //!!!!!!! To avoid numeric issues the difference to be the same is set to
       //1 microsecond.
       deltat=fabs(time-old_time);
-      if((deltat<1.0e-6) && tokens[2]=="ORB" && old_token=="ATT" &&M7ShiftLines>0 && !start){
+      if((deltat<1.0e-6) && tokens[2]=="ORB" && old_token=="ATT" &&M7ShiftLines>0 && !start &&time<Tstop_RUN &&time>Tstart_RUN ){
         Tstart=time;
         start=true;
         printf("First entry with ATT time==ORB time is at line=%d\n", M7ShiftLines);

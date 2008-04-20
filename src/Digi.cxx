@@ -213,14 +213,15 @@ void FT2::Digi_FT2(FT2 &FT2){
   //-------------------------------------------------------------------
   
   unsigned int FT2Entries=Get_FT2_Entries(FT2);
+  printf("Padding Time=%e\n",M7padding);
   printf("ID of firtst Digi evt %d\n", Digi_Start);
-  printf("Time of the firtst Digi evt %30.28g\n",Tstart_Run);
-  printf("Tstart of the the M7 file   %30.28g\n", FT2.FT2_T.Tstart[0]);
+  printf("Time of the firtst Digi evt   %20.18g\n",Tstart_Run);
+  printf("Tstart from the the M7 file   %20.18g\n", FT2.FT2_T.Tstart[0]);
   
   printf("ID of the last Digi evt %d\n", Digi_Stop);
-  printf("Time of the last Digi evt %30.28g\n", Tstop_Run);
-  printf("Tstop of the the M7       %30.28g\n\n", FT2.FT2_T.Tstop[FT2Entries-1]);
-  printf("Tstart RUN=%30.28g  Tstop RUN=%30.28g\n", Tstart_Run, Tstop_Run);
+  printf("Time of the last Digi evt   %20.18g\n", Tstop_Run);
+  printf("Tstop from the the M7 file  %20.18g\n\n", FT2.FT2_T.Tstop[FT2Entries-1]);
+  printf("Tstart RUN=%20.18g  Tstop RUN=%20.18g\n", Tstart_Run, Tstop_Run);
   printf("---------------------------------------------------\n");
   
   
