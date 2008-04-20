@@ -43,7 +43,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " --verbose\n"
   " -h --help\n"
   " --test-quaternion \n";
-  printf("iargc=%d\n",iargc);
+  printf("iargc=%d\n", iargc);
   if (iargc < 2) {
     std::cout << usage;
     std::exit(0);
@@ -83,12 +83,14 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           FT2.Version= std::string(argv[i+1]);
           
           std::cout<<"-Version="<<FT2.Version<<std::endl;
-        } 
+        }
         if(par=="-DigiTstart"){
           FT2.GleamDigiTstart=atof(std::string(argv[i+1]).c_str());
+          printf("DigiTstart=%20.18g\n",FT2.GleamDigiTstart);
         }
         if(par=="-DigiTstop"){
           FT2.GleamDigiTstop=atof(std::string(argv[i+1]).c_str());
+          printf("DigiTstop=%20.18g\n",FT2.GleamDigiTstop);
         }
         if(par=="-h"){
           std::cout << usage;
@@ -399,25 +401,25 @@ void FT2::TestQuaternion(){
   for(unsigned int i=0;i<100;i++){
     double fraction=double(i)/100.0;
     Quaternion interp(q1.interpolate(q2, fraction));
-    printf("%e %e %e\n",q1.vector().x(),q2.vector().x(),interp.vector().x() );
+    printf("%e %e %e\n", q1.vector().x(), q2.vector().x(), interp.vector().x() );
   }
   double a1x=q1.vector().x()*q1.vector().x();
   double a1y=q1.vector().y()*q1.vector().y();
   double a1z=q1.vector().z()*q1.vector().z();
   double w1=sqrt(1.0-(a1x+a1y+a1z));
   
-  Quaternion q3(Hep3Vector( 0.305193, 0.431166, 0.161976),w1);
-
+  Quaternion q3(Hep3Vector( 0.305193, 0.431166, 0.161976), w1);
+  
   double a2x=q2.vector().x()*q2.vector().x();
   double a2y=q2.vector().y()*q2.vector().y();
   double a2z=q2.vector().z()*q2.vector().z();
   double w2=sqrt(1.0-(a2x+a2y+a2z));
   
-  Quaternion q4(Hep3Vector( 0.305161, 0.431174, 0.161991),w2);
+  Quaternion q4(Hep3Vector( 0.305161, 0.431174, 0.161991), w2);
   for(unsigned int i=0;i<100;i++){
     double fraction=double(i)/100.0;
     Quaternion interp1(q3.interpolate(q4, fraction));
-    printf("%e %e %e\n",q3.vector().x(),q4.vector().x(),interp1.vector().x() );
+    printf("%e %e %e\n", q3.vector().x(), q4.vector().x(), interp1.vector().x() );
   }
   
 }

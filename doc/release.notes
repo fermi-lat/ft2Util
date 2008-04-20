@@ -13,3 +13,7 @@ v1r2p4  04-10-2008 ORB interpolation via Parabola or the method used by gtbary
 		   Magic7 read in order to have ATT and ORB entries right at Tstart of a FT2 bin
 
 v1r2p5  04-11-2008 Corrected interpolation ATT flag on output file
+
+v1r2p6  04-15-2008 Don't attach pad entries in Gleam mode if can't use SLERP
+
+v1r2p7  45-20-2008 Corrected bug deriving from modify in v1r2p6
