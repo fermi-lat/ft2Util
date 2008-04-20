@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sun Apr 20 15:25:12 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx Gleam.cxx M7.cxx utils.cxx 
+Log Message:
+Corrected bug deriving from modify in v1r2p6
+    *
+------------------------------------------------------------
 User: tramacer  Sun Apr 20 15:25:11 PDT 2008
 ft2Util/doc
 
