@@ -109,6 +109,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   T->SetBranchStatus("*", 0);
   //--- ROOT Enable only needed branch DIGI --
   T->SetBranchStatus("m_eventId", 1);
+  T->SetBranchStatus("m_runId", 1);
   T->SetBranchStatus("m_liveTime", 1);
   T->SetBranchStatus("m_timeStamp", 1);
   T->SetBranchStatus("m_metaEvent", 1);
@@ -119,6 +120,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   T->SetBranchAddress("DigiEvent", &evt);
   UInt_t Digi_nEvt = (UInt_t)T->GetEntries();
   UInt_t Digi_EvtId;
+  
   //---------------------------------------------------------
   
   /*-------- WORK ON  M7 FILE ---------------------------------------------------------
@@ -179,6 +181,9 @@ void FT2::Digi_FT2(FT2 &FT2){
   DigiTime=evt->getTimeStamp();
   Tstart_Run=evt->getTimeStamp();
   Digi_Start=Digi_i;
+  FT2.RunID= evt->getRunId();
+  std::cout<<"RunID of firs evt = "<<evt->getRunId()<<"\n";
+  
   
   //Takes the Last Digi Element
   //that falls within the M7 time span
@@ -202,6 +207,13 @@ void FT2::Digi_FT2(FT2 &FT2){
   DigiTime=evt->getTimeStamp();
   Tstop_Run=evt->getTimeStamp();
   Digi_Stop=Digi_i;
+  UInt_t LastEvtRunID=evt->getRunId();
+  std::cout<<"RunID of last evt = "<<LastEvtRunID<<"\n";
+  
+  if(FT2.RunID!=LastEvtRunID){
+   std::cout<<"Warning Run Id changes during Run possible problems\n";
+    
+  }
   
   
   std::cout<<"M-7 file"<<std::endl;
@@ -213,9 +225,9 @@ void FT2::Digi_FT2(FT2 &FT2){
   //-------------------------------------------------------------------
   
   unsigned int FT2Entries=Get_FT2_Entries(FT2);
-  printf("Padding Time=%e\n",M7padding);
+  printf("Padding Time=%e\n", M7padding);
   printf("ID of firtst Digi evt %d\n", Digi_Start);
-  printf("Time of the firtst Digi evt   %20.18g\n",Tstart_Run);
+  printf("Time of the firtst Digi evt   %20.18g\n", Tstart_Run);
   printf("Tstart from the the M7 file   %20.18g\n", FT2.FT2_T.Tstart[0]);
   
   printf("ID of the last Digi evt %d\n", Digi_Stop);
