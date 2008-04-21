@@ -118,7 +118,7 @@ public:
   FT2_SpaceCraft FT2_SC;
   
   unsigned int M7ShiftStart;
-  
+  unsigned long RunID;
   
   //File Names
   bool verbose;
@@ -150,8 +150,9 @@ public:
   void Set_GAPS(FT2 &FT2);
   void Set_GAPS_DeadTime(FT2 &FT2);
   void Fix_Fake_GAPS(FT2 &FT2);
-
-  //FT2_Time
+  unsigned long Get_Run_ID(std::string  GapsRun); 
+  
+//FT2_Time
   //void Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries, unsigned int bin);
   
   //DIGI

@@ -273,14 +273,16 @@ void FT2::Set_GAPS(FT2 &FT2){
     std::vector<std::string> tokens; // Create vector to hold our words
     std::stringstream ss(line); // Insert the string into a stream
     while (ss >> buf)	tokens.push_back(buf);
-    
+    unsigned long GapsRun=FT2.Get_Run_ID(tokens[0]);
+    std::cout<<"GapsRunID= "<<GapsRun<<"\n";
+    std::cout<<"RunId=     "<<FT2.RunID<<"\n";
     //SKIP lines that start with # character
     comment=line.substr(0, 1);
-    if(comment.find( "#", 0) == std::string::npos ){
+    if(comment.find( "#", 0) == std::string::npos  && GapsRun==FT2.RunID){
       //increase Gaps size
       Entries++;
       FT2.GP.Set_GAPS_Size(FT2.GP, Entries);
-      std::cout<<Entries<<"\n";
+      std::cout<<"gaps entries "<<Entries<<"\n";
       FT2.GP.GemStart[Entries-1]=std::strtoul(tokens[1].c_str(), NULL, 10);
       FT2.GP.GemStop[Entries-1] =std::strtoul(tokens[2].c_str(), NULL, 10);
       
@@ -291,10 +293,14 @@ void FT2::Set_GAPS(FT2 &FT2){
     std::cout<<"GemStart="
     <<FT2.GP.GemStart[i]
     <<" GemStop="
-    <<FT2.GP.GemStart[i]
+    <<FT2.GP.GemStop[i]
     <<"\n";
   }
   
+  if (Entries==0){
+    std::cout<<"Gaps dont belong to this run, set DigiGaps false\n";
+    FT2.DigiGAPS=false;
+  }
   GPF.close();
 }
 

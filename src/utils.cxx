@@ -5,6 +5,10 @@
  *
  */
 
+//c/ headers
+#include <stdio.h>
+#include <stdlib.h>
+
 // c++/stl headers
 #include <cmath>
 #include <cstdlib>
@@ -148,7 +152,13 @@ void FT2::Get_DigiFileLineNumber(FT2 &FT2, const std::string & infile){
 }
 
 
-
+unsigned long FT2::Get_Run_ID(std::string GapsRun){
+  std::cout<<"Run String "<< GapsRun<<"\n";
+  GapsRun.erase(0,1);
+  std::cout<<"Run String "<< GapsRun<<"\n";
+  unsigned long Run=std::strtoul(GapsRun.c_str(), NULL, 10);
+  return Run;
+}
 
 
 //---------------Get FT2 Entry Index    ---------------------------------
