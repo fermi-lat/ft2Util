@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Mon Apr 21 11:28:47 PDT 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+ft2Utils checks that RunId in the Gasp file match RunId of the DigiFile
+    *
+------------------------------------------------------------
+User: tramacer  Mon Apr 21 11:28:47 PDT 2008
 ft2Util/doc
 
 Modified Files:
