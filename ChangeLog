@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Apr 21 11:28:48 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx FT2.cxx utils.cxx 
+Log Message:
+ft2Utils checks that RunId in the Gasp file match RunId of the DigiFile
+    *
+------------------------------------------------------------
 User: tramacer  Mon Apr 21 11:28:47 PDT 2008
 ft2Util/ft2Util
 
