@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Apr 21 11:28:46 PDT 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+ft2Utils checks that RunId in the Gasp file match RunId of the DigiFile
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p7, operation: add
 Package: ft2Util
