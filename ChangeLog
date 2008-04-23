@@ -1,22 +1,4 @@
 ------------------------------------------------------------
-User: tramacer  Wed Apr 23 16:54:27 PDT 2008
-ft2Util/doc
-
-Modified Files:
-	release.notes 
-Log Message:
-typecasting from unsgined long to signed long generates error in fitstio when the observing mode is 0
-    *
-------------------------------------------------------------
-User: tramacer  Wed Apr 23 16:54:27 PDT 2008
-ft2Util/apps
-
-Modified Files:
-	main.cxx mergeft2.cxx 
-Log Message:
-typecasting from unsgined long to signed long generates error in fitstio when the observing mode is 0
-    *
-------------------------------------------------------------
 TAG
 Tag name: v1r2p8, operation: add
 Package: ft2Util
