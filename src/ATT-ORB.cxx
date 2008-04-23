@@ -371,14 +371,18 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
   double deltat;
   unsigned int jump_b, jump_f, size;
   unsigned int max= FT2.ORB.entr.size();
-  
+  unsigned int interp_entr=0;
   printf("----------- Interpolation ORB if entr=0 -----------------\n");
   
   for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
     
     if(FT2.ORB.entr[i]==0){
-      printf("------------------------------------------------\n");
-      printf("Entry =%d\n", i);
+      interp_entr++;
+      
+      if(FT2.verbose){
+        printf("------------------------------------------------\n");
+        printf("Entry =%d\n", i);
+      }
       
       FT2.ORB.Tstart[i]=FT2.FT2_T.Tstart[i];
       
@@ -412,7 +416,11 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       //cerca i punti avanti
       for(jump_f=0; (jump_f+i)<max-1  && FT2.ORB.entr[i+jump_f]==0;jump_f++){
       }
-      printf("jump_f=%d\n", jump_f);
+      
+      if(FT2.verbose){
+        printf("jump_f=%d\n", jump_f);
+      }
+      
       if(jump_f==0 || FT2.ORB.entr[i+jump_f]==0) {
         failed_jump_f=true;
         failed_b=true;
@@ -470,12 +478,15 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
         if(FT2.verbose){
           printf("Interpolation of ORB\n");
           printf("Successful T=%e FT2.ORB.x=%e\n", FT2.ORB.Tstart[i], FT2.ORB.x[i]);
+          printf("------------------------------------------------\n");
         }
-        printf("------------------------------------------------\n");
+        
       }
       
     }
   }
+  printf("Total entries with ORB interpolation=%d\n", interp_entr);
+  printf("================================================\n");
 }
 
 
@@ -551,11 +562,14 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
   unsigned int jump_b, jump_b1, jump_f, jump_f1;
   
   unsigned int max= FT2.ATT.entr.size()-1;
+  unsigned int interp_entr=0;
   
   printf("----------- Interpolates ATT if entr=0 -----------------\n");
   for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){
     
     if(FT2.ATT.entr[i]==0){
+      
+      interp_entr++;
       
       FT2.ATT.Tstart[i]=FT2.FT2_T.Tstart[i];
       //printf("Att_w=%e\n",FT2.ATT.w[i]);
@@ -654,18 +668,18 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
                   jump_b,
                   FT2.ATT.x[i]- FT2.ATT.x[i-jump_b],
                   FT2.ATT.x[i+jump_f]-FT2.ATT.x[i]);
-          
+          printf("----------------------------------------------------------\n");
         }
       }
       if(failed_b && failed_f){
         printf("ATT Interpolation failed\n");
         FT2.ATT.interp_flag[i]=-1;
       }
-      printf("----------------------------------------------------------\n");
+      
     }
   }
-  
-  
+  printf("Total entries with ATT interpolation=%d\n", interp_entr);
+  printf("----------------------------------------------------------\n");
 }
 
 

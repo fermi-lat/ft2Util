@@ -89,7 +89,8 @@ public:
   std::vector<double> x, y, z, vx, vy, vz;
   std::vector<bool> gap;
   std::vector<int> interp_flag;
-  std::vector<unsigned int>  entr, CM, SAA;
+  std::vector<unsigned int>  entr, SAA;
+  std::vector<int> CM;
 };
 
 

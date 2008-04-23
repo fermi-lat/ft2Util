@@ -19,3 +19,5 @@ v1r2p6  04-15-2008 Don't attach pad entries in Gleam mode if can't use SLERP
 v1r2p7  04-20-2008 Corrected bug deriving from modify in v1r2p6
 
 v1r2p8  04-21-2008 ft2Utils checks that RunId in the Gasp file match RunId of the DigiFile
+
+v1r2p9  04-23-2008 typecasting from unsgined long to signed long generates error in fitstio when the observing mode is 0
