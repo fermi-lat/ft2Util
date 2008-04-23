@@ -146,7 +146,7 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
           //------------ Handling Gaps -----------------------------------------
           if(Delta_Gap>1 && !backjump){
             printf("---------------------------------------------------------\n");
-            printf("Found Gap, Delta_Gap=%d\n", Delta_Gap);
+            printf("!!! Warning: Found Gap in M7 file , Delta_Gap=%d\n", Delta_Gap);
             printf("Time=%20.20e Tstop previous entry=%20.20e\n", time, FT2.FT2_T.Tstop[Current_FT2_Entries-2]);
             for(unsigned int i=1;i<Delta_Gap;i++){
               if(FT2.verbose){
@@ -277,7 +277,7 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
     exit(0);
   }
   if(M7ShiftLines>6){
-    printf("!!!!!Warning: M7ShiftLines=%d >6 Possible problems with the M7 file\n");
+    printf("!!!!!Warning: M7ShiftLines=%d >6 Possible problems with the M7 file\n",M7ShiftLines);
     printf("Or when merging M7 and Digi file\n");
   }
   //if(FT2.verbose){

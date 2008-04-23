@@ -144,7 +144,7 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
     ft2["ra_scx"].set(FT2.FT2_SC.RA_SCX[i]);
     ft2["dec_scx"].set(FT2.FT2_SC.DEC_SCX[i]);
     ft2["ra_zenith"].set(FT2.FT2_SC.RA_ZENITH[i]);
-    ft2["dec_zenith"].set(FT2.FT2_SC.DEC_ZENITH[i]);
+    ft2["dec_zenith"].set(FT2.FT2_SC.DEC_ZENITH[i]);    
     ft2["lon_geo"].set(FT2.FT2_SC.LON_GEO[i]);
     ft2["lat_geo"].set(FT2.FT2_SC.LAT_GEO[i]);
     ft2["rad_geo"].set(FT2.FT2_SC.RAD_GEO[i]);
@@ -152,16 +152,18 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
     ft2["b_mcilwain"].set(FT2_SC.B_MCILWAIN[i]);
     ft2["l_mcilwain"].set(FT2_SC.L_MCILWAIN[i]);
     ft2["livetime"].set(FT2_T.LiveTime[i]);
-    ft2["lat_mode"].set(FT2.ORB.CM[i]);
+    ft2["lat_mode"].set(FT2.ORB.CM[i]);   
     ft2["qsj_1"].set(FT2.FT2_SC.QS_J1[i]);
     ft2["qsj_2"].set(FT2.FT2_SC.QS_J2[i]);
     ft2["qsj_3"].set(FT2.FT2_SC.QS_J3[i]);
     ft2["qsj_4"].set(FT2.FT2_SC.QS_J4[i]);
+    
     if (FT2.ORB.SAA[i]) {
       ft2["in_saa"].set(true);
     } else {
       ft2["in_saa"].set(false);
     }
+    
     ft2.next();
   }
   
