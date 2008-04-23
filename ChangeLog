@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Wed Apr 23 16:54:29 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx FITS.cxx M7.cxx 
+Log Message:
+typecasting from unsgined long to signed long generates error in fitstio when the observing mode is 0
+    *
+------------------------------------------------------------
 User: tramacer  Wed Apr 23 16:54:28 PDT 2008
 ft2Util/ft2Util
 
