@@ -596,12 +596,20 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
       
       if(failed_b && !failed_f){
         FT2.ATT.interp_flag[i]=3;
-        printf("---LinIntep of ATT,bkw interp failed I will not use slerp but velocities\n");
-        deltat=FT2.ATT.Tstart[i+jump_f]-FT2.FT2_T.Tstart[i];
-        FT2.ATT.x[i]=FT2.ATT.x[i+jump_f]+FT2.ATT.vx[i+jump_f]*(-deltat);
-        FT2.ATT.y[i]=FT2.ATT.y[i+jump_f]+FT2.ATT.vy[i+jump_f]*(-deltat);
-        FT2.ATT.z[i]=FT2.ATT.z[i+jump_f]+FT2.ATT.vz[i+jump_f]*(-deltat);
-        FT2.ATT.Eval_w(FT2.ATT, i);
+        if(FT2.MC==false){
+          printf("---LinIntep of ATT,bkw interp failed I will not use slerp but velocities\n");
+          deltat=FT2.ATT.Tstart[i+jump_f]-FT2.FT2_T.Tstart[i];
+          FT2.ATT.x[i]=FT2.ATT.x[i+jump_f]+FT2.ATT.vx[i+jump_f]*(-deltat);
+          FT2.ATT.y[i]=FT2.ATT.y[i+jump_f]+FT2.ATT.vy[i+jump_f]*(-deltat);
+          FT2.ATT.z[i]=FT2.ATT.z[i+jump_f]+FT2.ATT.vz[i+jump_f]*(-deltat);
+          FT2.ATT.Eval_w(FT2.ATT, i);
+        }else{
+          printf("---MC: bkw interp failed facke values just replace first non zero entry\n");
+          FT2.ATT.x[i]=FT2.ATT.x[i+jump_f];
+          FT2.ATT.y[i]=FT2.ATT.y[i+jump_f];
+          FT2.ATT.z[i]=FT2.ATT.z[i+jump_f];
+          FT2.ATT.w[i]=FT2.ATT.w[i+jump_f];
+        }
         //printf("Att_w=%e\n",FT2.ATT.w[i]);
         if(FT2.verbose){
           printf("Entry i=%d Time=%20.18g\n", i, FT2.FT2_T.Tstart[i]);
@@ -615,12 +623,21 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
       
       if(failed_f && !failed_b){
         FT2.ATT.interp_flag[i]=3;
-        printf("---LinIntep of ATT, fwd interp failed I will not use slerp but velocities\n");
-        deltat=FT2.ATT.Tstart[i-jump_b]-FT2.FT2_T.Tstart[i];
-        FT2.ATT.x[i]=FT2.ATT.x[i-jump_b]+FT2.ATT.vx[i-jump_b]*(-deltat);
-        FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
-        FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
-        FT2.ATT.Eval_w(FT2.ATT, i);
+        if(FT2.MC==false){
+          printf("---LinIntep of ATT, fwd interp failed I will not use slerp but velocities\n");
+          deltat=FT2.ATT.Tstart[i-jump_b]-FT2.FT2_T.Tstart[i];
+          FT2.ATT.x[i]=FT2.ATT.x[i-jump_b]+FT2.ATT.vx[i-jump_b]*(-deltat);
+          FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
+          FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
+          FT2.ATT.Eval_w(FT2.ATT, i);
+        }
+        else{
+          printf("---MC: fwd interp failed facke values just replace first non zero entry\n");
+          FT2.ATT.x[i]=FT2.ATT.x[i-jump_b];
+          FT2.ATT.y[i]=FT2.ATT.y[i-jump_b];
+          FT2.ATT.z[i]=FT2.ATT.z[i-jump_b];
+          FT2.ATT.w[i]=FT2.ATT.w[i-jump_b];
+        }
         //printf("Att_w=%e\n",FT2.ATT.w[i]);
         if(FT2.verbose){
           printf("Entry i=%d Time=%20.18g\n", i, FT2.FT2_T.Tstart[i]);
