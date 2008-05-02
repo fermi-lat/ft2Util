@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Thu May  1 22:22:15 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx 
+Log Message:
+MC: just replace values without any interpolation if missing m7 at the edges of the run 
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p9, operation: add
 Package: ft2Util
