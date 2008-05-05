@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon May  5 11:22:14 PDT 2008
+ft2Util/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+changed requirements for fitsgen to *
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p10, operation: add
 Package: ft2Util
