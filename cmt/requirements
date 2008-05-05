@@ -11,8 +11,7 @@ use astro v*
 use cfitsio * IExternal 
 use CLHEP v3* IExternal
 use facilities v*
-use fitsGen v3r9
-
+use fitsGen v*
 
 apply_pattern  package_include
 apply_pattern  package_headers

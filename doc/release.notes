@@ -21,3 +21,7 @@ v1r2p7  04-20-2008 Corrected bug deriving from modify in v1r2p6
 v1r2p8  04-21-2008 ft2Utils checks that RunId in the Gasp file match RunId of the DigiFile
 
 v1r2p9  04-23-2008 typecasting from unsgined long to signed long generates error in fitstio when the observing mode is 0
+
+v1r2p10 02-05-2008 MC mode does not interpolate ATT entries missing at the edges of the run, but just replace first non 0 from M7
+
+v1r2p11 05-05-2008 changed requirements for fitsgen
