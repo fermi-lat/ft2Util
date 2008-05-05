@@ -98,11 +98,11 @@ void FT2::Gleam_FT2(FT2 &FT2){
 //--------------------------------------------------------------------
 printf("------------ Merging ----------------------------------------------\n");
   bool redo=false;
-  FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run , Tstop_Run, redo);
+  FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run-M7padding, Tstop_Run+M7padding , redo);
   if(redo){
     redo=false;
     printf("Re Merge to cut rigth at Digi boundaries\n");
-    FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run , Tstop_Run, redo);
+    FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run-M7padding , Tstop_Run+M7padding, redo);
   }
 
   //-------- Fill the M7 Entries ---------------------------------------
