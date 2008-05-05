@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon May  5 13:27:35 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Gleam.cxx 
+Log Message:
+force to add padded entries also in Gleam mode
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p11, operation: add
 Package: ft2Util
