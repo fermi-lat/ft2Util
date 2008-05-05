@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon May  5 13:36:08 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Gleam.cxx 
+Log Message:
+force to add padded entries also in Gleam mode
+    *
+------------------------------------------------------------
 User: tramacer  Mon May  5 13:27:35 PDT 2008
 ft2Util/src
 
