@@ -32,13 +32,13 @@ void FT2_Time::Set_FT2Time_Size(FT2_Time &FT2_T, unsigned int size) {
   FT2_T.bin.resize(size);
 }
 
-double FT2_Time::Get_Tstart( unsigned int  timebin ){
-  return double(timebin)*30.0;
-}
+//double FT2_Time::Get_Tstart( unsigned int  timebin ){
+//  return double(timebin)*30.0;
+//}
 
-double FT2_Time::Get_Tstop(  unsigned int  timebin ){
-  return double(timebin)*30.0 + 30.0;
-}
+//double FT2_Time::Get_Tstop(  unsigned int  timebin ){
+//  return double(timebin)*30.0 + 30.0;
+//}
 
 //------------------------------------------------------------
 //------------------------------------------------------------
@@ -96,9 +96,17 @@ void FT2::init(){
   DigiGAPS=false;
   Gleam=false;
   MC=false;
-  TestQ=false;
+  ATT.TestQ=false;
   printf("FT2 initialized\n");
+  //Initialize constants to default
+  FT2_BIN_WIDTH=1.0;
+  FT2_MERGED_BIN_WIDTH=30.0;
+  ATT.NomrTolerance=1.0e-5;
+  ATT.DeltaT_TstatTolerance=1.0e-5;
+  ORB.DeltaT_TstatTolerance=1.0e-5;
 }
+
+
 //--------------  Update the private FT2  Entries ----------------------------
 void FT2::Update_FT2_Entries(FT2 &FT2, int i){
   FT2.Entries=i;

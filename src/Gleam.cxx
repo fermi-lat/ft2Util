@@ -57,44 +57,6 @@ void FT2::Gleam_FT2(FT2 &FT2){
     }
   }
 
-  /*
-  //-------- Add fake extra Entries at end and beginning ---------------
-  printf("Adding entries before that M7 file starts");
-  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
-  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
-  FT2_Entries= Get_FT2_Entries(FT2);
-  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
-  printf("added entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
-  FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstart[0]-1.0;
-  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstart[0];
-  //!!!!-1 flag added entries
-  std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
-  std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
-  //FT2.FT2_T.bin[0]=-1;
-  
-  printf("Adding entries after that M7 file ends"); 
-  printf("FT2 entries %d \n",Get_FT2_Entries(FT2));
-  FT2.Update_FT2_Entries(FT2,Get_FT2_Entries(FT2)+1);
-  FT2_Entries= Get_FT2_Entries(FT2);
-  FT2.FT2_T.Set_FT2Time_Size(FT2.FT2_T,FT2_Entries);
-  printf("added entry, FT2 entries %d \n",Get_FT2_Entries(FT2));
-  FT2.FT2_T.Tstart[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2];
-  FT2.FT2_T.Tstop[FT2_Entries-1]=FT2.FT2_T.Tstop[FT2_Entries-2]+1.0;
-  //!!!!-1 flag added entrie
-  std::sort(FT2.FT2_T.Tstart.begin(), FT2.FT2_T.Tstart.end());
-  std::sort(FT2.FT2_T.Tstop.begin(), FT2.FT2_T.Tstop.end());
-  //FT2.FT2_T.bin[FT2_Entries-1]=-1;
-  //!!!! Set the bin entry correct
-  for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
-    FT2.FT2_T.bin[i]=i;
-  }
-  if(FT2.verbose){
-    for (unsigned int i = 0; i < FT2.FT2_T.Tstart.size(); ++i){ 
-      printf("%d Tstart=%20.18g  Tstop=%20.18g bin=%d \n",i,FT2.FT2_T.Tstart[i],FT2.FT2_T.Tstop[i],FT2.FT2_T.bin[i]);
-    }
-  }
-*/
-
 //--------------------------------------------------------------------
 printf("------------ Merging ----------------------------------------------\n");
   bool redo=false;

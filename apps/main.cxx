@@ -50,11 +50,10 @@ int main(int argc, char **argv){
      FT2.DigiMC_FT2(FT2);
      //printf("No More supported\n");
     }
-    else if(FT2.TestQ==true){
-      FT2.TestQuaternion();
-    }else{ FT2.Digi_FT2(FT2);}
-      
-  } catch (std::exception & eObj) {
+    else{ 
+      FT2.Digi_FT2(FT2);
+    }  
+  }catch (std::exception & eObj) {
       std::cout << eObj.what() << std::endl;
       std::exit(1);
   }

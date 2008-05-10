@@ -17,11 +17,12 @@
 
 
 void getFileNames(int iargc, char * argv[],std::string & FT2File,
-		  std::string & fitsFile, std::string & Version) {
+		  std::string & fitsFile, std::string & Version,FT2 &FT2) {
   const char usage[] = 
     "usage: mergeFT2Entries.exe  [OPTIONS]\n" 
     " -FT2_txt_File <FileName>\n" 
     " -FT2_fits_File <FileName> \n"
+    " -FT2_MERGED_BIN_WIDTH <span of the bin of the merged FT2 file (def=30 s)>\n" 
     " -Version <vesion of the file>\n"
     " -h --help\n";
   
@@ -37,6 +38,10 @@ void getFileNames(int iargc, char * argv[],std::string & FT2File,
       if(par=="-FT2_txt_File" ) FT2File  = std::string(argv[i+1]);
       if(par=="-FT2_fits_File") fitsFile = std::string(argv[i+1]);
       if(par=="-Version")       Version= std::string(argv[i+1]);
+      if(par=="-FT2_MERGED_BIN_WIDTH"){
+          FT2.FT2_MERGED_BIN_WIDTH=atof(std::string(argv[i+1]).c_str());
+          printf("FT2_MERGED_BIN_WIDTH =%e\n",FT2.FT2_MERGED_BIN_WIDTH);
+        }
       if(par=="-h"){ 
 	std::cout << usage;
 	std::exit(0);
@@ -78,7 +83,7 @@ int main(int iargc, char **argv){
     bool first_bin(true), new_entry(false);
     bool in_saa;
     
-    getFileNames(iargc, argv, FT2File,fitsFile, Version);
+    getFileNames(iargc, argv, FT2File,fitsFile, Version,FT2);
     
     std::ifstream inFT2File(FT2File.c_str());
 
@@ -192,7 +197,7 @@ int main(int iargc, char **argv){
 	
     //  printf("time elapsed=%e\n",time_elapsed);
 
-    if(time_elapsed>=30.0){ 
+    if(time_elapsed>=FT2.FT2_MERGED_BIN_WIDTH){ 
 	  FT2.FT2_T.Tstop[Entries-1]=atof(tokens[2].c_str());
 	  //store t_stop
 	  //store live_time

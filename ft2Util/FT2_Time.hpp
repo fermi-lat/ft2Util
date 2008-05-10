@@ -9,8 +9,6 @@
 #ifndef __FT2_Time_Class__
 #define __FT2_Time_Class__
 
-const double FT2_BIN_WIDTH=1.0;
-
 //This class handles some time fields
 //for the FT2 file, all the time here refers
 //to the time for the final FT2 fil
@@ -20,8 +18,8 @@ public:
   std::vector<unsigned int> bin;
   FT2_Time();
   void Set_FT2Time_Size(FT2_Time &FT2_T, unsigned int size);
-  double FT2_Time::Get_Tstart( unsigned int  timebin );
-  double FT2_Time::Get_Tstop( unsigned int  timebin );
+  //double FT2_Time::Get_Tstart( unsigned int  timebin );
+  //double FT2_Time::Get_Tstop( unsigned int  timebin );
 };
 
 
@@ -45,8 +43,8 @@ public:
 //class FT2_Time
 class DigiTime {
 public:
-  std::vector<double> Tstart, Tstop, LiveTime,Tstart_LiveTime, Tstop_LiveTime;
-  std::vector<double> DeadTime,GapsDeadTime,ReconDeadTime,RealGapsDeadTime; 
+  std::vector<double> Tstart, Tstop, LiveTime, Tstart_LiveTime, Tstop_LiveTime;
+  std::vector<double> DeadTime, GapsDeadTime, ReconDeadTime, RealGapsDeadTime;
   std::vector<bool> update;
   std::vector<bool> gap;
   double RunStart, RunStop;
@@ -57,7 +55,7 @@ public:
 class GAPS{
 public:
   GAPS();
-  std::vector<double> LiveTstart, LiveTstop,Tstart,Tstop;
+  std::vector<double> LiveTstart, LiveTstop, Tstart, Tstop;
   std::vector<unsigned long>  GemStart, GemStop;
   void Set_GAPS_Size(GAPS &Gap, unsigned long size );
 };
@@ -73,8 +71,24 @@ public:
   std::vector<double> x, y, z, w, vx, vy, vz;
   std::vector<unsigned int>  entr;
   std::vector<bool> gap;
+  /*
+   * Interpolation FLAGS description :
+   * -1 means that the interpolation failed
+   *  1 means interpolation made by the best method (SLERP)
+   *  2 means extrapolation  via velocities (both for ATT and ORB)
+   *  3 means extrapolation via velocities (very inaccurae)
+   *  4 means vec_norm significantly larger than 1 and W *FORCED* to 0
+   *  5 means vec_norm significantly larger than 1 and W *NOT FORCED* to 0
+   */
   std::vector<int> interp_flag;
   void Eval_w(ATTITUDE &Att, unsigned int i);
+  double Eval_VecNorm(ATTITUDE &Att, unsigned int i);
+  void CorrectAndEval_w(ATTITUDE &Att, unsigned int i);
+  void CheckAndEval_w(ATTITUDE &Att, unsigned int i);
+  double NomrTolerance;
+  double DeltaT_TstatTolerance;
+  //Test Quaternion
+  bool TestQ;
 };
 
 
@@ -88,9 +102,17 @@ public:
   std::vector<double> Tstart;
   std::vector<double> x, y, z, vx, vy, vz;
   std::vector<bool> gap;
+  /*
+   * Interpolation FLAGS description: 
+   * -1 means that the interpolation failed
+   *  1 means interpolation made by the best method (gtbary)
+   *  2 means extrapolation via parabolic fit (accurate for shor gaps ~ 10 sec)
+   *  3 means extrapolation via velocities  (very inaccurate)
+   */
   std::vector<int> interp_flag;
   std::vector<unsigned int>  entr, SAA;
   std::vector<int> CM;
+  double DeltaT_TstatTolerance;
 };
 
 
@@ -118,6 +140,10 @@ public:
   FT2_Time FT2_T;
   FT2_SpaceCraft FT2_SC;
   
+  double FT2_BIN_WIDTH;
+  
+  double FT2_MERGED_BIN_WIDTH;
+
   unsigned int M7ShiftStart;
   unsigned long RunID;
   
@@ -129,19 +155,19 @@ public:
   
   
   //M-7
-  void Set_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN);
+  void Set_M7_Entries(FT2 &FT2, double Tstart_RUN, double Tstop_RUN);
   double Get_M7_Time(const std::string &Time, const std::string &Frac_Time);
-  void Fill_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN);
+  void Fill_M7_Entries(FT2 &FT2, double Tstart_RUN, double Tstop_RUN);
   void Average_M7_Entries(FT2 &FT2);
-  void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens ,double time, unsigned int entry);
-  void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, double time,unsigned int entry);
+  void Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &tokens , double time, unsigned int entry);
+  void Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, double time, unsigned int entry);
   void Clean_ATT_Quaternions(ATTITUDE &Att, unsigned int entry);
   void Clean_ORB(ORBIT &Orb, unsigned int entry);
   void Interp_ORB_Entries(FT2 &FT2);
   void Interp_ORB_Entries_PARAB_FW(FT2 &FT2, unsigned int i, bool &failed);
   void Interp_ORB_Entries_PARAB_BW(FT2 &FT2, unsigned int i, bool &failed);
   void Interp_ATT_Entries(FT2 &FT2);
-  void Interp_ORB_Tstart(FT2 &FT2); 
+  void Interp_ORB_Tstart(FT2 &FT2);
   void Interp_ATT_Tstart(FT2 &FT2);
   void Interp_ORB_Vel_Entries(FT2 &FT2);
   unsigned int M7_Entries;
@@ -151,7 +177,7 @@ public:
   void Set_GAPS(FT2 &FT2);
   void Set_GAPS_DeadTime(FT2 &FT2);
   void Fix_Fake_GAPS(FT2 &FT2);
-  unsigned long Get_Run_ID(std::string  GapsRun); 
+  unsigned long Get_Run_ID(std::string  GapsRun);
   
 //FT2_Time
   //void Update_FT2_Time(FT2 &FT2, unsigned int Current_FT2_Entries, unsigned int bin);
@@ -182,7 +208,7 @@ public:
   
   //FT2_SpaceCraft
   void Fill_SC_Entries(FT2 &FT2);
- 
+  
   //Digi
   void Digi_FT2(FT2 &FT2);
   
@@ -205,9 +231,8 @@ public:
   //Math
   double lininterp(double x1, double x2, double t1, double t2, double t);
   
-  //Test Quaternion
-  bool TestQ;
-  void TestQuaternion();
+ 
+  
   
 private:
   bool OutOfRange;
@@ -227,8 +252,8 @@ public:
   void   GetCoeff(ParabInterp p, double &a, double &b, double &c);
   void   GetInterp(ParabInterp p, double x, double &y);
 private:
- //y=c*x^2+b*x+a
-  double  pa,pb,pc;
+  //y=c*x^2+b*x+a
+  double  pa, pb, pc;
 };
 
 class OrbInterp{

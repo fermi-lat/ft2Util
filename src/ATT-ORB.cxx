@@ -493,62 +493,50 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
 //-------------Interpolates ORB entry to Tstart------------------
 void FT2::Interp_ORB_Tstart(FT2 &FT2){
   double deltat ;
+  unsigned int l=0;
   printf("--------------- Interplates ORB entry to Tstart -------------\n");
   for (unsigned int i = 0; i < FT2.ORB.entr.size(); ++i){
-    if(FT2.verbose){
-      std::cout<<"ORB elements in Entry "<<i<<","<<FT2.ORB.entr[i]<<"\n";
-    }
-    
-    //if(FT2.ORB.entr[i]>0){
     deltat=-(FT2.ORB.Tstart[i]-FT2.FT2_T.Tstart[i]);
-    
-    //!!!Interpolate entry to Tstart
-    
-    
-    FT2.ORB.x[i]= FT2.ORB.x[i]+ FT2.ORB.vx[i]*deltat;
-    FT2.ORB.y[i]= FT2.ORB.y[i]+ FT2.ORB.vy[i]*deltat;
-    FT2.ORB.z[i]= FT2.ORB.z[i]+ FT2.ORB.vz[i]*deltat;
-    if(FT2.verbose){
-      printf("--- Interpolate to Tstart\n");
-      printf("deltat=%e deltax=%e\n", deltat, FT2.ORB.vx[i]*deltat);
+    if(fabs(deltat)>ORB.DeltaT_TstatTolerance){
+      l++;
+      FT2.ORB.x[i]= FT2.ORB.x[i]+ FT2.ORB.vx[i]*deltat;
+      FT2.ORB.y[i]= FT2.ORB.y[i]+ FT2.ORB.vy[i]*deltat;
+      FT2.ORB.z[i]= FT2.ORB.z[i]+ FT2.ORB.vz[i]*deltat;
+      if(FT2.verbose){
+        printf("!!!WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!!\n");
+        printf("Entry=%d deltat=%e x correction=%e\n", i, deltat, FT2.ORB.vx[i]*deltat);
+      }
     }
-    //}
-    
+  }
+  if(l>0){
+    printf("!!! WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!! total entries with this issue=%d\n",l);
   }
 }
-
 
 
 //-------------Interpolates ATT entry to Tstart------------------
 void FT2::Interp_ATT_Tstart(FT2 &FT2){
   double deltat ;
+  unsigned int l=0;
   printf("--------------- Interplates ATT entry to Tstart -------------\n");
   for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){
-    if(FT2.verbose){
-      std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
-    }
-    
-    //if(FT2.ATT.entr[i]>0){
     deltat=-(FT2.ATT.Tstart[i]-FT2.FT2_T.Tstart[i]);
-    
-    //!!!Interpolate entry to Tstart
-    
-    
-    FT2.ATT.x[i]= FT2.ATT.x[i]+ FT2.ATT.vx[i]*deltat;
-    FT2.ATT.y[i]= FT2.ATT.y[i]+ FT2.ATT.vy[i]*deltat;
-    FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
-    FT2.ATT.w[i]=sqrt(1- FT2.ATT.x[i]* FT2.ATT.x[i]-
-            FT2.ATT.y[i]*FT2.ATT.y[i]-
-            FT2.ATT.z[i]*FT2.ATT.z[i]);
-    if(FT2.verbose){
-      printf("--- Interpolate to Tstart\n");
-      printf("deltat=%e deltax=%e\n", deltat, FT2.ATT.vx[i]*deltat);
+    if(fabs(deltat)>ATT.DeltaT_TstatTolerance){
+      l++;
+      FT2.ATT.x[i]= FT2.ATT.x[i]+ FT2.ATT.vx[i]*deltat;
+      FT2.ATT.y[i]= FT2.ATT.y[i]+ FT2.ATT.vy[i]*deltat;
+      FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
+      FT2.ATT.Eval_w(FT2.ATT, i);
+      if(FT2.verbose){
+        printf("!!!WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!!\n");
+        printf("Entry=%d deltat=%e x correction=%e\n", i , deltat, FT2.ATT.vx[i]*deltat);
+      }
     }
-    //}
-    
+  }
+  if(l>0){
+    printf("!!! WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!! total entries with this issue=%d\n",l);
   }
 }
-
 
 
 
@@ -730,13 +718,17 @@ void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &
     Att.y[entry]=atof(tokens[6].c_str());
     Att.z[entry]=atof(tokens[7].c_str());
     Att.w[entry]=atof(tokens[8].c_str());
+    //Decide if to test and correct the Quaternion
+    Att.Eval_w(Att, entry);
     Att.vx[entry]=atof(tokens[9].c_str());
     Att.vy[entry]=atof(tokens[10].c_str());
     Att.vz[entry]=atof(tokens[11].c_str());
     Att.gap[entry]=false;
-    
+    //std::cout<<"time "<<time<<"w"<<Att.w[entry]<<"\n";
   }
 }
+
+
 
 void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
   Orb.entr[entry]=0;
@@ -756,7 +748,7 @@ void FT2::Clean_ORB(ORBIT &Orb, unsigned int entry){
 
 void FT2::Update_ORB(ORBIT &Orb, const std::vector<std::string> &tokens, double time, unsigned int entry){
   Orb.entr[entry]++;
-  double deltat;
+  //double deltat;
   //Update only if the entry is the first for the time bin
   if (Orb.entr[entry]==1){
     //printf("ORB update\n");
