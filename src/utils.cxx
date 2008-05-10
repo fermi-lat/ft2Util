@@ -42,11 +42,16 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " -DigiTstart <Time of first Digi event>\n "
   " -DigiTstop <Time of last Digi event> \n "
   " -Version <vesion of the file>\n"
-  " --MC \n"
-  " --Gleam \n"
+  " -ATTNomrTolerancen <Tolerance for The normaliazation of the quaternion (def=1e-5)>\n"
+  " -ATTDeltaT_TstartTolerance <Tolerance for moving ATT entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
+  " -ORBDeltaT_TstartTolerance <Tolerance for moving ORB entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
+  " -FT2_BIN_WIDTH <span of the bin of the non merged FT2 file (def=1 s)>\n"
+  " --MC\n"
+  " --Gleam\n"
   " --verbose\n"
   " -h --help\n"
-  " --test-quaternion \n";
+  " --test-quaternion\n";
+  
   printf("iargc=%d\n", iargc);
   if (iargc < 2) {
     std::cout << usage;
@@ -90,11 +95,11 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
         }
         if(par=="-DigiTstart"){
           FT2.GleamDigiTstart=atof(std::string(argv[i+1]).c_str());
-          printf("DigiTstart=%20.18g\n",FT2.GleamDigiTstart);
+          printf("DigiTstart=%20.18g\n", FT2.GleamDigiTstart);
         }
         if(par=="-DigiTstop"){
           FT2.GleamDigiTstop=atof(std::string(argv[i+1]).c_str());
-          printf("DigiTstop=%20.18g\n",FT2.GleamDigiTstop);
+          printf("DigiTstop=%20.18g\n", FT2.GleamDigiTstop);
         }
         if(par=="-h"){
           std::cout << usage;
@@ -117,8 +122,26 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           FT2.MC=true;
         }
         if(par=="--test-quaternion"){
-          FT2.TestQ=true;
+          std::cout<<"TestQ \n";
+          FT2.ATT.TestQ=true;
         }
+        if(par=="-ATTNomrTolerancen"){
+          FT2.ATT.NomrTolerance=atof(std::string(argv[i+1]).c_str());
+          printf("ATTNomrTolerancen =%e\n", FT2.ATT.NomrTolerance);
+        }
+        if(par=="-ATTDeltaT_TstartTolerance"){
+          FT2.ATT.DeltaT_TstatTolerance=atof(std::string(argv[i+1]).c_str());
+          printf("ATTDeltaT_TstartTolerance =%e\n", FT2.ATT.DeltaT_TstatTolerance);
+        }
+        if(par=="-ORBDeltaT_TstartTolerance"){
+          FT2.ORB.DeltaT_TstatTolerance=atof(std::string(argv[i+1]).c_str());
+          printf("ORBDeltaT_TstartTolerance =%e\n", FT2.ORB.DeltaT_TstatTolerance);
+        }
+        if(par=="-FT2_BIN_WIDTH"){
+          FT2.FT2_BIN_WIDTH=atof(std::string(argv[i+1]).c_str());
+          printf("FT2_BIN_WIDTH =%e\n", FT2.FT2_BIN_WIDTH);
+        }
+        
       }
     }
     std::cout<<"---------------------------------------------------------"
@@ -154,7 +177,7 @@ void FT2::Get_DigiFileLineNumber(FT2 &FT2, const std::string & infile){
 
 unsigned long FT2::Get_Run_ID(std::string GapsRun){
   std::cout<<"Run String "<< GapsRun<<"\n";
-  GapsRun.erase(0,1);
+  GapsRun.erase(0, 1);
   std::cout<<"Run String "<< GapsRun<<"\n";
   unsigned long Run=std::strtoul(GapsRun.c_str(), NULL, 10);
   return Run;
@@ -387,13 +410,48 @@ double OrbInterp::outer_product(double vect_x[], double vect_y[], double vect_z[
 
 
 //------------------------------- Eval W-------------------------------------------
+void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int entry){
+  if(Att.TestQ){
+    Att.CorrectAndEval_w(Att, entry);
+  }else{
+    Att.CheckAndEval_w(Att, entry);
+  }
+}
 
-void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int i){
-  double ax, ay, az, aw;
-  ax=Att.x[i]*Att.x[i];
-  ay=Att.y[i]*Att.y[i];
-  az=Att.z[i]*Att.z[i];
-  aw=sqrt(1.0-(ax+ay+az));
+//Check and Correct W
+void ATTITUDE::CorrectAndEval_w(ATTITUDE &Att, unsigned int i){
+  double aw, vec_norm, delta;
+  
+  vec_norm=Att.Eval_VecNorm(Att, i);
+  delta=vec_norm-1.0;
+  
+  //check the normalization of the quaternion
+  if (delta>=0.0){
+    aw=0;
+    if(delta>Att.NomrTolerance){
+      printf("!!!Warning ATT vector normalization: W !FORCED! to 0, vec_norm was= %15e\n", vec_norm);
+    }
+    
+    Att.interp_flag[i]=4;
+  }else{
+    aw=sqrt(1.0-vec_norm);
+    //Sign Correction on the scalar component
+    if(Att.w[i]<0){
+      aw=-aw;
+    }
+  }
+  Att.w[i]=aw;
+}
+
+//Only check but don't Correct W
+void ATTITUDE::CheckAndEval_w(ATTITUDE &Att, unsigned int i){
+  double aw, vec_norm;
+  vec_norm=Att.Eval_VecNorm(Att, i);
+  if ((vec_norm-1.0)>=0.0){
+    printf("!!!Warning ATT vector normalization: W !NOT FORCED! to 0, will be NAN!!!, vec_norm was= %15.15e\n", vec_norm);
+    Att.interp_flag[i]=5;
+  }
+  aw=sqrt(1.0-vec_norm);
   //Sign Correction on the scalar component
   if(Att.w[i]<0){
     aw=-aw;
@@ -402,34 +460,23 @@ void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int i){
 }
 
 
-
-//------------------------- Test Quaternion ---------------------------------------
-void FT2::TestQuaternion(){
-  using namespace astro;
-  Quaternion q1(Hep3Vector( 0.305193, 0.431166, 0.161976));
-  Quaternion q2(Hep3Vector( 0.305161, 0.431174, 0.161991));
-  for(unsigned int i=0;i<100;i++){
-    double fraction=double(i)/100.0;
-    Quaternion interp(q1.interpolate(q2, fraction));
-    printf("%e %e %e\n", q1.vector().x(), q2.vector().x(), interp.vector().x() );
+double ATTITUDE::Eval_VecNorm(ATTITUDE &Att, unsigned int i){
+  double ax2, ay2, az2, vnorm, delta;
+  ax2=Att.x[i]*Att.x[i];
+  ay2=Att.y[i]*Att.y[i];
+  az2=Att.z[i]*Att.z[i];
+  vnorm=ax2+ay2+az2;
+  
+  delta=vnorm-1.0;
+  if ( (vnorm-1.0)>=0.0){
+    if(delta>Att.NomrTolerance){
+      printf("!!!Warning ATT vector normalization greater then 1.0 and exceed the tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n",i, vnorm);
+    }else{
+      printf("!!!Warning ATT vector normalization greater then 1.0 but did not exceed tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n",i, vnorm);
+    }
   }
-  double a1x=q1.vector().x()*q1.vector().x();
-  double a1y=q1.vector().y()*q1.vector().y();
-  double a1z=q1.vector().z()*q1.vector().z();
-  double w1=sqrt(1.0-(a1x+a1y+a1z));
-  
-  Quaternion q3(Hep3Vector( 0.305193, 0.431166, 0.161976), w1);
-  
-  double a2x=q2.vector().x()*q2.vector().x();
-  double a2y=q2.vector().y()*q2.vector().y();
-  double a2z=q2.vector().z()*q2.vector().z();
-  double w2=sqrt(1.0-(a2x+a2y+a2z));
-  
-  Quaternion q4(Hep3Vector( 0.305161, 0.431174, 0.161991), w2);
-  for(unsigned int i=0;i<100;i++){
-    double fraction=double(i)/100.0;
-    Quaternion interp1(q3.interpolate(q4, fraction));
-    printf("%e %e %e\n", q3.vector().x(), q4.vector().x(), interp1.vector().x() );
-  }
-  
+  return vnorm;
 }
+
+
+

@@ -25,3 +25,7 @@ v1r2p9  04-23-2008 typecasting from unsgined long to signed long generates error
 v1r2p10 02-05-2008 MC mode does not interpolate ATT entries missing at the edges of the run, but just replace first non 0 from M7
 
 v1r2p11 05-05-2008 changed requirements for fitsgen
+
+v1r2p12 05-04-2008 force to add padded entries also in Gleam mode
+
+v1r2p13 05-09-2008 Check on the Quaternion normalization, added option in the command line to set some paramters

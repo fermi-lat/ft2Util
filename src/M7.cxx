@@ -173,7 +173,7 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
               
               //Update FT2_Time class
               FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
-              FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
+              FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2.FT2_BIN_WIDTH;
               //Live Time set to zero!!!
               FT2.FT2_T.LiveTime[Current_FT2_Entries-1]=0;
               
@@ -225,14 +225,14 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
           if(M7LineCounter==0){
             FT2.FT2_T.Tstart[Current_FT2_Entries-1]=Tstart;
             
-            FT2.FT2_T.Tstop[Current_FT2_Entries-1]=Tstart+FT2_BIN_WIDTH;
+            FT2.FT2_T.Tstop[Current_FT2_Entries-1]=Tstart+FT2.FT2_BIN_WIDTH;
             
           }
           else{
             
             FT2.FT2_T.Tstart[Current_FT2_Entries-1]=FT2.FT2_T.Tstop[Current_FT2_Entries-2];
             
-            FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2_BIN_WIDTH;
+            FT2.FT2_T.Tstop[Current_FT2_Entries-1]=FT2.FT2_T.Tstart[Current_FT2_Entries-1]+FT2.FT2_BIN_WIDTH;
           }
           
           //Live Time set to zero!!!
