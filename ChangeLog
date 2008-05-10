@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri May  9 19:25:38 PDT 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+Check on the Quaternion normalization, added option in the command line to set some paramters
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p12, operation: add
 Package: ft2Util
