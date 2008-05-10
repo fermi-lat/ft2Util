@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri May  9 19:31:07 PDT 2008
+ft2Util/src
+
+Modified Files:
+	utils.cxx 
+Log Message:
+typo in the command line
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p13, operation: add
 Package: ft2Util
