@@ -42,7 +42,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " -DigiTstart <Time of first Digi event>\n "
   " -DigiTstop <Time of last Digi event> \n "
   " -Version <vesion of the file>\n"
-  " -ATTNomrTolerancen <Tolerance for The normaliazation of the quaternion (def=1e-5)>\n"
+  " -ATTNomrTolerance <Tolerance for The normaliazation of the quaternion (def=1e-5)>\n"
   " -ATTDeltaT_TstartTolerance <Tolerance for moving ATT entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
   " -ORBDeltaT_TstartTolerance <Tolerance for moving ORB entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
   " -FT2_BIN_WIDTH <span of the bin of the non merged FT2 file (def=1 s)>\n"
@@ -125,7 +125,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           std::cout<<"TestQ \n";
           FT2.ATT.TestQ=true;
         }
-        if(par=="-ATTNomrTolerancen"){
+        if(par=="-ATTNomrTolerance"){
           FT2.ATT.NomrTolerance=atof(std::string(argv[i+1]).c_str());
           printf("ATTNomrTolerancen =%e\n", FT2.ATT.NomrTolerance);
         }
