@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon May 12 14:29:47 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx DigiMC.cxx FT2.cxx M7.cxx SC.cxx mainpage.h utils.cxx 
+Log Message:
+doxygen documentation
+    *
+------------------------------------------------------------
 User: tramacer  Mon May 12 14:29:46 PDT 2008
 ft2Util/ft2Util
 
