@@ -29,3 +29,5 @@ v1r2p11 05-05-2008 changed requirements for fitsgen
 v1r2p12 05-04-2008 force to add padded entries also in Gleam mode
 
 v1r2p13 05-09-2008 Check on the Quaternion normalization, added option in the command line to set some paramters
+
+v1r2p14 05-09-2008 typo in a command line parameter name

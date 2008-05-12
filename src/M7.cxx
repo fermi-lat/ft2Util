@@ -71,7 +71,7 @@ void FT2::Set_M7_Entries(FT2 &FT2, double Tstart_RUN,double Tstop_RUN){
       
       //printf("time=%20.18g old_time=%20.18g M7ShiftLine=%d\n",time,old_time, M7ShiftLines);
       
-      //!!!!!!! To avoid numeric issues the difference to be the same is set to
+      // !!!!!!! To avoid numeric issues the difference to be the same is set to
       //1 microsecond.
       deltat=fabs(time-old_time);
       if((deltat<1.0e-6) && tokens[2]=="ORB" && old_token=="ATT" &&M7ShiftLines>0 && !start &&time<Tstop_RUN &&time>Tstart_RUN ){
@@ -390,9 +390,7 @@ void FT2::Fill_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN){
     }
   }
   
-  ///!!!!!!!!MAY BE THAT WILL BE NO MOER USED
-  ///FT2.Interp_ORB_Vel_Entries(FT2);
-  
+
   FT2.Interp_ORB_Entries(FT2);
   FT2.Interp_ORB_Tstart(FT2);
   
@@ -413,13 +411,13 @@ void FT2::Fill_M7_Entries(FT2 &FT2,double Tstart_RUN,double Tstop_RUN){
  *corresponding to the first and last event
  *It cheks if the last and first DIGI entry actually fall inside
  *the FT2 time spane, otherwise it adds entry according
- *THIS SHOULD NEVER HAPPEN!!!!!!!!!!!!!!!!
+ *THIS SHOULD NOT HAPPEN!!!
  *-------------------------------------------------------------------------*/
 void FT2::Merge_M7_Digi_Entries(FT2 &FT2, double Tstart_Run , double Tstop_Run, bool &redo){
   
   unsigned int Current_FT2_Entry, FT2_Entries;
   
-  //!!!!padding for new bins
+  // !!!padding for new bins
   double padding=1.0;
   
   printf("---------------------------------------------------------\n");
