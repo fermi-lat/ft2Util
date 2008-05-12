@@ -1,4 +1,4 @@
-/** @file FT2_Time.cxx
+/** @file  MergeFT2.hpp
 @brief 
 
 @author Andrea Tramacere <tramacer@slac.stanford.edu>

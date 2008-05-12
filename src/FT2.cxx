@@ -358,7 +358,7 @@ void FT2::Set_GAPS_DeadTime(FT2 &FT2){
       printf("GapDeadTime=%e\n", GapDeadTime);
       frac=(FT2.FT2_T.Tstop[T1]-FT2.GP.Tstart[i])/GapTime;
       d1=frac*GapDeadTime;
-      //!!!THIS DEAD TIME MUST NOT BE SUBTRACTED
+      // !!!THIS DEAD TIME MUST NOT BE SUBTRACTED
       //FT2.DT.GapsDeadTime[T1]+=d1;
       FT2.DT.RealGapsDeadTime[T1]+=d1;
       printf("DeltaT>1 dead time=%e\n", FT2.DT.DeadTime[T1]);
@@ -366,7 +366,7 @@ void FT2::Set_GAPS_DeadTime(FT2 &FT2){
       
       frac=(FT2.GP.Tstop[i]-FT2.FT2_T.Tstart[T2])/GapTime;
       d2=frac*GapDeadTime;
-      //!!!THIS DEAD TIME MUST NOT BE SUBTRACTED
+      // !!!THIS DEAD TIME MUST NOT BE SUBTRACTED
       //FT2.DT.GapsDeadTime[T2]+=d2;
       FT2.DT.RealGapsDeadTime[T2]+=d2;
       printf("DeltaT>1 dead time=%e\n", FT2.DT.DeadTime[T2]);

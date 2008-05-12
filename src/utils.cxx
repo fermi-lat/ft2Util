@@ -275,7 +275,7 @@ double FT2::lininterp(double x1, double x2, double t1, double t2, double t){
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 // PARTICULAR PURPOSE. See the GNU General Public License for more details.
 // ---------------------------------------------------------------------------------
-//! Approximates an arbitrary function using parabolic least squares fitting.
+// ! Approximates an arbitrary function using parabolic least squares fitting.
 
 void ParabInterp::GetCoeff(ParabInterp p, double &a, double &b, double &c) {
   //y=c*x^2+b*c+a
@@ -330,7 +330,7 @@ void ParabInterp::GetInterp(ParabInterp p, double x, double &y){
 
 //-------------------------- Orb Interpolation Wrapper--------------------------
 // @author Andrea Tramacere <tramacer@slac.stanford.edu>
-// wrapper of the code from Lucas Guillemot,
+// wrapper of the code from gtbary,
 
 void OrbInterp::Interp(double t, ORBIT  &Orb, unsigned int i1, unsigned int i2, unsigned int interp){
   

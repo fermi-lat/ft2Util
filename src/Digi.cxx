@@ -1,18 +1,9 @@
 /** @file Digi.cxx
  * @brief
- * FT2::Digi_FT2(FT2 &FT2) is the used class to evaluate live time from Digi File.
- * Digi file is used to evaluate the LiveTime for eache FT2 entry. The Merit File is used to find
- * recon crasches and correct LiveTime Accrdingly. The M7 file is used t o generate FT2 time entries
  *
  * @author Andrea Tramacere <tramacer@slac.stanford.edu>
  *
  */
-
-/*-------------------------------------------------------------------------------
- *FT2::Digi_FT2(FT2 &FT2) is the class to evaluate live time from Digi File.
- *It uses Merit File to find recon craches and correct LiveTime Accrdingly
- *It uses M7 file to generate FT2 time entries
- *-----------------------------------------------------------------------------*/
 //--------------------------- ROOT DECLARATIONS ---------------------------------
 
 // ROOT Headers
@@ -51,7 +42,7 @@
 
 void FT2::Digi_FT2(FT2 &FT2){
   
-  //!!! These values are very important
+  // !!! These values are very important
   double conv=50.0/1e9;
   double RollOver = 33554432.0;
   
@@ -162,20 +153,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   printf("Check on Tstart and Tstop of the Digi File and M7 file \n");
   Digi_i=0;
   Digi_Start=0;
-  //Takes the first Digi Element
-  //that falls within the M7 time span
-  //double DeltaT;
-  //do{
   
-  //T->GetEntry(Digi_i);
-  // DigiTime=evt->getTimeStamp();
-  //printf("DigiTime=%30.28g\n", DigiTime);
-  //FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
-  //DeltaT=DigiTime-FT2.FT2_T.Tstart[0];
-  //evt->Clear();
-  // Digi_i++;
-  // }while(FT2.Get_OutOfRange(FT2)&&DeltaT>=1.0&& Digi_i<Digi_nEvt-1);
-  //Digi_i--;
   
   T->GetEntry(Digi_i);
   DigiTime=evt->getTimeStamp();
@@ -185,23 +163,9 @@ void FT2::Digi_FT2(FT2 &FT2){
   std::cout<<"RunID of firs evt = "<<evt->getRunId()<<"\n";
   
   
-  //Takes the Last Digi Element
-  //that falls within the M7 time span
+   
   Digi_i=Digi_nEvt-1;
-  
-  
-  //do{
-  
-  //T->GetEntry(Digi_i);
-  //DigiTime=evt->getTimeStamp();
-  //printf("DigiTime=%30.28g Digi_i=%d\n", DigiTime, Digi_i);
-  //FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
-  //DeltaT=FT2.FT2_T.Tstop[FT2Entries]-DigiTime;
-  //evt->Clear();
-  //Digi_i--;
-  //}while(FT2.Get_OutOfRange(FT2) && Digi_i>0 &&DeltaT>=1.0);
-  //Digi_i++;
-  //Digi_i=Digi_nEvt-1;
+ 
   
   T->GetEntry(Digi_i);
   DigiTime=evt->getTimeStamp();
@@ -217,6 +181,7 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   
   std::cout<<"M-7 file"<<std::endl;
+  
   //Read M-7 File and Set FT2 Entries
   //Padding in reading M7 file
   double M7padding=2.0;
@@ -251,11 +216,11 @@ void FT2::Digi_FT2(FT2 &FT2){
    *-------------------------------------------------------------------------*/
   printf("------------ Merging ----------------------------------------------\n");
   bool redo=false;
-  FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run , Tstop_Run, redo);
+  FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run -M7padding, Tstop_Run+M7padding, redo);
   if(redo){
     redo=false;
     printf("Re Merge to cut rigth at Digi boundaries\n");
-    FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run , Tstop_Run, redo);
+    FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run -M7padding, Tstop_Run+M7padding, redo);
   }
   
   //--------------------------------------------------------------------
@@ -359,7 +324,7 @@ void FT2::Digi_FT2(FT2 &FT2){
     
     FT2.Get_FT2_Entry_Index(FT2, DigiTime, Current_FT2_Entry);
     
-    ///!!!!TIME CALIBRATION
+    /// !!!!TIME CALIBRATION
     if(Current_FT2_Entry!=Old_FT2_Entry ){
       //if((first_bin)||(New_FT2_Entry)){
       

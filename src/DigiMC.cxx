@@ -172,7 +172,7 @@ void FT2::DigiMC_FT2(FT2 &FT2){
    *Merge The M7 entries with the entries in the Digi
    *corresponding to the first and last event
    *The Sc entries must be filled after M7-Digi Merging, because the
-   *merging process will create two new FT2 entries
+   *merging process may create new FT2 entries
    *-------------------------------------------------------------------------*/
   printf("Merging ");
   Digi_i=0;

@@ -64,7 +64,7 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
   using CLHEP::Hep3Vector;
   
   
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //FT2 template requires SC parameters at the beginning of the FT2 interval
   //The first ATT and ORB entry do not come at the same time and more-over it may happens
   //that during the fligth ATT and ORB time-stamp are misaligned
@@ -103,7 +103,7 @@ void FT2::Fill_SC_Entries(FT2 &FT2){
     FT2.FT2_SC.DEC_ZENITH[i]=(zenith.dec());
     
     //LAT LON and RAD  GEO
-    //!!!!!!!!!!! Here we have
+    // !!!!!!!!!!! Here we have
     //The time of the ORBIT stamp
     EarthCoordinate EC(pos_km, FT2_T.Tstart[i]);
     
