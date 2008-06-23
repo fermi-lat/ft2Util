@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sun Jun 22 22:58:05 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx 
+Log Message:
+bug for undeclared variable
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p16, operation: add
 Package: ft2Util
