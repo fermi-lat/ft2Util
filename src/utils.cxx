@@ -452,6 +452,7 @@ void ATTITUDE::CheckAndEval_w(ATTITUDE &Att, unsigned int i){
     Att.interp_flag[i]=5;
   }
   aw=sqrt(1.0-vec_norm);
+  
   //Sign Correction on the scalar component
   if(Att.w[i]<0){
     aw=-aw;
@@ -461,6 +462,9 @@ void ATTITUDE::CheckAndEval_w(ATTITUDE &Att, unsigned int i){
 
 
 double ATTITUDE::Eval_VecNorm(ATTITUDE &Att, unsigned int i){
+  using namespace astro;
+  using CLHEP::Hep3Vector;
+
   double ax2, ay2, az2, vnorm, delta;
   ax2=Att.x[i]*Att.x[i];
   ay2=Att.y[i]*Att.y[i];
@@ -468,6 +472,15 @@ double ATTITUDE::Eval_VecNorm(ATTITUDE &Att, unsigned int i){
   vnorm=ax2+ay2+az2;
   
   delta=vnorm-1.0;
+  
+  //Quaternion q_test(Hep3Vector(ax2,ay2,az2));
+  
+  //std::cout<<"scalar"<<q_test.scalar()<<"\n";
+  //std::cout<<"norm"<<q_test.norm()<<"\n";
+  //std::cout<<"norm"<<q_test.sgn()<<"\n"; 
+  
+  //std::cout<<"vnorm"<<vnorm<<"\n";
+  
   if ( (vnorm-1.0)>=0.0){
     if(delta>Att.NomrTolerance){
       printf("!!!Warning ATT vector normalization greater then 1.0 and exceed the tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n",i, vnorm);
