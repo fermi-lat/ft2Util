@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Jun 23 11:48:40 PDT 2008
+ft2Util/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+fixed bug due to changes in v1r2p16
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p17, operation: add
 Package: ft2Util
