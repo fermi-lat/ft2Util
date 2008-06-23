@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Mon Jun 23 11:48:40 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx utils.cxx 
+Log Message:
+fixed bug due to changes in v1r2p16
+    *
+------------------------------------------------------------
+User: tramacer  Mon Jun 23 11:48:40 PDT 2008
 ft2Util/doc
 
 Modified Files:
