@@ -528,8 +528,8 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
       FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
       double old_w=FT2.ATT.w[i];
       FT2.ATT.Eval_w(FT2.ATT, i);
-      if(old_w<0){
-          FT2.ATT.w[i]=-FT2.ATT.w[i];
+      if(old_w<0 && FT2.ATT.w[i]>0 ){
+          FT2.ATT.w[i]=-1*FT2.ATT.w[i];
           //std::cout<<"scalr"<<interp.scalar()<<"\n";
         }
       if(FT2.verbose){
@@ -596,8 +596,9 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           FT2.ATT.y[i]=FT2.ATT.y[i+jump_f]+FT2.ATT.vy[i+jump_f]*(-deltat);
           FT2.ATT.z[i]=FT2.ATT.z[i+jump_f]+FT2.ATT.vz[i+jump_f]*(-deltat);
           FT2.ATT.Eval_w(FT2.ATT, i);
-          if(FT2.ATT.w[i+jump_f]<0){
+          if(FT2.ATT.w[i+jump_f]<0 &&  FT2.ATT.w[i]>0 ){
             FT2.ATT.w[i]=-FT2.ATT.w[i];
+             std::cout<<FT2.ATT.w[i+jump_f] <<" "<<FT2.ATT.w[i] <<"\n";
           }
           
         }else{
@@ -627,8 +628,10 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
           FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
           FT2.ATT.Eval_w(FT2.ATT,i);
-          if(FT2.ATT.w[i]<0){
+          if(FT2.ATT.w[i-jump_b]<0 &&  FT2.ATT.w[i]>0){
             FT2.ATT.w[i]=-FT2.ATT.w[i];
+            std::cout<<FT2.ATT.w[i-jump_b] <<" "<<FT2.ATT.w[i] <<"\n";
+            
           }
         }
         else{
@@ -656,23 +659,40 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         
         fraction = (FT2.FT2_T.Tstart[i]-FT2.ATT.Tstart[i-jump_b])/deltat;
         unsigned int index;
+        
         index=i-jump_b;
-        FT2.ATT.Eval_w(FT2.ATT, index);
+        
+        //double old_w=FT2.ATT.w[index];
+        //FT2.ATT.Eval_w(FT2.ATT, index);
+        //if(old_w<0 &&  FT2.ATT.w[index]>0 ){
+         //   FT2.ATT.w[index]=-FT2.ATT.w[index];
+         //   std::cout<<old_w <<" jump "<<FT2.ATT.w[index] <<"\n";
+         //}
+        
         index=i+jump_f;
-        FT2.ATT.Eval_w(FT2.ATT, index);
+        
+        //FT2.ATT.Eval_w(FT2.ATT, index);
+        //old_w=FT2.ATT.w[index];
+        //if(old_w<0 &&  FT2.ATT.w[index]>0 ){
+        //     FT2.ATT.w[index]=-FT2.ATT.w[index];
+        //    std::cout<<old_w <<" jump "<<FT2.ATT.w[index] <<"\n";
+        // }
+        
         Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
         Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
-        //Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]));
-        //Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]));
         Quaternion interp(q1.interpolate(q2, fraction));
         
         FT2.ATT.x[i]=interp.vector().x();
         FT2.ATT.y[i]=interp.vector().y();
         FT2.ATT.z[i]=interp.vector().z();
-        //FT2.ATT.Eval_w(FT2.ATT, i);
+         
         FT2.ATT.Eval_w(FT2.ATT,i);
-        if(interp.scalar()<0){
+        //std::cout<<interp.scalar()<<"*"<<"\n";
+        //std::cout<< FT2.ATT.w[i+jump_f]<<"*"<<"\n";
+        //std::cout<< FT2.ATT.w[i-jump_b]<<"*"<<"\n";
+        if(interp.scalar()<0 && FT2.ATT.w[i]>0){
           FT2.ATT.w[i]=-FT2.ATT.w[i];
+           std::cout<<interp.scalar() <<" intper "<<FT2.ATT.w[i] <<"\n";
           //std::cout<<"scalr"<<interp.scalar()<<"\n";
         }
         //printf("Att_w=%e\n",FT2.ATT.w[i]);
@@ -737,7 +757,12 @@ void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &
     Att.z[entry]=atof(tokens[7].c_str());
     Att.w[entry]=atof(tokens[8].c_str());
     //Decide if to test and correct the Quaternion
+    double old_w=Att.w[entry];
     Att.Eval_w(Att, entry);
+    if(old_w<0 and Att.w[entry]>0 ){        
+        Att.w[entry]=-1.0*Att.w[entry];
+    }
+   
     Att.vx[entry]=atof(tokens[9].c_str());
     Att.vy[entry]=atof(tokens[10].c_str());
     Att.vz[entry]=atof(tokens[11].c_str());

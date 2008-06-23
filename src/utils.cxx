@@ -436,9 +436,9 @@ void ATTITUDE::CorrectAndEval_w(ATTITUDE &Att, unsigned int i){
   }else{
     aw=sqrt(1.0-vec_norm);
     //Sign Correction on the scalar component
-    if(Att.w[i]<0){
-      aw=-aw;
-    }
+    //if(Att.w[i]<0){
+    //  aw=-aw;
+    //}
   }
   Att.w[i]=aw;
 }
@@ -454,9 +454,9 @@ void ATTITUDE::CheckAndEval_w(ATTITUDE &Att, unsigned int i){
   aw=sqrt(1.0-vec_norm);
   
   //Sign Correction on the scalar component
-  if(Att.w[i]<0){
-    aw=-aw;
-  }
+  //if(Att.w[i]<0){
+  //  aw=-aw;
+  // }
   Att.w[i]=aw;
 }
 

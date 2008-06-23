@@ -31,3 +31,11 @@ v1r2p12 05-04-2008 force to add padded entries also in Gleam mode
 v1r2p13 05-09-2008 Check on the Quaternion normalization, added option in the command line to set some paramters
 
 v1r2p14 05-09-2008 typo in a command line parameter name
+
+v1r2p15            documentation
+
+v1r2p16 06-22-2008 correction of Q4 sign at interpolated entries
+
+v1r2p17 06-22-2008 typo syntax error
+
+v1r2p18 06-23-2008 correction of a bug after v1r2p16 changes
