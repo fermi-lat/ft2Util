@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sun Jun 22 22:36:42 PDT 2008
+ft2Util/src
+
+Modified Files:
+	ATT-ORB.cxx Digi.cxx Gleam.cxx utils.cxx 
+Log Message:
+sign issue on the 4th component of quaternion for entries intepolated without SLERP
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p15, operation: add
 Package: ft2Util
