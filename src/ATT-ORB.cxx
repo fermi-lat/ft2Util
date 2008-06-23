@@ -526,8 +526,9 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
       FT2.ATT.x[i]= FT2.ATT.x[i]+ FT2.ATT.vx[i]*deltat;
       FT2.ATT.y[i]= FT2.ATT.y[i]+ FT2.ATT.vy[i]*deltat;
       FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
+      double old_w=FT2.ATT.w[i];
       FT2.ATT.Eval_w(FT2.ATT, i);
-      if(interp.scalar()<0){
+      if(old_w<0){
           FT2.ATT.w[i]=-FT2.ATT.w[i];
           //std::cout<<"scalr"<<interp.scalar()<<"\n";
         }
