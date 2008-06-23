@@ -527,6 +527,10 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
       FT2.ATT.y[i]= FT2.ATT.y[i]+ FT2.ATT.vy[i]*deltat;
       FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
       FT2.ATT.Eval_w(FT2.ATT, i);
+      if(interp.scalar()<0){
+          FT2.ATT.w[i]=-FT2.ATT.w[i];
+          //std::cout<<"scalr"<<interp.scalar()<<"\n";
+        }
       if(FT2.verbose){
         printf("!!!WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!!\n");
         printf("Entry=%d deltat=%e x correction=%e\n", i , deltat, FT2.ATT.vx[i]*deltat);
@@ -591,6 +595,10 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           FT2.ATT.y[i]=FT2.ATT.y[i+jump_f]+FT2.ATT.vy[i+jump_f]*(-deltat);
           FT2.ATT.z[i]=FT2.ATT.z[i+jump_f]+FT2.ATT.vz[i+jump_f]*(-deltat);
           FT2.ATT.Eval_w(FT2.ATT, i);
+          if(FT2.ATT.w[i+jump_f]<0){
+            FT2.ATT.w[i]=-FT2.ATT.w[i];
+          }
+          
         }else{
           printf("---MC: bkw interp failed facke values just replace first non zero entry\n");
           FT2.ATT.x[i]=FT2.ATT.x[i+jump_f];
@@ -617,7 +625,10 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           FT2.ATT.x[i]=FT2.ATT.x[i-jump_b]+FT2.ATT.vx[i-jump_b]*(-deltat);
           FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
           FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
-          FT2.ATT.Eval_w(FT2.ATT, i);
+          FT2.ATT.Eval_w(FT2.ATT,i);
+          if(FT2.ATT.w[i]<0){
+            FT2.ATT.w[i]=-FT2.ATT.w[i];
+          }
         }
         else{
           printf("---MC: fwd interp failed facke values just replace first non zero entry\n");
@@ -625,6 +636,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           FT2.ATT.y[i]=FT2.ATT.y[i-jump_b];
           FT2.ATT.z[i]=FT2.ATT.z[i-jump_b];
           FT2.ATT.w[i]=FT2.ATT.w[i-jump_b];
+          
         }
         //printf("Att_w=%e\n",FT2.ATT.w[i]);
         if(FT2.verbose){
@@ -656,7 +668,12 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         FT2.ATT.x[i]=interp.vector().x();
         FT2.ATT.y[i]=interp.vector().y();
         FT2.ATT.z[i]=interp.vector().z();
-        FT2.ATT.Eval_w(FT2.ATT, i);
+        //FT2.ATT.Eval_w(FT2.ATT, i);
+        FT2.ATT.Eval_w(FT2.ATT,i);
+        if(interp.scalar()<0){
+          FT2.ATT.w[i]=-FT2.ATT.w[i];
+          //std::cout<<"scalr"<<interp.scalar()<<"\n";
+        }
         //printf("Att_w=%e\n",FT2.ATT.w[i]);
         if(FT2.verbose){
           printf("---Slerp Interpolation of ATT\n");

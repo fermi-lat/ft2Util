@@ -57,18 +57,30 @@ void FT2::Gleam_FT2(FT2 &FT2){
     }
   }
 
-//--------------------------------------------------------------------
-printf("------------ Merging ----------------------------------------------\n");
+  //--------------------------------------------------------------------
+  printf("------------ Merging ----------------------------------------------\n");
+  
+
   bool redo=false;
-  FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run-M7padding, Tstop_Run+M7padding , redo);
+  //FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run-M7padding, Tstop_Run+M7padding , redo);
+  FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run, Tstop_Run , redo);
   if(redo){
     redo=false;
     printf("Re Merge to cut rigth at Digi boundaries\n");
-    FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run-M7padding , Tstop_Run+M7padding, redo);
+    //FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run-M7padding , Tstop_Run+M7padding, redo);
+    FT2.Merge_M7_Digi_Entries(FT2, Tstart_Run , Tstop_Run , redo);
   }
 
   //-------- Fill the M7 Entries ---------------------------------------
-  FT2.Fill_M7_Entries(FT2,Tstart_Run-M7padding,Tstop_Run+M7padding);
+  //double Tstart_M7_pad=FT2.FT2_T.Tstart[0];
+  //double Tstop_M7_pad=FT2.FT2_T.Tstart[FT2_Entries-1];
+  
+  FT2_Entries= Get_FT2_Entries(FT2);
+  double Tstart_M7_pad=FT2.FT2_T.Tstart[0];
+  double Tstop_M7_pad=FT2.FT2_T.Tstart[FT2_Entries-1];
+  
+  //FT2.Fill_M7_Entries(FT2,Tstart_Run-M7padding,Tstop_Run+M7padding);
+  FT2.Fill_M7_Entries(FT2,Tstart_M7_pad ,Tstop_M7_pad);
   if(FT2.verbose){
     FT2.ATT.Print_ATT_Entries(FT2.ATT);
     FT2.ORB.Print_ORB_Entries(FT2.ORB);
