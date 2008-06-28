@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Fri Jun 27 18:22:35 PDT 2008
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+no more ATT extrapolation, sub by replacement
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p18, operation: add
 Package: ft2Util
