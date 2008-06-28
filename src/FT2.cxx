@@ -97,6 +97,7 @@ void FT2::init(){
   Gleam=false;
   MC=false;
   ATT.TestQ=false;
+  ATT.TestQ_all=false;
   printf("FT2 initialized\n");
   //Initialize constants to default
   FT2_BIN_WIDTH=1.0;
