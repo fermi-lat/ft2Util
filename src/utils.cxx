@@ -125,6 +125,13 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           std::cout<<"TestQ \n";
           FT2.ATT.TestQ=true;
         }
+        
+        if(par=="--test-quaternion-all"){
+          std::cout<<"TestQ_all \n";
+          FT2.ATT.TestQ=true;
+          FT2.ATT.TestQ_all=true;
+        }
+        
         if(par=="-ATTNomrTolerance"){
           FT2.ATT.NomrTolerance=atof(std::string(argv[i+1]).c_str());
           printf("ATTNomrTolerancen =%e\n", FT2.ATT.NomrTolerance);

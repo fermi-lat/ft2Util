@@ -40,4 +40,6 @@ v1r2p17 06-22-2008 typo syntax error
 
 v1r2p18 06-23-2008 correction of a bug after v1r2p16 changes
 
-v1r2p19 06-23-2008 no more ATT extrapolation, sub by replacement
+v1r2p19 06-27-2008 no more ATT extrapolation, sub by replacement
+
+v1r2p20 06-28-2008 added Quaternion Extrapolation

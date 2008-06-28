@@ -286,7 +286,7 @@ public:
   double DeltaT_TstatTolerance;
   
   ///bool var to test and correct the scalar quaternion component
-  bool TestQ;
+  bool TestQ, TestQ_all;
 };
 
 
