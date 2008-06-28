@@ -472,15 +472,16 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       }
       
       if(!failed_jump_b && !failed_jump_f){
+        printf("Entry =%d\n", i);
+        printf("Interpolation of ORB with GtBary method \n");
         OrbInterp P;
         P.Interp( FT2.ORB.Tstart[i], FT2.ORB, i-jump_b, i+jump_f, i);
         FT2.ORB.interp_flag[i]=1;
         if(FT2.verbose){
           printf("Interpolation of ORB\n");
           printf("Successful T=%e FT2.ORB.x=%e\n", FT2.ORB.Tstart[i], FT2.ORB.x[i]);
-          printf("------------------------------------------------\n");
         }
-        
+        printf("------------------------------------------------\n");
       }
       
     }
@@ -609,14 +610,16 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
       if( (jump_b1==i && FT2.ATT.entr[0]==0) || (jump_b1==jump_b) ) failed_b1=true;
       
       if(failed_b && !failed_f && !failed_f1){
-        std::cout<<"slerp t>1 bw, -> entry"<<i<<" <-\n";
-        std::cout<<"ATT elements in Entry "<<i+jump_f1<<","<<FT2.ATT.entr[i+jump_f1]<<"\n";
-        std::cout<<"ATT elements in Entry "<<i+jump_f<<","<<FT2.ATT.entr[i+jump_f]<<"\n";
-               
+        FT2.ATT.interp_flag[i]=2;          
         //Q1=i+jump_f_1
         //Q2=i+jump_f
         deltat = FT2.ATT.Tstart[i+jump_f1]-FT2.ATT.Tstart[i+jump_f];
         fraction = (FT2.FT2_T.Tstart[i+jump_f1]-FT2.ATT.Tstart[i])/deltat;
+        
+        std::cout<<"slerp t>1 bw, -> entry"<<i<<" t="<<fraction<<" <-\n";
+        std::cout<<"ATT elements in Entry "<<i+jump_f1<<","<<FT2.ATT.entr[i+jump_f1]<<"\n";
+        std::cout<<"ATT elements in Entry "<<i+jump_f<<","<<FT2.ATT.entr[i+jump_f]<<"\n";
+        
         Quaternion q1(Hep3Vector(FT2.ATT.x[i+jump_f1], FT2.ATT.y[i+jump_f1], FT2.ATT.z[i+jump_f1]), FT2.ATT.w[i+jump_f1]);
         Quaternion q2(Hep3Vector(FT2.ATT.x[i+jump_f], FT2.ATT.y[i+jump_f], FT2.ATT.z[i+jump_f]), FT2.ATT.w[i+jump_f]);
         Quaternion interp(q1.interpolate(q2, fraction));
@@ -629,18 +632,21 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         
         std::cout<<"Q1 "<<i+jump_f1<<" Q1_4 "<< FT2.ATT.w[i+jump_f1] <<"\n";
         std::cout<<"Q2 "<<i+jump_f <<" Q2_4 "<< FT2.ATT.w[i+jump_f]  <<"\n";
-        std::cout<<"Q4 interp"<<interp.scalar()<<"* -> entry "<<i <<"\n";
+        std::cout<<"Q4 interp "<<interp.scalar()<<"* -> entry "<<i <<"\n";
         printf("----------------------------------------------------------\n");
       }
       
-      if(failed_f && !failed_b && !failed_b1){
-        std::cout<<"slerp t>1 fw, -> entry "<<i<<" <-\n";
-        std::cout<<"ATT elements in Entry "<<i-jump_b1<<","<<FT2.ATT.entr[i-jump_b1]<<"\n";
-        std::cout<<"ATT elements in Entry "<<i-jump_b<<","<<FT2.ATT.entr[i-jump_b]<<"\n";
+      if(failed_f && !failed_b && !failed_b1){    
+        FT2.ATT.interp_flag[i]=2;          
         //Q1=i-jump_b_1
         //Q2=i-jump_b
         deltat = FT2.ATT.Tstart[i-jump_b]-FT2.ATT.Tstart[i-jump_b1];
         fraction = (FT2.FT2_T.Tstart[i]-FT2.ATT.Tstart[i-jump_b1])/deltat;
+        
+        std::cout<<"slerp t>1 fw, -> entry "<<i<<" t="<<fraction<<" <-\n";
+        std::cout<<"ATT elements in Entry "<<i-jump_b1<<","<<FT2.ATT.entr[i-jump_b1]<<"\n";
+        std::cout<<"ATT elements in Entry "<<i-jump_b<<","<<FT2.ATT.entr[i-jump_b]<<"\n";
+        
         Quaternion q1(Hep3Vector(FT2.ATT.x[i-jump_b1], FT2.ATT.y[i-jump_b1], FT2.ATT.z[i-jump_b1]), FT2.ATT.w[i-jump_b1]);
         Quaternion q2(Hep3Vector(FT2.ATT.x[i-jump_b], FT2.ATT.y[i-jump_b], FT2.ATT.z[i-jump_b]), FT2.ATT.w[i-jump_b]);
         Quaternion interp(q1.interpolate(q2, fraction));
@@ -652,7 +658,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         
         std::cout<<"Q1 "<<i-jump_b1<<" Q1_4 "<< FT2.ATT.w[i-jump_b1] <<"\n";
         std::cout<<"Q2 "<<i-jump_b <<" Q2_4 "<< FT2.ATT.w[i-jump_b]  <<"\n";
-        std::cout<<"Q4 interp"<<interp.scalar()<<"* -> entry "<<i <<"\n";
+        std::cout<<"Q4 interp "<<interp.scalar()<<"* -> entry "<<i <<"\n";
         printf("----------------------------------------------------------\n");
       }
       
@@ -783,7 +789,7 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         
         //No more check on Q4
         //FT2.ATT.Eval_w(FT2.ATT,i);
-        std::cout<<"Slerp   -> entry "<<i<<" <-\n"; 
+        std::cout<<"Slerp   -> entry "<<i<<" t="<<fraction<<" <-\n"; 
         std::cout<<"ATT elements in Entry "<<i-jump_b<<","<<FT2.ATT.entr[i-jump_b]<<"\n";
         std::cout<<"ATT elements in Entry "<<i+jump_f<<","<<FT2.ATT.entr[i+jump_f]<<"\n";
         std::cout<<"Q1 "<<i-jump_b<<" Q1_4 "<< FT2.ATT.w[i-jump_b] <<"\n";
