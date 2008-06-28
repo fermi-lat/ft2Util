@@ -509,7 +509,7 @@ void FT2::Interp_ORB_Tstart(FT2 &FT2){
     }
   }
   if(l>0){
-    printf("!!! WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!! total entries with this issue=%d\n",l);
+    printf("!!! WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!! total entries with this issue=%d\n", l);
   }
 }
 
@@ -520,18 +520,22 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
   unsigned int l=0;
   printf("--------------- Interplates ATT entry to Tstart -------------\n");
   for (unsigned int i = 0; i < FT2.ATT.entr.size(); ++i){
-    deltat=-(FT2.ATT.Tstart[i]-FT2.FT2_T.Tstart[i]);
+    //NO more interpolation
+    //deltat=-(FT2.ATT.Tstart[i]-FT2.FT2_T.Tstart[i]);
+    deltat=0;
     if(fabs(deltat)>ATT.DeltaT_TstatTolerance){
       l++;
       FT2.ATT.x[i]= FT2.ATT.x[i]+ FT2.ATT.vx[i]*deltat;
       FT2.ATT.y[i]= FT2.ATT.y[i]+ FT2.ATT.vy[i]*deltat;
       FT2.ATT.z[i]= FT2.ATT.z[i]+ FT2.ATT.vz[i]*deltat;
-      double old_w=FT2.ATT.w[i];
-      FT2.ATT.Eval_w(FT2.ATT, i);
-      if(old_w<0 && FT2.ATT.w[i]>0 ){
-          FT2.ATT.w[i]=-1*FT2.ATT.w[i];
-          //std::cout<<"scalr"<<interp.scalar()<<"\n";
-        }
+      FT2.ATT.w[i]= FT2.ATT.w[i];
+      //double old_w=FT2.ATT.w[i];
+      //Here no more check on Q4
+      //FT2.ATT.Eval_w(FT2.ATT, i);
+      //if(old_w<0 && FT2.ATT.w[i]>0 ){
+      //    FT2.ATT.w[i]=-1*FT2.ATT.w[i];
+      //    //std::cout<<"scalr"<<interp.scalar()<<"\n";
+      //  }
       if(FT2.verbose){
         printf("!!!WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!!\n");
         printf("Entry=%d deltat=%e x correction=%e\n", i , deltat, FT2.ATT.vx[i]*deltat);
@@ -539,7 +543,7 @@ void FT2::Interp_ATT_Tstart(FT2 &FT2){
     }
   }
   if(l>0){
-    printf("!!! WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!! total entries with this issue=%d\n",l);
+    printf("!!! WARNING Interpolate to Tstart SHOULD NOT HAPPEN!!! total entries with this issue=%d\n", l);
   }
 }
 
@@ -591,14 +595,21 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         FT2.ATT.interp_flag[i]=3;
         if(FT2.MC==false){
           printf("---LinIntep of ATT,bkw interp failed I will not use slerp but velocities\n");
-          deltat=FT2.ATT.Tstart[i+jump_f]-FT2.FT2_T.Tstart[i];
+          //No more interpolation
+          //deltat=FT2.ATT.Tstart[i+jump_f]-FT2.FT2_T.Tstart[i];
+          deltat=0;
           FT2.ATT.x[i]=FT2.ATT.x[i+jump_f]+FT2.ATT.vx[i+jump_f]*(-deltat);
           FT2.ATT.y[i]=FT2.ATT.y[i+jump_f]+FT2.ATT.vy[i+jump_f]*(-deltat);
           FT2.ATT.z[i]=FT2.ATT.z[i+jump_f]+FT2.ATT.vz[i+jump_f]*(-deltat);
+          //FT2.ATT.w[i]=FT2.ATT.w[i+jump_f];
+          
+          //No more check on Q4
+          std::cout<<" entry "<<i <<"\n";
           FT2.ATT.Eval_w(FT2.ATT, i);
           if(FT2.ATT.w[i+jump_f]<0 &&  FT2.ATT.w[i]>0 ){
+            std::cout<<"sign correction  entry "<<i<<deltat<<"\n"; 
             FT2.ATT.w[i]=-FT2.ATT.w[i];
-             std::cout<<FT2.ATT.w[i+jump_f] <<" "<<FT2.ATT.w[i] <<"\n";
+            std::cout<<FT2.ATT.w[i+jump_f] <<" "<<FT2.ATT.w[i] <<"\n";
           }
           
         }else{
@@ -617,22 +628,30 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
           std::cout<<"ATT elements in Entry "<<i<<","<<FT2.ATT.entr[i]<<"\n";
           printf("delta+_ATT_x=%e\n", FT2.ATT.x[i+jump_f]-FT2.ATT.x[i]);
         }
+        printf("----------------------------------------------------------\n");
       }
       
       if(failed_f && !failed_b){
         FT2.ATT.interp_flag[i]=3;
         if(FT2.MC==false){
           printf("---LinIntep of ATT, fwd interp failed I will not use slerp but velocities\n");
-          deltat=FT2.ATT.Tstart[i-jump_b]-FT2.FT2_T.Tstart[i];
+          //No more interpolation
+          //deltat=FT2.ATT.Tstart[i-jump_b]-FT2.FT2_T.Tstart[i];
+          deltat=0;
           FT2.ATT.x[i]=FT2.ATT.x[i-jump_b]+FT2.ATT.vx[i-jump_b]*(-deltat);
           FT2.ATT.y[i]=FT2.ATT.y[i-jump_b]+FT2.ATT.vy[i-jump_b]*(-deltat);
           FT2.ATT.z[i]=FT2.ATT.z[i-jump_b]+FT2.ATT.vz[i-jump_b]*(-deltat);
-          FT2.ATT.Eval_w(FT2.ATT,i);
+          //FT2.ATT.w[i]=FT2.ATT.w[i-jump_b];
+          
+          //No more check on Q4
+          std::cout<<" entry "<<i <<"\n";
+          FT2.ATT.Eval_w(FT2.ATT, i);
           if(FT2.ATT.w[i-jump_b]<0 &&  FT2.ATT.w[i]>0){
+            std::cout<<"sign correction  entry "<<i<<deltat<<"\n";
             FT2.ATT.w[i]=-FT2.ATT.w[i];
             std::cout<<FT2.ATT.w[i-jump_b] <<" "<<FT2.ATT.w[i] <<"\n";
-            
           }
+          printf("----------------------------------------------------------\n");
         }
         else{
           printf("---MC: fwd interp failed facke values just replace first non zero entry\n");
@@ -665,9 +684,9 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         //double old_w=FT2.ATT.w[index];
         //FT2.ATT.Eval_w(FT2.ATT, index);
         //if(old_w<0 &&  FT2.ATT.w[index]>0 ){
-         //   FT2.ATT.w[index]=-FT2.ATT.w[index];
-         //   std::cout<<old_w <<" jump "<<FT2.ATT.w[index] <<"\n";
-         //}
+        //   FT2.ATT.w[index]=-FT2.ATT.w[index];
+        //   std::cout<<old_w <<" jump "<<FT2.ATT.w[index] <<"\n";
+        //}
         
         index=i+jump_f;
         
@@ -685,17 +704,24 @@ void FT2::Interp_ATT_Entries(FT2 &FT2){
         FT2.ATT.x[i]=interp.vector().x();
         FT2.ATT.y[i]=interp.vector().y();
         FT2.ATT.z[i]=interp.vector().z();
-         
-        FT2.ATT.Eval_w(FT2.ATT,i);
-        //std::cout<<interp.scalar()<<"*"<<"\n";
+        FT2.ATT.w[i]=interp.scalar();
+        
+        //No more check on Q4
+        //FT2.ATT.Eval_w(FT2.ATT,i);
+        std::cout<<"Slerp"<<"\n";
+        std::cout<<interp.scalar()<<"* -> entry "<<i <<"\n";
+        printf("----------------------------------------------------------\n");
+        //FT2.ATT.Eval_w(FT2.ATT,i);
+        //std::cout<<FT2.ATT.w[i]<<"\n";
         //std::cout<< FT2.ATT.w[i+jump_f]<<"*"<<"\n";
         //std::cout<< FT2.ATT.w[i-jump_b]<<"*"<<"\n";
-        if(interp.scalar()<0 && FT2.ATT.w[i]>0){
-          FT2.ATT.w[i]=-FT2.ATT.w[i];
-           std::cout<<interp.scalar() <<" intper "<<FT2.ATT.w[i] <<"\n";
-          //std::cout<<"scalr"<<interp.scalar()<<"\n";
-        }
+        //if(interp.scalar()<0 && FT2.ATT.w[i]>0){
+        //  FT2.ATT.w[i]=-FT2.ATT.w[i];
+        //   std::cout<<interp.scalar() <<" intper "<<FT2.ATT.w[i] <<"\n";
+        //std::cout<<"scalr"<<interp.scalar()<<"\n";
+        //}
         //printf("Att_w=%e\n",FT2.ATT.w[i]);
+        
         if(FT2.verbose){
           printf("---Slerp Interpolation of ATT\n");
           printf("Entry i=%d Time=%20.18g\n", i, FT2.FT2_T.Tstart[i]);
@@ -757,12 +783,14 @@ void FT2::Update_ATT_Quaternions(ATTITUDE &Att, const std::vector<std::string> &
     Att.z[entry]=atof(tokens[7].c_str());
     Att.w[entry]=atof(tokens[8].c_str());
     //Decide if to test and correct the Quaternion
-    double old_w=Att.w[entry];
-    Att.Eval_w(Att, entry);
-    if(old_w<0 and Att.w[entry]>0 ){        
-        Att.w[entry]=-1.0*Att.w[entry];
-    }
-   
+    
+    //!!!!!Ingnore Checking
+    //double old_w=Att.w[entry];
+    //Att.Eval_w(Att, entry);
+    //if(old_w<0 and Att.w[entry]>0 ){
+    //   Att.w[entry]=-1.0*Att.w[entry];
+    //}
+    
     Att.vx[entry]=atof(tokens[9].c_str());
     Att.vy[entry]=atof(tokens[10].c_str());
     Att.vz[entry]=atof(tokens[11].c_str());

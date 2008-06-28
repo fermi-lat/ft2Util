@@ -421,12 +421,16 @@ void ATTITUDE::Eval_w(ATTITUDE &Att, unsigned int entry){
 //Check and Correct W
 void ATTITUDE::CorrectAndEval_w(ATTITUDE &Att, unsigned int i){
   double aw, vec_norm, delta;
-  
+  printf("Eeval Norm and correct\n");
   vec_norm=Att.Eval_VecNorm(Att, i);
   delta=vec_norm-1.0;
-  
+  printf("Test Q4, delta=%e vec_norm=%e \n",delta,vec_norm);
   //check the normalization of the quaternion
   if (delta>=0.0){
+    double norm=sqrt(vec_norm);
+    Att.x[i]=Att.x[i]/norm;
+    Att.y[i]=Att.y[i]/norm;
+    Att.z[i]=Att.z[i]/norm;
     aw=0;
     if(delta>Att.NomrTolerance){
       printf("!!!Warning ATT vector normalization: W !FORCED! to 0, vec_norm was= %15e\n", vec_norm);
@@ -434,6 +438,7 @@ void ATTITUDE::CorrectAndEval_w(ATTITUDE &Att, unsigned int i){
     
     Att.interp_flag[i]=4;
   }else{
+    printf("Normalization is good did not renormalized\n");
     aw=sqrt(1.0-vec_norm);
     //Sign Correction on the scalar component
     //if(Att.w[i]<0){
@@ -445,6 +450,7 @@ void ATTITUDE::CorrectAndEval_w(ATTITUDE &Att, unsigned int i){
 
 //Only check but don't Correct W
 void ATTITUDE::CheckAndEval_w(ATTITUDE &Att, unsigned int i){
+  printf("Eeval Norm and Don't Correct\n");
   double aw, vec_norm;
   vec_norm=Att.Eval_VecNorm(Att, i);
   if ((vec_norm-1.0)>=0.0){
@@ -464,7 +470,7 @@ void ATTITUDE::CheckAndEval_w(ATTITUDE &Att, unsigned int i){
 double ATTITUDE::Eval_VecNorm(ATTITUDE &Att, unsigned int i){
   using namespace astro;
   using CLHEP::Hep3Vector;
-
+  
   double ax2, ay2, az2, vnorm, delta;
   ax2=Att.x[i]*Att.x[i];
   ay2=Att.y[i]*Att.y[i];
@@ -477,15 +483,15 @@ double ATTITUDE::Eval_VecNorm(ATTITUDE &Att, unsigned int i){
   
   //std::cout<<"scalar"<<q_test.scalar()<<"\n";
   //std::cout<<"norm"<<q_test.norm()<<"\n";
-  //std::cout<<"norm"<<q_test.sgn()<<"\n"; 
+  //std::cout<<"norm"<<q_test.sgn()<<"\n";
   
   //std::cout<<"vnorm"<<vnorm<<"\n";
   
   if ( (vnorm-1.0)>=0.0){
     if(delta>Att.NomrTolerance){
-      printf("!!!Warning ATT vector normalization greater then 1.0 and exceed the tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n",i, vnorm);
+      printf("!!!Warning ATT vector normalization greater then 1.0 and exceed the tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n", i, vnorm);
     }else{
-      printf("!!!Warning ATT vector normalization greater then 1.0 but did not exceed tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n",i, vnorm);
+      printf("!!!Warning ATT vector normalization greater then 1.0 but did not exceed tolerance : Entry=%d vec_norm>1 vec_norm=%15.15e\n", i, vnorm);
     }
   }
   return vnorm;
