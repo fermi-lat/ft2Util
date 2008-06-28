@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Jun 28 02:05:13 PDT 2008
+ft2Util/ft2Util
+
+Modified Files:
+	FT2_Time.hpp 
+Log Message:
+added Quaternion extrapolation
+    *
+------------------------------------------------------------
 User: tramacer  Sat Jun 28 02:05:12 PDT 2008
 ft2Util/doc
 
