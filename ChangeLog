@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Jun 28 02:05:12 PDT 2008
+ft2Util/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+added Quaternion extrapolation
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p19, operation: add
 Package: ft2Util
