@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Wed Jul  2 10:39:57 PDT 2008
+ft2Util/src
+
+Modified Files:
+	Digi.cxx FT2.cxx 
+Log Message:
+chck on the gaps GemID 
+    *
+------------------------------------------------------------
+User: tramacer  Wed Jul  2 10:39:57 PDT 2008
 ft2Util/ft2Util
 
 Modified Files:
