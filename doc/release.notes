@@ -45,3 +45,5 @@ v1r2p19 06-27-2008 no more ATT extrapolation, sub by replacement
 v1r2p20 06-28-2008 added Quaternion Extrapolation
 
 v1r2p21 06-28-2008 minor changes for text output
+
+v1r2p22 07-01-2008 check on the GemID of the gaps 

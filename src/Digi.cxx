@@ -160,20 +160,23 @@ void FT2::Digi_FT2(FT2 &FT2){
   Tstart_Run=evt->getTimeStamp();
   Digi_Start=Digi_i;
   FT2.RunID= evt->getRunId();
-  std::cout<<"RunID of firs evt = "<<evt->getRunId()<<"\n";
-  
+  FT2.Digi_EvtId_start=evt->getEventId(); 
+  std::cout<<"RunID of firs evt     = "<<evt->getRunId()<<"\n";
+  std::cout<<"ExtGemID of first evt = "<<FT2.Digi_EvtId_start<<"\n";
   
    
-  Digi_i=Digi_nEvt-1;
- 
   
+  Digi_i=Digi_nEvt-1;  
   T->GetEntry(Digi_i);
   DigiTime=evt->getTimeStamp();
   Tstop_Run=evt->getTimeStamp();
   Digi_Stop=Digi_i;
+  FT2.Digi_EvtId_stop=evt->getEventId();
   UInt_t LastEvtRunID=evt->getRunId();
-  std::cout<<"RunID of last evt = "<<LastEvtRunID<<"\n";
+  std::cout<<"RunID of last evt     = "<<LastEvtRunID<<"\n";
+  std::cout<<"ExtGemID of last evt  = "<<FT2.Digi_EvtId_stop <<"\n";
   
+
   if(FT2.RunID!=LastEvtRunID){
    std::cout<<"Warning Run Id changes during Run possible problems\n";
     
@@ -204,7 +207,9 @@ void FT2::Digi_FT2(FT2 &FT2){
   
   //-------------------------------------------------------------------
   //------- Gaps ------------------------------------------------------
-  if(FT2.DigiGAPS)FT2.Set_GAPS(FT2);
+  if(FT2.DigiGAPS){
+    FT2.Set_GAPS(FT2);
+  };
   //-------------------------------------------------------------------
   
   /*---------------------------------------------------------------------------

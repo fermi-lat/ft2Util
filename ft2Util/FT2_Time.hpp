@@ -610,7 +610,8 @@ public:
   double GleamDigiTstart,
           /// Tstop of the Run for the Gleam Option
           GleamDigiTstop;
-  
+  ///ExtGemID counter of firs and last Dig_evt
+  unsigned long Digi_EvtId_start, Digi_EvtId_stop;
   
   //------------------------------ FT2 -----------------------------------------
   /**
