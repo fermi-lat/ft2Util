@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Mon Jul  7 10:16:04 PDT 2008
+ft2Util/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+check on the GemID of the gaps but does not exit if the ID are wrong
+    *
+------------------------------------------------------------
 User: tramacer  Mon Jul  7 10:16:02 PDT 2008
 ft2Util/apps
 
