@@ -47,3 +47,5 @@ v1r2p20 06-28-2008 added Quaternion Extrapolation
 v1r2p21 06-28-2008 minor changes for text output
 
 v1r2p22 07-01-2008 check on the GemID of the gaps 
+
+v1r2p23 07-07-2008 check on the GemID of the gaps but does not exit if the ID are wrong

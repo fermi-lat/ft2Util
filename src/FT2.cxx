@@ -283,41 +283,56 @@ void FT2::Set_GAPS(FT2 &FT2){
     std::stringstream ss(line); // Insert the string into a stream
     while (ss >> buf)	tokens.push_back(buf);
     unsigned long GapsRun=FT2.Get_Run_ID(tokens[0]);
+    unsigned long GemID_start, GemID_stop;
     std::cout<<"GapsRunID= "<<GapsRun<<"\n";
     std::cout<<"RunId=     "<<FT2.RunID<<"\n";
     //SKIP lines that start with # character
     comment=line.substr(0, 1);
     if(comment.find( "#", 0) == std::string::npos  && GapsRun==FT2.RunID){
       //increase Gaps size
-      Entries++;
-      FT2.GP.Set_GAPS_Size(FT2.GP, Entries);
-      std::cout<<"gaps entries "<<Entries<<"\n";
- 
-      FT2.GP.GemStart[Entries-1]=std::strtoul(tokens[1].c_str(), NULL, 10);
+      
+      GemID_start=std::strtoul(tokens[1].c_str(), NULL, 10);
+      GemID_stop =std::strtoul(tokens[2].c_str(), NULL, 10);
+      if(     GemID_start<FT2.Digi_EvtId_stop &&
+              GemID_start>=FT2.Digi_EvtId_start &&
+              GemID_stop >  FT2.Digi_EvtId_start &&
+              GemID_stop <=  FT2.Digi_EvtId_stop){        
+        Entries++;
+        FT2.GP.Set_GAPS_Size(FT2.GP, Entries);
+        std::cout<<"gaps entries "<<Entries<<"\n";
+        FT2.GP.GemStart[Entries-1]= GemID_start;
+        FT2.GP.GemStop[Entries-1] = GemID_stop;
+      }
+      
+      //Entries++;
+      //FT2.GP.Set_GAPS_Size(FT2.GP, Entries);
+      //std::cout<<"gaps entries "<<Entries<<"\n";
+      
+      //FT2.GP.GemStart[Entries-1]=std::strtoul(tokens[1].c_str(), NULL, 10);
       /// Check that all the Gasp GemID are within the Run GemEvtIDs.
-      if(FT2.GP.GemStart[Entries-1]<FT2.Digi_EvtId_start || FT2.GP.GemStart[Entries-1]>FT2.Digi_EvtId_stop){
+      if(GemID_start<FT2.Digi_EvtId_start || GemID_start>=FT2.Digi_EvtId_stop){
         std::cout<<"============================================="<<"\n";
         std::cout<<"!!!!ERROR:Gap ExtGemID not valid"<<"\n";
-        std::cout<<"Gap       ExtGemID="<<FT2.GP.GemStart[Entries-1]<<"\n";
+        std::cout<<"Gap start ExtGemID="<<GemID_start <<"\n";
         std::cout<<"Run start ExtGemID="<<FT2.Digi_EvtId_start <<"\n";
         std::cout<<"Run stop  ExtGemID="<<FT2.Digi_EvtId_stop <<"\n";
         std::cout<<"============================================="<<"\n";
-        exit(1);
+        //exit(1);
       }
       
-      FT2.GP.GemStop[Entries-1] =std::strtoul(tokens[2].c_str(), NULL, 10);
+      //FT2.GP.GemStop[Entries-1] =std::strtoul(tokens[2].c_str(), NULL, 10);
       /// Check that all the Gasp GemID are within the Run GemEvtIDs.
-      if(FT2.GP.GemStop[Entries-1]<FT2.Digi_EvtId_start || FT2.GP.GemStop[Entries-1]>FT2.Digi_EvtId_stop){
+      if(GemID_stop<=FT2.Digi_EvtId_start || GemID_stop>FT2.Digi_EvtId_stop){
         std::cout<<"============================================="<<"\n";
         std::cout<<"!!!!ERROR:Gap GemID not valid"<<"\n";
-        std::cout<<"Gap       GemID="<<FT2.GP.GemStop[Entries-1]<<"\n";
+        std::cout<<"Gap stop  GemID="<<GemID_stop <<"\n";
         std::cout<<"Run start GemID="<<FT2.Digi_EvtId_start <<"\n";
         std::cout<<"Run stop  GemID="<<FT2.Digi_EvtId_stop <<"\n";
         std::cout<<"============================================="<<"\n";
-        exit(1);
-      } 
+        //exit(1);
+      }
     }
- 
+    
   }
   printf("Digi Gaps Informations\n");
   for (unsigned long i=0;i<Entries;i++){
@@ -333,7 +348,7 @@ void FT2::Set_GAPS(FT2 &FT2){
     FT2.DigiGAPS=false;
   }
   GPF.close();
- 
+  
   
   
   
