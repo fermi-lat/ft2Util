@@ -1,13 +1,4 @@
 ------------------------------------------------------------
-User: tramacer  Mon Jul  7 10:16:02 PDT 2008
-ft2Util/apps
-
-Modified Files:
-	main.cxx mergeft2.cxx 
-Log Message:
-check on the GemID of the gaps but does not exit if the ID are wrong
-    *
-------------------------------------------------------------
 TAG
 Tag name: v1r2p22, operation: add
 Package: ft2Util
