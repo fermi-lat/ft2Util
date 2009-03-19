@@ -12,7 +12,6 @@ use cfitsio * IExternal
 use CLHEP v3* IExternal
 use facilities v*
 use fitsGen v*
-
 apply_pattern  package_include
 apply_pattern  package_headers
 apply_pattern  package_linkopts

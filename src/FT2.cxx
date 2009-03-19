@@ -98,6 +98,7 @@ void FT2::init(){
   MC=false;
   ATT.TestQ=false;
   ATT.TestQ_all=false;
+  new_tpl=false;
   printf("FT2 initialized\n");
   //Initialize constants to default
   FT2_BIN_WIDTH=1.0;
@@ -105,6 +106,8 @@ void FT2::init(){
   ATT.NomrTolerance=1.0e-5;
   ATT.DeltaT_TstatTolerance=1.0e-5;
   ORB.DeltaT_TstatTolerance=1.0e-5;
+  LAT_CONFIG=0;
+  DATA_QUAL=0;
 }
 
 
