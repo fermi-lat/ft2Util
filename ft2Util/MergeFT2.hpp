@@ -24,9 +24,9 @@ void getFileNames_TXT(int iargc, char * argv[], std::string & FT2File,
 void getFileNames_FITS(int iargc, char * argv[], std::string & ft2,
         std::string & ft2_merged, std::string & Version, double & FT2_MERGED_BIN_WIDTH );
 
-void FITS(int iargc, char *argv[], bool old_tpl);
+void FITS(int iargc, char *argv[], bool old_tpl,std::string path);
 
-void TXT(int iargc, char *argv[], bool old_tpl);
+void TXT(int iargc, char *argv[], bool old_tpl,std::string path);
 
 void  count_rows( std::string ft2_name, double FT2_MERGED_BIN_WIDTH, unsigned int & nrows, unsigned int & nrows_merged);
 #endif

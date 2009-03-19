@@ -42,11 +42,19 @@ void FT2::WriteFitsFile(FT2 &FT2) {
     std::cout << "Start Instance of Ft2File\n";
     std::cout << "The file name is " << FT2.FT2_fits_File << "\n";
     std::cout << "The file lenght is " << FT2_ENTR << "\n";
-    if (FT2.new_tpl == true) {
-        fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR, "SC_DATA", "/afs/slac.stanford.edu/u/gl/tramacer/fitsGen/ScienceTools-LATEST-1-2481/data/ft2.tpl");
+
+
+    //fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR);
+    //if (FT2.new_tpl == true) {
+    if (new_tpl == false) {
+        std::cout << "You are using the default ft2 template " << FT2.path << "\n";
     } else {
-        fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR);
+        std::cout << "You are using a new ft2 template " << FT2.path << "\n";
     }
+    fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR, "SC_DATA", FT2.path);
+    //}
+
+
     std::cout << "Instanced\n";
 
     //!!!!!!!!!!!!!!Verify this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -65,7 +73,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
 
 
     for (unsigned int i = START; i < STOP; i++) {
-        ft2["start"].set(FT2_T.Tstart[i]);
+        ft2["start"].set(FT2.FT2_T.Tstart[i]);
         ft2["stop"].set(FT2.FT2_T.Tstop[i]);
         scPosition[0] = FT2.ORB.x[i];
         scPosition[1] = FT2.ORB.y[i];
@@ -126,11 +134,14 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
     std::cout << "Start Instance of Ft2File\n";
     std::cout << "The file name is " << FT2.FT2_fits_File << "\n";
     std::cout << "The file lenght is " << FT2_ENTR << "\n";
-     if (FT2.new_tpl == true) {
-        fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR, "SC_DATA", "/afs/slac.stanford.edu/u/gl/tramacer/fitsGen/ScienceTools-LATEST-1-2481/data/ft2.tpl");
+
+     if (new_tpl == false) {
+        std::cout << "You are using the default ft2 template " << FT2.path << "\n";
     } else {
-        fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR);
+        std::cout << "You are using a new ft2 template " << FT2.path << "\n";
     }
+    fitsGen::Ft2File ft2(FT2.FT2_fits_File, FT2_ENTR, "SC_DATA", FT2.path);
+
     std::cout << "Instanced\n";
 
     //!!!!!!!!!!!!!!Verify this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

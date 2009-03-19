@@ -1,12 +1,13 @@
 #Gleam
-makeFT2Entries.exe -M7File magic7.txt  -FT2_txt_File ft2-out.txt -FT2_fits_File ft2.fits --Gleam 
+makeFT2Entries.exe -M7File magic7.txt  -FT2_txt_File ft2-out.txt -FT2_fits_File ft2.fits --Gleam [-new_tpl path-to-new-ft2-tpl-flie] 
 
 #MC
-makeFT2Entries.exe --MC  -DigiFile file_digi.root  -MeritFile file_merit.root  -M7File magic7.txt   -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit
+makeFT2Entries.exe --MC  -DigiFile file_digi.root  -MeritFile file_merit.root  -M7File magic7.txt   -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit [-new_tpl path-to-new-ft2-tpl-flie] [-DataQual integer] [-LatConfig integer]
 
 #Non MC
-makeFT2Entries.exe -DigiFile file_digi.root  -MeritFile file_merit.root  -M7File magic7.txt   -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit
+makeFT2Entries.exe -DigiFile file_digi.root  -MeritFile file_merit.root  -M7File magic7.txt   -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit [-new_tpl path-to-new-ft2-tpl-flie]
 
 #Merge Entries
-mergeFT2Entries.exe  -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit
+mergeFT2Entries.exe  -FT2_txt_File ft2-out.txt   -FT2_fits_File ft2.fit 
+mergeFT2Entries.exe  -FT2_txt_File ft2-out.fits   -FT2_fits_File ft2.fit  [-new_tpl path-to-new-ft2-tpl-flie]
 
