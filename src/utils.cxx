@@ -48,7 +48,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " -ATTDeltaT_TstartTolerance <Tolerance for moving ATT entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
   " -ORBDeltaT_TstartTolerance <Tolerance for moving ORB entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
   " -FT2_BIN_WIDTH <span of the bin of the non merged FT2 file (def=1 s)>\n"
-  " --new_tpl <to use the old ft2 template>\n "
+  " -new_tpl <to path to an alternative ft2 tpl file>\n "
   " --MC\n"
   " --Gleam\n"
   " --verbose\n"
@@ -112,6 +112,11 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           FT2.GleamDigiTstop=atof(std::string(argv[i+1]).c_str());
           printf("DigiTstop=%20.18g\n", FT2.GleamDigiTstop);
         }
+        if(par=="-new_tpl" ){
+            FT2.new_tpl=true;
+            FT2.path=std::string(argv[i+1]);
+            std::cout<<"You are using an alternative  ft2 template"<<FT2.path <<" \n";
+        }
         if(par=="-h"){
           std::cout << usage;
           std::exit(0);
@@ -142,10 +147,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           FT2.ATT.TestQ=true;
           FT2.ATT.TestQ_all=true;
         }
-        if(par=="--new_tpl" ){
-            FT2.new_tpl=true;
-            std::cout<<"You are using the old ft2 template \n";
-        }
+        
 
 
 

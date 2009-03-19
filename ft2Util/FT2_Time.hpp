@@ -406,7 +406,10 @@ public:
     
     /// Version string
     std::string Version ;
-    
+
+    /// Path to ft2 tpl file
+    std::string path;
+
     /// Digi Time Class Aggregate object
     DigiTime DT;
     
