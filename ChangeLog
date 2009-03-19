@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Thu Mar 19 16:43:14 PDT 2009
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+new version handling both old and new ft2 tpl file
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p24, operation: add
 Package: ft2Util
