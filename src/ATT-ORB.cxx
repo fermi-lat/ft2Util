@@ -395,6 +395,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       //booleanm variables to test failure
       //to perform bw or fw extrapolation
       //Note that failed_jump_f = true implies failed_b
+      //se fallisce il jum_forward non si puo' interpolare backward
       bool failed_f = false;
       bool failed_b = false;
       
@@ -419,6 +420,7 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
       
       if(FT2.verbose){
         printf("jump_f=%d\n", jump_f);
+        printf("jump_b=%d\n",jump_b);
       }
       
       if(jump_f==0 || FT2.ORB.entr[i+jump_f]==0) {
@@ -446,12 +448,12 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
         if(failed_b){
           FT2.ORB.interp_flag[i]=3;
           printf("Also PARAB FAILED I will extrapolate using velocities\n");
-          deltat=FT2.ORB.Tstart[i-jump_b]-FT2_T.Tstart[i];
-          FT2.ORB.x[i]=FT2.ORB.x[i-jump_b]+FT2.ORB.vx[i-jump_b]*(-deltat);
-          FT2.ORB.y[i]=FT2.ORB.y[i-jump_b]+FT2.ORB.vy[i-jump_b]*(-deltat);
-          FT2.ORB.z[i]=FT2.ORB.z[i-jump_b]+FT2.ORB.vz[i-jump_b]*(-deltat);
-          FT2.ORB.CM[i] =  FT2.ORB.CM[i-jump_b];
-          FT2.ORB.SAA[i]= FT2.ORB.SAA[i-jump_b];
+          deltat=FT2.ORB.Tstart[i+jump_f]-FT2_T.Tstart[i];
+          FT2.ORB.x[i]=FT2.ORB.x[i+jump_f]-FT2.ORB.vx[i+jump_f]*(deltat);
+          FT2.ORB.y[i]=FT2.ORB.y[i+jump_f]-FT2.ORB.vy[i+jump_f]*(deltat);
+          FT2.ORB.z[i]=FT2.ORB.z[i+jump_f]-FT2.ORB.vz[i+jump_f]*(deltat);
+          FT2.ORB.CM[i] =  FT2.ORB.CM[i+jump_f];
+          FT2.ORB.SAA[i]= FT2.ORB.SAA[i+jump_f];
         }
       }
       
@@ -462,12 +464,13 @@ void FT2::Interp_ORB_Entries(FT2 &FT2){
         if(failed_f){
           FT2.ORB.interp_flag[i]=3;
           printf("Also PARAB FAILED I will extrapolate using velocities\n");
-          deltat=FT2.ORB.Tstart[i+jump_f]-FT2_T.Tstart[i];
-          FT2.ORB.x[i]=FT2.ORB.x[i+jump_f]+FT2.ORB.vx[i+jump_f]*(-deltat);
-          FT2.ORB.y[i]=FT2.ORB.y[i+jump_f]+FT2.ORB.vy[i+jump_f]*(-deltat);
-          FT2.ORB.z[i]=FT2.ORB.z[i+jump_f]+FT2.ORB.vz[i+jump_f]*(-deltat);
-          FT2.ORB.CM[i] = FT2.ORB.CM[i+jump_f];
-          FT2.ORB.SAA[i]= FT2.ORB.SAA[i+jump_f];
+          deltat=FT2_T.Tstart[i]-FT2.ORB.Tstart[i-jump_b];
+          printf("i=%d  jump_f=%d jump_b=%d deltat=%e\n",i,jump_f,jump_b,deltat);
+          FT2.ORB.x[i]=FT2.ORB.x[i-jump_b]+FT2.ORB.vx[i-jump_b]*(deltat);
+          FT2.ORB.y[i]=FT2.ORB.y[i-jump_b]+FT2.ORB.vy[i-jump_b]*(deltat);
+          FT2.ORB.z[i]=FT2.ORB.z[i-jump_b]+FT2.ORB.vz[i-jump_b]*(deltat);
+          FT2.ORB.CM[i] = FT2.ORB.CM[i-jump_b];
+          FT2.ORB.SAA[i]= FT2.ORB.SAA[i-jump_b];
         }
       }
       

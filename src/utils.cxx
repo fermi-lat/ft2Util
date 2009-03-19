@@ -42,10 +42,13 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
   " -DigiTstart <Time of first Digi event>\n "
   " -DigiTstop <Time of last Digi event> \n "
   " -Version <vesion of the file>\n"
+  " -LatConfig <LAT config  for run intent>\n"
+  " -DataQual <data quality ID>\n"
   " -ATTNomrTolerance <Tolerance for The normaliazation of the quaternion (def=1e-5)>\n"
   " -ATTDeltaT_TstartTolerance <Tolerance for moving ATT entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
   " -ORBDeltaT_TstartTolerance <Tolerance for moving ORB entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
   " -FT2_BIN_WIDTH <span of the bin of the non merged FT2 file (def=1 s)>\n"
+  " --new_tpl <to use the old ft2 template>\n "
   " --MC\n"
   " --Gleam\n"
   " --verbose\n"
@@ -93,6 +96,14 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           
           std::cout<<"-Version="<<FT2.Version<<std::endl;
         }
+         if(par=="-LatConfig"){
+          FT2.LAT_CONFIG= atoi(std::string(argv[i+1]).c_str());
+          std::cout<<"-LatConfig="<<FT2.LAT_CONFIG<<std::endl;
+        }
+        if(par=="-DataQual"){
+          FT2.DATA_QUAL= atoi(std::string(argv[i+1]).c_str());
+          std::cout<<"-DataQual="<<FT2.DATA_QUAL<<std::endl;
+        }
         if(par=="-DigiTstart"){
           FT2.GleamDigiTstart=atof(std::string(argv[i+1]).c_str());
           printf("DigiTstart=%20.18g\n", FT2.GleamDigiTstart);
@@ -131,7 +142,13 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
           FT2.ATT.TestQ=true;
           FT2.ATT.TestQ_all=true;
         }
-        
+        if(par=="--new_tpl" ){
+            FT2.new_tpl=true;
+            std::cout<<"You are using the old ft2 template \n";
+        }
+
+
+
         if(par=="-ATTNomrTolerance"){
           FT2.ATT.NomrTolerance=atof(std::string(argv[i+1]).c_str());
           printf("ATTNomrTolerancen =%e\n", FT2.ATT.NomrTolerance);
@@ -264,6 +281,18 @@ double FT2::lininterp(double x1, double x2, double t1, double t2, double t){
   return x1+((x2-x1)/(t2-t1))*(t-t1);
 }
 
+
+
+// -------------------------DEG RAD CONVERSION----------------------------------    
+double Rad2Deg (double Angle) {
+  static double ratio = 180.0 / 3.141592653589793238;
+  return Angle * ratio;
+}
+
+double Deg2Rad (double Angle) {
+  static double ratio =  3.141592653589793238/180.0;
+  return Angle * ratio;
+}
 
 
 //-------------------------- Parab Interpolation ------------------------------------------
