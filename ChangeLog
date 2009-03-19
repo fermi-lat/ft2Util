@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Thu Mar 19 16:43:15 PDT 2009
+ft2Util/test
+
+Modified Files:
+	Command_Line_Templates.txt 
+Log Message:
+new version handling both old and new ft2 tpl file
+    *
+------------------------------------------------------------
+User: tramacer  Thu Mar 19 16:43:15 PDT 2009
 ft2Util/src
 
 Modified Files:
