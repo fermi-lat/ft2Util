@@ -1,22 +1,4 @@
 ------------------------------------------------------------
-User: tramacer  Wed May  6 18:34:42 PDT 2009
-ft2Util/ft2Util
-
-Modified Files:
-	FT2_Time.hpp 
-Log Message:
-force DigiStart and DigiStop from command line
-    *
-------------------------------------------------------------
-User: tramacer  Wed May  6 18:34:42 PDT 2009
-ft2Util/apps
-
-Modified Files:
-	main.cxx mergeft2.cxx 
-Log Message:
-force DigiStart and DigiStop from command line
-    *
-------------------------------------------------------------
 TAG
 Tag name: v1r2p25, operation: add
 Package: ft2Util
