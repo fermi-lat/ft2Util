@@ -99,6 +99,9 @@ void FT2::init(){
   ATT.TestQ=false;
   ATT.TestQ_all=false;
   new_tpl=false;
+  DigiCutT1=false;
+  DigiCutT2=false;
+  DigiCut=false;
   printf("FT2 initialized\n");
   //Initialize constants to default
   path="/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/ScienceTools/ScienceTools-v9r8p2/fitsGen/v4r1p1/data/ft2.tpl";
