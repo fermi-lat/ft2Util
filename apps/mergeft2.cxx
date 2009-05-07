@@ -86,7 +86,7 @@ void getFileNames_FITS(int iargc, char * argv[], std::string & ft2,
 }
 
 int main(int iargc, char **argv) {
-    printf("v1r2p25-test\n");
+    printf("v1r2p26-test\n");
 
     bool new_tpl(false);
     std::string path = "/afs/slac.stanford.edu/u/gl/tramacer/fitsGen/ScienceTools-LATEST-1-2481/data/ft2.tpl";
