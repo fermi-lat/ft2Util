@@ -49,6 +49,7 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
             " -ATTDeltaT_TstartTolerance <Tolerance for moving ATT entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
             " -ORBDeltaT_TstartTolerance <Tolerance for moving ORB entry for actual TSTAMP to enetry TSTART (def=1e-5 s)>\n"
             " -FT2_BIN_WIDTH <span of the bin of the non merged FT2 file (def=1 s)>\n"
+            " -LiveTimeTolerance <minum value below wich live time is set to zero\n>"
             " -new_tpl <to path to an alternative ft2 tpl file>\n "
             " --MC\n"
             " --Gleam\n"
@@ -172,7 +173,10 @@ void FT2::getFileNames(int iargc, char * argv[], FT2 &FT2) {
                     FT2.FT2_BIN_WIDTH = atof(std::string(argv[i + 1]).c_str());
                     printf("FT2_BIN_WIDTH =%e\n", FT2.FT2_BIN_WIDTH);
                 }
-
+                if (par == "-LiveTimeTolerance") {
+                    FT2.LiveTimeTolerance = atof(std::string(argv[i + 1]).c_str());
+                    printf("LiveTimeTolerance =%e\n", FT2.LiveTimeTolerance);
+                }
             }
         }
         std::cout << "---------------------------------------------------------"

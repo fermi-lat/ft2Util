@@ -422,6 +422,9 @@ public:
     /// Width of the ft2 bin for merged file
     double FT2_MERGED_BIN_WIDTH;
 
+    ///minum value below wich live time is set to zero
+    double LiveTimeTolerance;
+
     ///Line skipped in M7 file to have ATT and ORB with the same Time stamp
     unsigned int M7ShiftStart;
 
