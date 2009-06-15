@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: tramacer  Sun Jun 14 22:41:24 PDT 2009
+ft2Util/src
+
+Modified Files:
+	FITS.cxx FT2.cxx FT2_TXT.cxx utils.cxx 
+Log Message:
+added LiveTimeTolerance parameter to set to zero values below the tolerance
+    *
+------------------------------------------------------------
+User: tramacer  Sun Jun 14 22:41:24 PDT 2009
 ft2Util/ft2Util
 
 Modified Files:
