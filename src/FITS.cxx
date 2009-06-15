@@ -89,9 +89,12 @@ void FT2::WriteFitsFile(FT2 &FT2) {
         ft2["lat_geo"].set(FT2.FT2_SC.LAT_GEO[i]);
         ft2["rad_geo"].set(FT2.FT2_SC.RAD_GEO[i]);
         ft2["geomag_lat"].set(FT2.FT2_SC.GEOMAG_LAT[i]);
-        ft2["b_mcilwain"].set(FT2_SC.B_MCILWAIN[i]);
-        ft2["l_mcilwain"].set(FT2_SC.L_MCILWAIN[i]);
-        ft2["livetime"].set(FT2_T.LiveTime[i]);
+        ft2["b_mcilwain"].set(FT2.FT2_SC.B_MCILWAIN[i]);
+        ft2["l_mcilwain"].set(FT2.FT2_SC.L_MCILWAIN[i]);
+        if (fabs(FT2.FT2_T.LiveTime[i]) < FT2.LiveTimeTolerance) {
+            FT2.FT2_T.LiveTime[i] = 0;
+        }
+        ft2["livetime"].set(FT2.FT2_T.LiveTime[i]);
         ft2["lat_mode"].set(FT2.ORB.CM[i]);
         if (FT2.new_tpl == true) {
             ft2["rock_angle"].set(FT2.FT2_SC.ROCKING_ANGLE[i]);
@@ -112,7 +115,7 @@ void FT2::WriteFitsFile(FT2 &FT2) {
         ft2.next();
     }
 
-    ft2.setObsTimes(FT2_T.Tstart[START], FT2_T.Tstop[STOP]);
+    ft2.setObsTimes(FT2.FT2_T.Tstart[START], FT2.FT2_T.Tstop[STOP]);
     std::ostringstream creator;
     creator << "ft2Util";
     ft2.setPhduKeyword("CREATOR", creator.str());
@@ -135,7 +138,7 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
     std::cout << "The file name is " << FT2.FT2_fits_File << "\n";
     std::cout << "The file lenght is " << FT2_ENTR << "\n";
 
-     if (new_tpl == false) {
+    if (new_tpl == false) {
         std::cout << "You are using the default ft2 template " << FT2.path << "\n";
     } else {
         std::cout << "You are using a new ft2 template " << FT2.path << "\n";
@@ -158,7 +161,7 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
 
     std::cout << "Loop over fields and test ft2.tlp\n";
     for (unsigned int i = 0; i < FT2_ENTR; i++) {
-        ft2["start"].set(FT2_T.Tstart[i]);
+        ft2["start"].set(FT2.FT2_T.Tstart[i]);
         ft2["stop"].set(FT2.FT2_T.Tstop[i]);
         scPosition[0] = FT2.ORB.x[i];
         scPosition[1] = FT2.ORB.y[i];
@@ -174,9 +177,12 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
         ft2["lat_geo"].set(FT2.FT2_SC.LAT_GEO[i]);
         ft2["rad_geo"].set(FT2.FT2_SC.RAD_GEO[i]);
         ft2["geomag_lat"].set(FT2.FT2_SC.GEOMAG_LAT[i]);
-        ft2["b_mcilwain"].set(FT2_SC.B_MCILWAIN[i]);
-        ft2["l_mcilwain"].set(FT2_SC.L_MCILWAIN[i]);
-        ft2["livetime"].set(FT2_T.LiveTime[i]);
+        ft2["b_mcilwain"].set(FT2.FT2_SC.B_MCILWAIN[i]);
+        ft2["l_mcilwain"].set(FT2.FT2_SC.L_MCILWAIN[i]);
+        if (fabs(FT2.FT2_T.LiveTime[i]) < FT2.LiveTimeTolerance) {
+            FT2.FT2_T.LiveTime[i] = 0;
+        }
+        ft2["livetime"].set(FT2.FT2_T.LiveTime[i]);
         ft2["lat_mode"].set(FT2.ORB.CM[i]);
         if (FT2.new_tpl == true) {
             ft2["rock_angle"].set(FT2.FT2_SC.ROCKING_ANGLE[i]);
@@ -199,7 +205,7 @@ void FT2::WriteFitsFileMerged(FT2 &FT2) {
         ft2.next();
     }
 
-    ft2.setObsTimes(FT2_T.Tstart[0], FT2_T.Tstop[FT2_ENTR - 1]);
+    ft2.setObsTimes(FT2.FT2_T.Tstart[0], FT2.FT2_T.Tstop[FT2_ENTR - 1]);
     std::ostringstream creator;
     creator << "ft2Util";
     ft2.setPhduKeyword("CREATOR", creator.str());

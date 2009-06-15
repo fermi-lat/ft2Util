@@ -107,6 +107,7 @@ void FT2::init(){
   path="/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/ScienceTools/ScienceTools-v9r8p2/fitsGen/v4r1p1/data/ft2.tpl";
   FT2_BIN_WIDTH=1.0;
   FT2_MERGED_BIN_WIDTH=30.0;
+  LiveTimeTolerance=1E-6;
   ATT.NomrTolerance=1.0e-5;
   ATT.DeltaT_TstatTolerance=1.0e-5;
   ORB.DeltaT_TstatTolerance=1.0e-5;
