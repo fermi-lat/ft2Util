@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Jul 18 00:44:56 PDT 2009
+ft2Util/apps
+
+Modified Files:
+	mergeft2.cxx 
+Log Message:
+fixed bug in mergeft2.cxx concerning ra_sc*  values
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p27, operation: add
 Package: ft2Util
