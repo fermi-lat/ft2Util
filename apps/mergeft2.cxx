@@ -339,9 +339,9 @@ void FITS(int iargc, char **argv, bool new_tpl, std::string path) {
 
                 ft2_merged["ra_scz"].set(ft2["ra_scz"]);
                 ft2_merged["dec_scz"].set(ft2["dec_scz"]);
-                ft2_merged["ra_scx"].set(ft2["dec_scz"]);
-                ft2_merged["dec_scx"].set(ft2["dec_scz"]);
-                ft2_merged["ra_zenith"].set(ft2["dec_scz"]);
+                ft2_merged["ra_scx"].set(ft2["ra_scx"]);
+                ft2_merged["dec_scx"].set(ft2["dec_scx"]);
+                ft2_merged["ra_zenith"].set(ft2["ra_zenith"]);
                 ft2_merged["dec_zenith"].set(ft2["dec_zenith"]);
                 ft2_merged["lon_geo"].set(ft2["lon_geo"]);
                 ft2_merged["lat_geo"].set(ft2["lat_geo"]);
