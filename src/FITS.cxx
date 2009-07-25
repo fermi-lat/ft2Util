@@ -73,46 +73,54 @@ void FT2::WriteFitsFile(FT2 &FT2) {
 
 
     for (unsigned int i = START; i < STOP; i++) {
-        ft2["start"].set(FT2.FT2_T.Tstart[i]);
-        ft2["stop"].set(FT2.FT2_T.Tstop[i]);
-        scPosition[0] = FT2.ORB.x[i];
-        scPosition[1] = FT2.ORB.y[i];
-        scPosition[2] = FT2.ORB.z[i];
-        ft2["sc_position"].set(scPosition);
-        ft2["ra_scz"].set(FT2.FT2_SC.RA_SCZ[i]);
-        ft2["dec_scz"].set(FT2.FT2_SC.DEC_SCZ[i]);
-        ft2["ra_scx"].set(FT2.FT2_SC.RA_SCX[i]);
-        ft2["dec_scx"].set(FT2.FT2_SC.DEC_SCX[i]);
-        ft2["ra_zenith"].set(FT2.FT2_SC.RA_ZENITH[i]);
-        ft2["dec_zenith"].set(FT2.FT2_SC.DEC_ZENITH[i]);
-        ft2["lon_geo"].set(FT2.FT2_SC.LON_GEO[i]);
-        ft2["lat_geo"].set(FT2.FT2_SC.LAT_GEO[i]);
-        ft2["rad_geo"].set(FT2.FT2_SC.RAD_GEO[i]);
-        ft2["geomag_lat"].set(FT2.FT2_SC.GEOMAG_LAT[i]);
-        ft2["b_mcilwain"].set(FT2.FT2_SC.B_MCILWAIN[i]);
-        ft2["l_mcilwain"].set(FT2.FT2_SC.L_MCILWAIN[i]);
-        if (fabs(FT2.FT2_T.LiveTime[i]) < FT2.LiveTimeTolerance) {
-            FT2.FT2_T.LiveTime[i] = 0;
+        if (FT2.FT2_T.Tstart[i] < FT2.FT2_T.Tstop[i]) {
+            ft2["start"].set(FT2.FT2_T.Tstart[i]);
+            ft2["stop"].set(FT2.FT2_T.Tstop[i]);
+            scPosition[0] = FT2.ORB.x[i];
+            scPosition[1] = FT2.ORB.y[i];
+            scPosition[2] = FT2.ORB.z[i];
+            ft2["sc_position"].set(scPosition);
+            ft2["ra_scz"].set(FT2.FT2_SC.RA_SCZ[i]);
+            ft2["dec_scz"].set(FT2.FT2_SC.DEC_SCZ[i]);
+            ft2["ra_scx"].set(FT2.FT2_SC.RA_SCX[i]);
+            ft2["dec_scx"].set(FT2.FT2_SC.DEC_SCX[i]);
+            ft2["ra_zenith"].set(FT2.FT2_SC.RA_ZENITH[i]);
+            ft2["dec_zenith"].set(FT2.FT2_SC.DEC_ZENITH[i]);
+            ft2["lon_geo"].set(FT2.FT2_SC.LON_GEO[i]);
+            ft2["lat_geo"].set(FT2.FT2_SC.LAT_GEO[i]);
+            ft2["rad_geo"].set(FT2.FT2_SC.RAD_GEO[i]);
+            ft2["geomag_lat"].set(FT2.FT2_SC.GEOMAG_LAT[i]);
+            ft2["b_mcilwain"].set(FT2.FT2_SC.B_MCILWAIN[i]);
+            ft2["l_mcilwain"].set(FT2.FT2_SC.L_MCILWAIN[i]);
+            if (fabs(FT2.FT2_T.LiveTime[i]) < FT2.LiveTimeTolerance) {
+                FT2.FT2_T.LiveTime[i] = 0;
+            }
+            ft2["livetime"].set(FT2.FT2_T.LiveTime[i]);
+            ft2["lat_mode"].set(FT2.ORB.CM[i]);
+            if (FT2.new_tpl == true) {
+                ft2["rock_angle"].set(FT2.FT2_SC.ROCKING_ANGLE[i]);
+                ft2["ra_npole"].set(FT2.FT2_SC.ORBITAL_POLE_RA[i]);
+                ft2["dec_npole"].set(FT2.FT2_SC.ORBITAL_POLE_DEC[i]);
+                ft2["lat_config"].set(FT2.LAT_CONFIG);
+                ft2["data_qual"].set(FT2.DATA_QUAL);
+            }
+            ft2["qsj_1"].set(FT2.FT2_SC.QS_J1[i]);
+            ft2["qsj_2"].set(FT2.FT2_SC.QS_J2[i]);
+            ft2["qsj_3"].set(FT2.FT2_SC.QS_J3[i]);
+            ft2["qsj_4"].set(FT2.FT2_SC.QS_J4[i]);
+            if (FT2.ORB.SAA[i]) {
+                ft2["in_saa"].set(true);
+            } else {
+                ft2["in_saa"].set(false);
+            }
+            ft2.next();
+        } else if ((FT2.FT2_T.Tstart[i] == FT2.FT2_T.Tstop[i]) && (i == STOP - 1) && (FT2.FT2_T.LiveTime[i] == 0) ){
+            printf("Entry %d skipped, Tstart==Tstop, this happened in the last entry, with zero livetime, probable rounding problem\n", i);
+        } else if ((FT2.FT2_T.Tstart[i] == FT2.FT2_T.Tstop[i]) && (i < STOP - 1)) {
+            printf("Entry %d skipped, Tstart==Tstop, this did not  happened in the last entry !!!!!!!!!  possible problem\n", i);
+        } else if ((FT2.FT2_T.Tstart[i] == FT2.FT2_T.Tstop[i]) && (FT2.FT2_T.LiveTime[i] != 0)) {
+            printf("Entry %d skipped, Tstart==Tstop, this happened with non-zero livetime !!!!!!!!!! possible problem\n", i);
         }
-        ft2["livetime"].set(FT2.FT2_T.LiveTime[i]);
-        ft2["lat_mode"].set(FT2.ORB.CM[i]);
-        if (FT2.new_tpl == true) {
-            ft2["rock_angle"].set(FT2.FT2_SC.ROCKING_ANGLE[i]);
-            ft2["ra_npole"].set(FT2.FT2_SC.ORBITAL_POLE_RA[i]);
-            ft2["dec_npole"].set(FT2.FT2_SC.ORBITAL_POLE_DEC[i]);
-            ft2["lat_config"].set(FT2.LAT_CONFIG);
-            ft2["data_qual"].set(FT2.DATA_QUAL);
-        }
-        ft2["qsj_1"].set(FT2.FT2_SC.QS_J1[i]);
-        ft2["qsj_2"].set(FT2.FT2_SC.QS_J2[i]);
-        ft2["qsj_3"].set(FT2.FT2_SC.QS_J3[i]);
-        ft2["qsj_4"].set(FT2.FT2_SC.QS_J4[i]);
-        if (FT2.ORB.SAA[i]) {
-            ft2["in_saa"].set(true);
-        } else {
-            ft2["in_saa"].set(false);
-        }
-        ft2.next();
     }
 
     ft2.setObsTimes(FT2.FT2_T.Tstart[START], FT2.FT2_T.Tstop[STOP]);
