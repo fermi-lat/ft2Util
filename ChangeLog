@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Jul 25 01:08:38 PDT 2009
+ft2Util/src
+
+Modified Files:
+	FITS.cxx 
+Log Message:
+zero-length entries at the end of the 1-second ft2file are checked and skipped
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p28, operation: add
 Package: ft2Util
