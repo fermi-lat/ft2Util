@@ -347,6 +347,7 @@ void FITS(int iargc, char **argv, bool new_tpl, std::string path) {
                 ft2_merged["lat_geo"].set(ft2["lat_geo"]);
                 ft2_merged["rad_geo"].set(ft2["rad_geo"]);
                 ft2_merged["geomag_lat"].set(ft2["geomag_lat"]);
+                ft2_merged["in_saa"].set(ft2["in_saa"]);
                 ft2_merged["b_mcilwain"].set(ft2["b_mcilwain"]);
                 ft2_merged["l_mcilwain"].set(ft2["l_mcilwain"]);
                 ft2_merged["lat_mode"].set(ft2["lat_mode"]);
