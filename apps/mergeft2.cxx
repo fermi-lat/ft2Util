@@ -86,7 +86,7 @@ void getFileNames_FITS(int iargc, char * argv[], std::string & ft2,
 }
 
 int main(int iargc, char **argv) {
-    printf("v1r2p26-test\n");
+    printf("v1r2p31 \n");
 
     bool new_tpl(false);
     std::string path = "/afs/slac.stanford.edu/u/gl/tramacer/fitsGen/ScienceTools-LATEST-1-2481/data/ft2.tpl";
@@ -298,7 +298,7 @@ void FITS(int iargc, char **argv, bool new_tpl, std::string path) {
         std::string ft2_name_merged;
         std::string line, comment;
         std::string Version;
-       
+
 
         double time, lt, next_lt, prev_lt, el, T_stop, T_start, time_elapsed(0), live_time(0), t1, t2;
         unsigned int Entries(0), nrows, nrows_merged;
@@ -309,8 +309,8 @@ void FITS(int iargc, char **argv, bool new_tpl, std::string path) {
         count_rows(ft2_name, FT2_MERGED_BIN_WIDTH, nrows, nrows_merged);
 
         fitsGen::MeritFile ft2(ft2_name, "SC_DATA");
-        if (new_tpl ==false) {
-            path ="/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/ScienceTools/ScienceTools-v9r8p2/fitsGen/v4r1p1/data/ft2.tpl";
+        if (new_tpl == false) {
+            path = "/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/ScienceTools/ScienceTools-v9r8p2/fitsGen/v4r1p1/data/ft2.tpl";
             std::cout << "You are using the default ft2 template " << path << "\n";
         }
 
@@ -347,7 +347,14 @@ void FITS(int iargc, char **argv, bool new_tpl, std::string path) {
                 ft2_merged["lat_geo"].set(ft2["lat_geo"]);
                 ft2_merged["rad_geo"].set(ft2["rad_geo"]);
                 ft2_merged["geomag_lat"].set(ft2["geomag_lat"]);
-                ft2_merged["in_saa"].set(ft2["in_saa"]);
+                bool saa;
+                ft2_merged["in_saa"].get(saa);
+                //std::cout << "in_saa " << saa << "\n";
+                if (saa == true) {
+                    ft2_merged["in_saa"].set(true);
+                } else {
+                    ft2_merged["in_saa"].set(false);
+                }
                 ft2_merged["b_mcilwain"].set(ft2["b_mcilwain"]);
                 ft2_merged["l_mcilwain"].set(ft2["l_mcilwain"]);
                 ft2_merged["lat_mode"].set(ft2["lat_mode"]);
