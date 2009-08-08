@@ -1,4 +1,32 @@
 ------------------------------------------------------------
+TAG
+Tag name: ft2Util-01-02-31, operation: add
+Package: ft2Util
+User: tramacer  Sat Aug  8 11:03:23 2009
+Files:
+  ft2Util/ChangeLog  1.323
+  ft2Util/apps/main.cxx  1.57
+  ft2Util/apps/mergeft2.cxx  1.32
+  ft2Util/cmt/requirements  1.12
+  ft2Util/doc/release.notes  1.17
+  ft2Util/doc/DoxyFile  1.1
+  ft2Util/ft2Util/FT2_Time.hpp  1.35
+  ft2Util/ft2Util/MergeFT2.hpp  1.6
+  ft2Util/src/FITS.cxx  1.18
+  ft2Util/src/Gleam.cxx  1.14
+  ft2Util/src/FT2.cxx  1.52
+  ft2Util/src/utils.cxx  1.20
+  ft2Util/src/SC.cxx  1.13
+  ft2Util/src/mainpage.h  1.4
+  ft2Util/src/Digi.cxx  1.21
+  ft2Util/src/DigiMC.cxx  1.9
+  ft2Util/src/ATT-ORB.cxx  1.20
+  ft2Util/src/FT2_TXT.cxx  1.11
+  ft2Util/src/M7.cxx  1.9
+  ft2Util/test/Command_Line_Templates.txt  1.2
+
+    *
+------------------------------------------------------------
 User: tramacer  Sat Aug  8 11:02:05 PDT 2009
 ft2Util/apps
 
