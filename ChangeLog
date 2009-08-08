@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: tramacer  Sat Aug  8 11:02:05 PDT 2009
+ft2Util/apps
+
+Modified Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+fixed bug in setting in_saa in mergede ft2 file
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-01-02-30, operation: add
 Package: ft2Util
