@@ -21,7 +21,7 @@ mergeFT2Entries = progEnv.Program('mergeFT2Entries',
 
 progEnv.Tool('registerTargets', package = 'ft2Util',
              staticLibraryCxts = [[ft2UtilLib, libEnv]],
-             testAppCxts = [[makeFT2Entries, progEnv]
+             testAppCxts = [[makeFT2Entries, progEnv],
                             [mergeFT2Entries, progEnv]],
              includes = listFiles(['ft2Util/*.h']))
 
