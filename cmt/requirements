@@ -1,6 +1,6 @@
 package ft2Util
 # $Header$
-version v0r0
+version v1r2p32
 author Andrea Tramacere <tramacer@slac.stanford.edu>
 
 use GlastPolicy v*
