@@ -2,6 +2,7 @@
 package manager:Andrea Tramacere
  *         EOH
 
+ ft2Util-01-02-33 08-Oct-2011 monzani fixing a tiny bug in SConscript
 
 
 ft2Util-01-02-32 05-Feb-2010    jrb SConsify
