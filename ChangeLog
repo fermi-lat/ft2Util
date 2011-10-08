@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: monzani  Sat Oct  8 00:45:31 PDT 2011
+ft2Util/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+fixed SConscript
+    *
+------------------------------------------------------------
 User: monzani  Sat Oct  8 00:44:07 PDT 2011
 ft2Util
 
