@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: heather  Mon Dec 12 11:32:11 PST 2011
+ft2Util/src
+
+Removed Files:
+	ATT-ORB.cxx Digi.cxx DigiMC.cxx FITS.cxx FT2.cxx FT2_TXT.cxx 
+	Gleam.cxx M7.cxx SC.cxx utils.cxx 
+Log Message:
+removing all files from old ft2Util
+    *
+------------------------------------------------------------
 User: heather  Mon Dec 12 11:32:10 PST 2011
 ft2Util/ft2Util
 
