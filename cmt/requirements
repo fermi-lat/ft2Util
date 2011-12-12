@@ -1,23 +1,39 @@
 package ft2Util
-# $Header$
-version v1r2p33
-author Andrea Tramacere <tramacer@slac.stanford.edu>
+version v1r0p1
+
+author G. Vianello <giacomov@slac.stanford.edu>
+
+# tested using Glast Release
 
 use GlastPolicy v*
-use enums v*
-use commonRootData v*
-use digiRootData v*
-use astro v*	
-use cfitsio * IExternal 
+use astro v*
 use CLHEP v3* IExternal
-use facilities v*
+use ROOT v* IExternal
+use tip v*
 use fitsGen v*
+use xmlBase v*
+use digiRootData v*
+
 apply_pattern  package_include
 apply_pattern  package_headers
 apply_pattern  package_linkopts
 
-library ft2Util -no_share *.cxx ${ft2Util_headers}
 
-private
-application makeFT2Entries ../apps/main.cxx
-application mergeFT2Entries ../apps/mergeft2.cxx
+macro source "*.cxx" WIN32 "*.cxx *.h"
+
+macro_prepend includes "-g3 "
+
+macro_append ROOT_libs " -lTreePlayer"\
+                 WIN32 " libTreePlayer.lib"
+
+#macro_prepend includes "-g3 -I $(FT2UTIL_2ROOT) -I $(FT2UTIL_2ROOT)/src " WIN32 "/I $(FT2UTIL_2ROOT) /I $(FT2UTIL_2ROOT)\src "
+
+library ft2Util_2 -s=../src  $(source) ${ft2Util_2_headers}
+
+application makeFT2 makeFT2.cpp
+
+application mergeFT2 mergeFT2.cpp
+ 
+
+
+
