@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: heather  Mon Dec 12 13:33:29 PST 2011
+ft2Util/ft2Util
+
+Added Files:
+	AttMessage.h Boresight.h ExtendedPointingInfo.h Extrapolator.h 
+	Ft2.h GapHandler.h Interpolator.h LatCondition.h LatInfo.h 
+	Livetime.h Magic7.h OrbMessage.h Status.h StatusFile.h 
+	TimeInterval.h 
+Log Message:
+initial commit of ft2Util from users/giacomov/ft2Util_2
+    *
+------------------------------------------------------------
 User: heather  Mon Dec 12 13:33:28 PST 2011
 ft2Util/doc
 
