@@ -1,4 +1,20 @@
 ------------------------------------------------------------
+User: heather  Mon Dec 12 13:33:31 PST 2011
+ft2Util/src
+
+Modified Files:
+	mainpage.h 
+Added Files:
+	AttMessage.cxx Boresight.cxx Configuration.cxx Configuration.h 
+	ExtendedPointingInfo.cxx Extrapolator.cxx Ft2.cxx 
+	GapHandler.cxx Interpolator.cxx LatCondition.cxx LatInfo.cxx 
+	Livetime.cxx Magic7.cxx OrbMessage.cxx Status.cxx 
+	StatusFile.cxx TimeInterval.cxx anyoption.cxx anyoption.h 
+	makeFT2.cpp mergeFT2.cpp test_quaternion.cpp util.cxx util.h 
+Log Message:
+initial commit of ft2Util from users/giacomov/ft2Util_2
+    *
+------------------------------------------------------------
 User: heather  Mon Dec 12 13:33:29 PST 2011
 ft2Util/ft2Util
 
