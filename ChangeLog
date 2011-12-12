@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: heather  Mon Dec 12 11:32:09 PST 2011
+ft2Util/apps
+
+Removed Files:
+	main.cxx mergeft2.cxx 
+Log Message:
+removing all files from old ft2Util
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-01-02-33, operation: add
 Package: ft2Util
