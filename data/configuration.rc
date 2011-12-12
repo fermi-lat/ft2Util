@@ -1,0 +1,58 @@
+#This file contains the configuration for the ft2Util_2 package
+#Every line beginning with "#" is a comment.
+#Every blank line is ignored
+
+#Package info
+
+packageVersion             = v0r0p0
+packageName                = ft2Util_2
+packageAuthor              = G.Vianello
+packageAuthorEmail         = giacomov@slac.stanford.edu
+
+#The Julian date of the start of the mission
+JulianDateMissionStart     = 211845067200.0
+
+#If the difference between two time stamps is less than NULL_TIME_DIFFERENCE
+#the two time stamps are considered to be the same (in MET, that is, in seconds)
+NULL_TIME_DIFFERENCE       = 1E-6
+
+#This is the number of ticks occurring between the closing of the window
+#for physics events and the issue of the sweep event, at the end of a run
+sweepEventsDelayEnd        = 20000
+
+#This is the number of ticks needed to complete a single command in the
+#flight software
+ticksPerCommand            = 196
+
+#This is the roll over number for the onboard clock
+RollOver                   = 33554432.0
+
+#This is the nominal conversion factor from ticks to second for the 
+#onboard clock
+nominalTicksToSecond       = 5E-8
+
+#The following three numbers are the angles (in arcsec) for the default boresight 
+#correction, which is the rotation which translates the spacecraft pointing into
+#the LAT pointing
+Rx                         = -170
+Ry                         = -173
+Rz                         = -491
+
+#When the Magic 7 file covers more than the time requested in the command line,
+#all the messages referring to more than magic7ReadPadding seconds 
+#before and after the requested interval will be ignored. The others are kept
+#to allow a safe extrapolation for the position and attitude, if needed.
+magic7ReadPadding          = 5400
+
+#This flag enable/disable the check for gaps in the Digi and Merit files
+#(turn this to "no" to speed up the process, if you already know the files are ok. 
+#You can also use a command line option to do this)
+verify                     = yes
+
+#When there is one or more missing events either in the Digi either in the Merit, 
+#the code produces a bad time interval going from t1+deadPad to t2-deadPad, 
+#where t1 and t2 are respectively the time stamp of the event before the gap
+#and the time stamp of the event after the gap. So deadPad is a padding to avoid
+#the loosing of the events before and after the gap because of the GTI filtering
+#(in micro seconds)
+deadPad                    =  1
