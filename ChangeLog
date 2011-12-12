@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: heather  Mon Dec 12 11:32:11 PST 2011
+ft2Util/test
+
+Removed Files:
+	Command_Line_Templates.txt 
+Log Message:
+removing all files from old ft2Util
+    *
+------------------------------------------------------------
+User: heather  Mon Dec 12 11:32:11 PST 2011
 ft2Util/src
 
 Removed Files:
