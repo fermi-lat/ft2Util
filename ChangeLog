@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: heather  Mon Dec 12 11:32:10 PST 2011
+ft2Util/ft2Util
+
+Removed Files:
+	FT2_Time.hpp MergeFT2.hpp 
+Log Message:
+removing all files from old ft2Util
+    *
+------------------------------------------------------------
 User: heather  Mon Dec 12 11:32:09 PST 2011
 ft2Util/apps
 
