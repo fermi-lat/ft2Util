@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: heather  Mon Dec 12 13:33:28 PST 2011
+ft2Util/data
+
+Added Files:
+	configuration.rc cookMyDigi.C ft2.tpl ft2_example.fits 
+	insertReconCrash.C r0327356667_digi_gaps.root 
+	r0327356667_v001_digiGap_2gaps.txt 
+	r0327356667_v001_magic7L1.txt 
+	r0327356667_v001_merit_crashes.root 
+Log Message:
+initial commit of ft2Util from users/giacomov/ft2Util_2
+    *
+------------------------------------------------------------
 User: heather  Mon Dec 12 13:33:18 PST 2011
 ft2Util/cmt
 
