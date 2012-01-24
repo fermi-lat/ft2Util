@@ -26,9 +26,9 @@ macro_prepend includes "-g3 "
 macro_append ROOT_libs " -lTreePlayer"\
                  WIN32 " libTreePlayer.lib"
 
-#macro_prepend includes "-g3 -I $(FT2UTIL_2ROOT) -I $(FT2UTIL_2ROOT)/src " WIN32 "/I $(FT2UTIL_2ROOT) /I $(FT2UTIL_2ROOT)\src "
+#macro_prepend includes "-g3 -I $(FT2UTIL_ROOT) -I $(FT2UTIL_ROOT)/src " WIN32 "/I $(FT2UTIL_ROOT) /I $(FT2UTIL_ROOT)\src "
 
-library ft2Util_2 -s=../src  $(source) ${ft2Util_2_headers}
+library ft2Util -s=../src  $(source) ${ft2Util_headers}
 
 application makeFT2 makeFT2.cpp
 
