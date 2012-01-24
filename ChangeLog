@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: monzani  Mon Jan 23 18:57:39 PST 2012
+ft2Util
+
+Modified Files:
+	SConscript ft2UtilLib.py 
+Log Message:
+correct SCons setup
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-01-02-34, operation: add
 Package: ft2Util
