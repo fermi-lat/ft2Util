@@ -1,7 +1,7 @@
 # -*- python -*-
 # $Id$
 # Authors: Giacomo Vianello <giacomov@slac.stanford.edu>
-# Version: ft2Util-01-02-34
+# Version: ft2Util-02-00-00
 
 Import('baseEnv')
 Import('listFiles')
