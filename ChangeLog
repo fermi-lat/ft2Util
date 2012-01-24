@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Mon Jan 23 17:58:40 PST 2012
+ft2Util/data
+
+Modified Files:
+	configuration.rc 
+Log Message:
+Changed the name of the package, from ft2Util_2 to ft2Util
+    *
+------------------------------------------------------------
 User: heather  Mon Dec 12 13:33:31 PST 2011
 ft2Util/src
 
