@@ -7,13 +7,13 @@
 #define GAPHANDLER_H
 
 #include "Ttypes.h"
-#include "ft2Util_2/TimeInterval.h"
+#include "ft2Util/TimeInterval.h"
 
 class TFile;
 class TTree;
 class DigiEvent;
 
-namespace ft2Util_2
+namespace ft2Util
 {
 /**
 *@class GapHandler

@@ -9,11 +9,11 @@
 #include <map>
 
 
-#include "ft2Util_2/Status.h"
-#include "ft2Util_2/TimeInterval.h"
+#include "ft2Util/Status.h"
+#include "ft2Util/TimeInterval.h"
 #include "facilities/commonUtilities.h"
 
-namespace ft2Util_2
+namespace ft2Util
 {
 /**
 *@class Ft2
@@ -49,7 +49,7 @@ public:
     ~Ft2();
 
 private:
-    std::map<double, ft2Util_2::Status> m_statusMap;
+    std::map<double, ft2Util::Status> m_statusMap;
     std::map<double, double> m_livetimes;
     std::map<double, int> m_insideSAA;
     double m_stopTime;

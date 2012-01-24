@@ -1,10 +1,10 @@
-#include "ft2Util_2/AttMessage.h"
+#include "ft2Util/AttMessage.h"
 #include "facilities/Util.h"
 
 
-ft2Util_2::AttMessage::~AttMessage() {}
+ft2Util::AttMessage::~AttMessage() {}
 
-ft2Util_2::AttMessage::AttMessage(const std::vector<std::string>& m7AttMessageTokens)
+ft2Util::AttMessage::AttMessage(const std::vector<std::string>& m7AttMessageTokens)
 {
   m_date = m7AttMessageTokens[0];
   m_timeUTC = m7AttMessageTokens[1];
@@ -24,17 +24,17 @@ ft2Util_2::AttMessage::AttMessage(const std::vector<std::string>& m7AttMessageTo
   m_rotVelocity = CLHEP::Hep3Vector(m_rotx,m_roty,m_rotz);
 }
 
-const astro::Quaternion& ft2Util_2::AttMessage::getQuaternion() const
+const astro::Quaternion& ft2Util::AttMessage::getQuaternion() const
 {
   return m_quaternion;
 }
 
-const CLHEP::Hep3Vector& ft2Util_2::AttMessage::getRotVelocity() const
+const CLHEP::Hep3Vector& ft2Util::AttMessage::getRotVelocity() const
 {
   return m_rotVelocity;
 }
 
-const void ft2Util_2::AttMessage::printMessage()
+const void ft2Util::AttMessage::printMessage()
 {
   std::cout << "Date: " << m_date << std::endl
                  << "UTC Time: " << m_timeUTC << std::endl
@@ -44,7 +44,7 @@ const void ft2Util_2::AttMessage::printMessage()
                  << std::endl;
 }
 
-const double ft2Util_2::AttMessage::getTime() const
+const double ft2Util::AttMessage::getTime() const
 {
   return m_MET;
 }

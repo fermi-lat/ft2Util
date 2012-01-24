@@ -1,7 +1,7 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#include "ft2Util_2/Extrapolator.h"
+#include "ft2Util/Extrapolator.h"
 #include "util.h"
 
 //ROOT
@@ -10,7 +10,7 @@
 
 //This class implements the extrapolation of points, using ROOT
 
-using namespace ft2Util_2;
+using namespace ft2Util;
 
 void applyOffset(std::vector<double> &v, double offset)
 {

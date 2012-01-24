@@ -7,7 +7,7 @@
 #include "iostream"
 #include "vector"
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /** @file AttMessage.h
       * @class AttMessage

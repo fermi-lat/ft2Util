@@ -1,9 +1,9 @@
-#include "ft2Util_2/OrbMessage.h"
+#include "ft2Util/OrbMessage.h"
 #include "facilities/Util.h"
 
-ft2Util_2::OrbMessage::~OrbMessage() {}
+ft2Util::OrbMessage::~OrbMessage() {}
 
-ft2Util_2::OrbMessage::OrbMessage(const std::vector<std::string> &m7OrbMessageTokens)
+ft2Util::OrbMessage::OrbMessage(const std::vector<std::string> &m7OrbMessageTokens)
 {
   m_date = m7OrbMessageTokens[0];
   m_timeUTC = m7OrbMessageTokens[1];
@@ -26,7 +26,7 @@ ft2Util_2::OrbMessage::OrbMessage(const std::vector<std::string> &m7OrbMessageTo
 
 }
 
-const void  ft2Util_2::OrbMessage::printMessage()
+const void  ft2Util::OrbMessage::printMessage()
 {
   std::cout.precision(20);
   std::cout << "Date: " << m_date << std::endl
@@ -37,32 +37,32 @@ const void  ft2Util_2::OrbMessage::printMessage()
                  << std::endl;
 }
 
-const double  ft2Util_2::OrbMessage::getTime() const
+const double  ft2Util::OrbMessage::getTime() const
 {
   return m_MET;
 }
 
-const std::string  ft2Util_2::OrbMessage::getDate() const
+const std::string  ft2Util::OrbMessage::getDate() const
 {
   return m_date;
 }
-const std::string  ft2Util_2::OrbMessage::getTimeUTC() const
+const std::string  ft2Util::OrbMessage::getTimeUTC() const
 {
   return m_timeUTC;
 }
-const CLHEP::Hep3Vector  ft2Util_2::OrbMessage::getPosition() const 
+const CLHEP::Hep3Vector  ft2Util::OrbMessage::getPosition() const 
 {
   return m_position;
 }
-const CLHEP::Hep3Vector  ft2Util_2::OrbMessage::getVelocity() const 
+const CLHEP::Hep3Vector  ft2Util::OrbMessage::getVelocity() const 
 {
   return m_velocity;
 }
-const int  ft2Util_2::OrbMessage::getMode() const 
+const int  ft2Util::OrbMessage::getMode() const 
 {
   return m_GNCmode;
 }
-const int  ft2Util_2::OrbMessage::getInSAA() const 
+const int  ft2Util::OrbMessage::getInSAA() const 
 {
   return m_inSAA;
 }

@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 
-#include "ft2Util_2/Boresight.h"
+#include "ft2Util/Boresight.h"
 #include "util.h"
 #include "xmlBase/XmlParser.h"
 #include "xmlBase/Dom.h"
@@ -14,52 +14,52 @@
 #include "facilities/Util.h"
 #include "facilities/commonUtilities.h"
 
-ft2Util_2::Boresight::Boresight()
+ft2Util::Boresight::Boresight()
 {
   //Default values for boresight angles. This could be avoided by
   //using one of the other two constructors.
-  m_Rx = ft2Util_2::Configuration::Instance()->Rx;
-  m_Ry = ft2Util_2::Configuration::Instance()->Ry;
-  m_Rz = ft2Util_2::Configuration::Instance()->Rz;
-  ft2Util_2::Boresight::update_rotation();
+  m_Rx = ft2Util::Configuration::Instance()->Rx;
+  m_Ry = ft2Util::Configuration::Instance()->Ry;
+  m_Rz = ft2Util::Configuration::Instance()->Rz;
+  ft2Util::Boresight::update_rotation();
 }
 
-ft2Util_2::Boresight::Boresight(double Rx, double Ry, double Rz) 
+ft2Util::Boresight::Boresight(double Rx, double Ry, double Rz) 
                               : m_Rx(Rx), m_Ry(Ry), m_Rz(Rz)
 {
-  ft2Util_2::Boresight::update_rotation();
+  ft2Util::Boresight::update_rotation();
 }
 
-ft2Util_2::Boresight::Boresight(const std::string borefile)
+ft2Util::Boresight::Boresight(const std::string borefile)
 {
-  ft2Util_2::Boresight::xmlParser(borefile, &m_Rx,&m_Ry,&m_Rz);
-  ft2Util_2::Boresight::update_rotation();
+  ft2Util::Boresight::xmlParser(borefile, &m_Rx,&m_Ry,&m_Rz);
+  ft2Util::Boresight::update_rotation();
 }
 
-void ft2Util_2::Boresight::update_rotation() 
+void ft2Util::Boresight::update_rotation() 
 { 
   //transform angles from arcsec to deg, then from deg to rad,
   //then obtain the boresight rotation matrix
-  m_rotation = CLHEP::HepRotationX ( ft2Util_2::util::Deg2Rad(m_Rx/3600.0) ) 
-                    * CLHEP::HepRotationY ( ft2Util_2::util::Deg2Rad(m_Ry/3600.0) ) 
-                    * CLHEP::HepRotationZ ( ft2Util_2::util::Deg2Rad(m_Rz/3600.0) );
+  m_rotation = CLHEP::HepRotationX ( ft2Util::util::Deg2Rad(m_Rx/3600.0) ) 
+                    * CLHEP::HepRotationY ( ft2Util::util::Deg2Rad(m_Ry/3600.0) ) 
+                    * CLHEP::HepRotationZ ( ft2Util::util::Deg2Rad(m_Rz/3600.0) );
 }
 
-const CLHEP::HepRotation& ft2Util_2::Boresight::getRotation() const
+const CLHEP::HepRotation& ft2Util::Boresight::getRotation() const
 {
   return m_rotation;
 }
 
-const astro::Quaternion ft2Util_2::Boresight::getQuaternion()
+const astro::Quaternion ft2Util::Boresight::getQuaternion()
 {
   return astro::Quaternion(m_rotation);
 }
 
-ft2Util_2::Boresight::~Boresight()
+ft2Util::Boresight::~Boresight()
 {
 }
 
-int ft2Util_2::Boresight::xmlParser (std::string infile, double* Rx, double* Ry, double* Rz )
+int ft2Util::Boresight::xmlParser (std::string infile, double* Rx, double* Ry, double* Rz )
 {
     XERCES_CPP_NAMESPACE_USE
     facilities::commonUtilities::setupEnvironment();

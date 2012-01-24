@@ -10,11 +10,11 @@
 #include <iostream>
 
 #include "astro/PointingHistory.h"
-#include "ft2Util_2/ExtendedPointingInfo.h"
-#include "ft2Util_2/Boresight.h"
-#include "ft2Util_2/LatCondition.h"
+#include "ft2Util/ExtendedPointingInfo.h"
+#include "ft2Util/Boresight.h"
+#include "ft2Util/LatCondition.h"
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *
@@ -36,8 +36,8 @@ namespace ft2Util_2
                @param condition This is a LatCondition class representing the condition (mode, config and data quality) of the LAT at a
                particular time
               */  
-                LatInfo ( const ft2Util_2::ExtendedPointingInfo& spacecraft,
-                                const ft2Util_2::LatCondition& condition);
+                LatInfo ( const ft2Util::ExtendedPointingInfo& spacecraft,
+                                const ft2Util::LatCondition& condition);
                 virtual ~LatInfo();
                 /**
                 *@brief Update the values of the boresight angles used for the boresight correction

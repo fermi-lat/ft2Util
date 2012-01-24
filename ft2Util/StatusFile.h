@@ -6,9 +6,9 @@
 #ifndef STATUSFILE_H
 #define STATUSFILE_H
 
-#include "ft2Util_2/Status.h"
+#include "ft2Util/Status.h"
 
-namespace ft2Util_2
+namespace ft2Util
 {
 /**
 *

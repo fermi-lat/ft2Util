@@ -9,7 +9,7 @@
 #include <iostream>
 #include <map>
 
-namespace ft2Util_2
+namespace ft2Util
 {
 /**
 *

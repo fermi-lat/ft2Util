@@ -3,15 +3,15 @@
 #include <cmath>
 #include <sstream>
 
-#include "ft2Util_2/Magic7.h"
-#include "ft2Util_2/Extrapolator.h"
-#include "ft2Util_2/Interpolator.h"
-#include "ft2Util_2/TimeInterval.h"
+#include "ft2Util/Magic7.h"
+#include "ft2Util/Extrapolator.h"
+#include "ft2Util/Interpolator.h"
+#include "ft2Util/TimeInterval.h"
 #include "util.h"
 #include "facilities/Util.h"
 #include "Configuration.h"
 
-ft2Util_2::Magic7::Magic7(const std::string m7txtFile, const double tstart, const double tstop)
+ft2Util::Magic7::Magic7(const std::string m7txtFile, const double tstart, const double tstop)
         : m_filename(m7txtFile)
 {
     //open the text file
@@ -20,7 +20,7 @@ ft2Util_2::Magic7::Magic7(const std::string m7txtFile, const double tstart, cons
 
     if (!input_file.is_open()) {
         std::cerr << "FATAL ERROR:  Unable to open Magic 7 file :  " << m7txtFile << std::endl;
-        throw std::runtime_error("ft2Util_2::Magic7(): could not open Magic 7 file");
+        throw std::runtime_error("ft2Util::Magic7(): could not open Magic 7 file");
     } else
     {
         std::cout << "Magic 7 file " << m7txtFile << " opened"<< std::endl << std::endl;
@@ -54,17 +54,17 @@ ft2Util_2::Magic7::Magic7(const std::string m7txtFile, const double tstart, cons
         //This is to avoid to read too much in the M7 file, but I don't cut exactly at tstart or tstop to keep extra messages
         //to make interpolation easier at the extremes of the interval.
         if ( (tstart !=-1 && tstop != -1) &&
-          (tstart - MET > ft2Util_2::Configuration::Instance()->magic7ReadPadding ||
-          MET - tstop > ft2Util_2::Configuration::Instance()->magic7ReadPadding)) continue;
+          (tstart - MET > ft2Util::Configuration::Instance()->magic7ReadPadding ||
+          MET - tstop > ft2Util::Configuration::Instance()->magic7ReadPadding)) continue;
         //ATT or ORB?
         if ( tokens[2]=="ATT" && tokens.size() == 12) {
             //ATT message
             AttMessage curMessage(tokens);
-            m_attMessages.insert(std::pair<double, ft2Util_2::AttMessage>(curMessage.getTime(), curMessage));
+            m_attMessages.insert(std::pair<double, ft2Util::AttMessage>(curMessage.getTime(), curMessage));
         } else if (tokens[2]=="ORB" && tokens.size() == 13) {
             //ORB message
             OrbMessage curMessage(tokens);
-            m_orbMessages.insert(std::pair<double, ft2Util_2::OrbMessage>(curMessage.getTime(), curMessage));
+            m_orbMessages.insert(std::pair<double, ft2Util::OrbMessage>(curMessage.getTime(), curMessage));
         } else
         {
             std::cerr << "WARNING:  Unable to parse the message at line " << linePos << " in Magic 7 file  " << m7txtFile << std::endl;
@@ -79,14 +79,14 @@ ft2Util_2::Magic7::Magic7(const std::string m7txtFile, const double tstart, cons
         std::cerr.precision(14);
         std::cerr << "FATAL ERROR:  No ATT messages found in the file  " << m7txtFile
                   << " for the required time span (" << tstart << ", " << tstop << ")." << std::endl;
-        throw std::runtime_error("ft2Util_2::Magic7(): No ATT messages found in M7 file in the requested time span.");
+        throw std::runtime_error("ft2Util::Magic7(): No ATT messages found in M7 file in the requested time span.");
     }
     if (m_orbMessages.empty())
     {
         std::cerr.precision(14);
         std::cerr << "FATAL ERROR:  No ORB messages found in the file  " << m7txtFile
                   << " for the required time span (" << tstart << ", " << tstop << ")." << std::endl;
-        throw std::runtime_error("ft2Util_2::Magic7(): No ORB messages found in M7 file in the requested time span.");
+        throw std::runtime_error("ft2Util::Magic7(): No ORB messages found in M7 file in the requested time span.");
     }
 //Summarizing the Magic 7 content
     std::cout.precision(14);
@@ -103,9 +103,9 @@ ft2Util_2::Magic7::Magic7(const std::string m7txtFile, const double tstart, cons
     this->setupTimeIntervals();
 }
 
-ft2Util_2::Magic7::~Magic7() {}
+ft2Util::Magic7::~Magic7() {}
 
-void ft2Util_2::Magic7::print()
+void ft2Util::Magic7::print()
 {
     //Print out the file
     std::cout << std::endl <<  "ATT Messages: " << std::endl << std::endl;
@@ -125,7 +125,7 @@ void ft2Util_2::Magic7::print()
     }
 }
 
-void ft2Util_2::Magic7::setupTimeIntervals()
+void ft2Util::Magic7::setupTimeIntervals()
 {
     std::cerr.precision(14);
     std::cout.precision(14);
@@ -141,7 +141,7 @@ void ft2Util_2::Magic7::setupTimeIntervals()
         //Since the following loop is very fast, we don't need to assume time-ordered ATT messages
         for (ATTitor=m_attMessages.begin();ATTitor != m_attMessages.end(); ++ATTitor)
         {
-          if (std::abs(ATTitor->first - ORBitor->first) < ft2Util_2::Configuration::Instance()->NULL_TIME_DIFFERENCE)
+          if (std::abs(ATTitor->first - ORBitor->first) < ft2Util::Configuration::Instance()->NULL_TIME_DIFFERENCE)
             {
                 //The current ATT and ORB messages have the same time stamp
                 found=true;
@@ -169,7 +169,7 @@ void ft2Util_2::Magic7::setupTimeIntervals()
     {
         //HEY! No contemporary ATT and ORB messages found!
         std::cerr << "FATAL ERROR: no contemporary ATT and ORB messages found in the magic 7 file " << m_filename << std::endl;
-        throw std::runtime_error("ft2Util_2::Magic7(): error in Magic 7 file (no contemporary ATT and ORB messages)");
+        throw std::runtime_error("ft2Util::Magic7(): error in Magic 7 file (no contemporary ATT and ORB messages)");
     }
     std::cout << "First concurrent ORB and ATT messages at time (MET):   " << firstORBitor->first << std::endl << std::endl;
 
@@ -190,7 +190,7 @@ void ft2Util_2::Magic7::setupTimeIntervals()
         prevItor--;
 
         double deltaT=itor->first-prevItor->first;
-        if (deltaT -1 > ft2Util_2::Configuration::Instance()->NULL_TIME_DIFFERENCE)
+        if (deltaT -1 > ft2Util::Configuration::Instance()->NULL_TIME_DIFFERENCE)
         {
             //There are one or more lacking ORB messages
             //How many lacking messages?
@@ -219,7 +219,7 @@ void ft2Util_2::Magic7::setupTimeIntervals()
                 std::cerr << "WARNING: " << " two ORB messages in less than one second, without a change of mode... "
                           << "very strange! It happened between "
                           << prevItor->first << " and " << itor->first << " in magic 7 file " << m_filename << std::endl;
-                /*          throw std::runtime_error("ft2Util_2::setupTimeIntervals():two ORB messages in less than one second without a change of mode. ");*/
+                /*          throw std::runtime_error("ft2Util::setupTimeIntervals():two ORB messages in less than one second without a change of mode. ");*/
             }
         } else
         {
@@ -237,7 +237,7 @@ void ft2Util_2::Magic7::setupTimeIntervals()
     
 }
 
-const astro::Quaternion ft2Util_2::Magic7::getQuaternion(double time) const
+const astro::Quaternion ft2Util::Magic7::getQuaternion(double time) const
 {
     //Lower_bound returns the element whose key is equal to "time" if exists,
     //otherwise returns the first element whose key is greater than "time" or the end
@@ -285,7 +285,7 @@ const astro::Quaternion ft2Util_2::Magic7::getQuaternion(double time) const
 }
 
 //Normalize a quaternion to 1: rotations must have norm = 1
-astro::Quaternion ft2Util_2::Magic7::normalize(const astro::Quaternion &q) const
+astro::Quaternion ft2Util::Magic7::normalize(const astro::Quaternion &q) const
 {
     double w;
     double norm = sqrt(q.norm());
@@ -295,7 +295,7 @@ astro::Quaternion ft2Util_2::Magic7::normalize(const astro::Quaternion &q) const
     return astro::Quaternion(v,w);
 }
 
-const CLHEP::Hep3Vector ft2Util_2::Magic7::getPosition(double time) const
+const CLHEP::Hep3Vector ft2Util::Magic7::getPosition(double time) const
 {
     //Lower_bound returns the element whose key is equal to "time" if exists,
     //otherwise returns the first element whose key is greater than "time"
@@ -410,7 +410,7 @@ const CLHEP::Hep3Vector ft2Util_2::Magic7::getPosition(double time) const
 }
 
 
-const int ft2Util_2::Magic7::getMode(double time) const
+const int ft2Util::Magic7::getMode(double time) const
 {
     //Lower_bound returns the element whose key is equal to "time" if exists,
     //otherwise returns the first element whose key is greater than "time"
@@ -461,7 +461,7 @@ const int ft2Util_2::Magic7::getMode(double time) const
     }
 }
 
-const int ft2Util_2::Magic7::getInSAA(double time) const
+const int ft2Util::Magic7::getInSAA(double time) const
 {
     //Lower_bound returns the element whose key is equal to "time" if exists,
     //otherwise returns the first element whose key is greater than "time"

@@ -15,7 +15,7 @@ class DigiEvent;
 #include "Ttypes.h"
 
 
-namespace ft2Util_2
+namespace ft2Util
 {
 /**
 *

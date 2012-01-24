@@ -14,7 +14,7 @@ class TF1;
 #include "Ttypes.h"
 //#include "TF1.h"
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *

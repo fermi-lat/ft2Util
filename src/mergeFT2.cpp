@@ -1,6 +1,6 @@
-#include "ft2Util_2/Magic7.h"
-#include "ft2Util_2/Ft2.h"
-#include "ft2Util_2/Livetime.h"
+#include "ft2Util/Magic7.h"
+#include "ft2Util/Ft2.h"
+#include "ft2Util/Livetime.h"
 #include "util.h"
 #include "facilities/Util.h"
 #include "tip/IFileSvc.h"
@@ -90,7 +90,7 @@ int parseCommandLine(int argc, char* argv[])
 
     if ( opt->getValue( "inputFT2" ) != NULL )  {
         cmdLine.inputFT2=opt->getValue("inputFT2");
-        ft2Util_2::util::checkFileExists(cmdLine.inputFT2);
+        ft2Util::util::checkFileExists(cmdLine.inputFT2);
         haveInputFT2=1;
     }
     if ( opt->getValue( "outputFT2" ) != NULL )  {
@@ -105,7 +105,7 @@ int parseCommandLine(int argc, char* argv[])
     if ( opt->getValue( "procVer" ) != NULL )  {
       cmdLine.processingVersion=facilities::Util::atoi(opt->getValue("procVer"));
     }
-//   if( opt->getValue( "templateFT2" ) != NULL )  { cmdLine.templateFT2=opt->getValue("templateFT2"); ft2Util_2::util::checkFileExists(cmdLine.templateFT2); haveTemplateFT2=1;}
+//   if( opt->getValue( "templateFT2" ) != NULL )  { cmdLine.templateFT2=opt->getValue("templateFT2"); ft2Util::util::checkFileExists(cmdLine.templateFT2); haveTemplateFT2=1;}
     if ( opt->getFlag( "help" ) ) {
         opt->printUsage();
         return -1;
@@ -127,7 +127,7 @@ int parseCommandLine(int argc, char* argv[])
     }
 
     //Check if the output file already exists
-    if (ft2Util_2::util::FileExists(cmdLine.outputFT2)==1)
+    if (ft2Util::util::FileExists(cmdLine.outputFT2)==1)
     {
         if (cmdLine.clobber!="y" && cmdLine.clobber!="true" && cmdLine.clobber !="yes")
         {
@@ -158,7 +158,7 @@ int parseCommandLine(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-    using namespace ft2Util_2;
+    using namespace ft2Util;
 
     int crtl = parseCommandLine(argc,argv);
 
@@ -319,7 +319,7 @@ int main(int argc, char* argv[])
 
     //Now update some keywords in the header of the output file
     outputFT2.setObsTimes(globalTstart, globalTstop);
-    std::string pack = ft2Util_2::Configuration::Instance()->packageName+"_"+ft2Util_2::Configuration::Instance()->packageVersion;
+    std::string pack = ft2Util::Configuration::Instance()->packageName+"_"+ft2Util::Configuration::Instance()->packageVersion;
     outputFT2.setPhduKeyword("CREATOR", pack);
     outputFT2.setPhduKeyword("VERSION", cmdLine.version);
     outputFT2.setPhduKeyword("PROC_VER", cmdLine.processingVersion);

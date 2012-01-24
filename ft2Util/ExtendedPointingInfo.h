@@ -9,7 +9,7 @@
 #include "astro/PointingInfo.h"
 #include "astro/SkyDir.h"
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *

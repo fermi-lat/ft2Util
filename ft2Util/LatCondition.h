@@ -6,7 +6,7 @@
 #ifndef LATCONDITION_H
 #define LATCONDITION_H
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *

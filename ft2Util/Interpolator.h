@@ -8,7 +8,7 @@
 
 #include "CLHEP/Vector/ThreeVector.h"
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *

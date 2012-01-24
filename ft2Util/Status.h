@@ -6,11 +6,11 @@
 #ifndef STATUS_H
 #define STATUS_H
 
-#include "ft2Util_2/ExtendedPointingInfo.h"
-#include "ft2Util_2/LatInfo.h"
+#include "ft2Util/ExtendedPointingInfo.h"
+#include "ft2Util/LatInfo.h"
 //#include "ft2Grow/LatCondition.h" Already included by LatInfo.h
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *
@@ -30,7 +30,7 @@ namespace ft2Util_2
                 Status(const CLHEP::Hep3Vector& position, 
                             const astro::Quaternion& orientation, 
                             const astro::EarthCoordinate& earthPos,
-                            const ft2Util_2::LatCondition &condition, 
+                            const ft2Util::LatCondition &condition, 
                             const astro::SkyDir &sunDir);
                 virtual ~Status();
                 //! Provide access to a member containing all the pointing information of the spacecraft (see ExtendedPointingInfo )               
