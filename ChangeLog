@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+User: giacomov  Mon Jan 23 17:58:43 PST 2012
+ft2Util/src
+
+Modified Files:
+	AttMessage.cxx Boresight.cxx Configuration.cxx Configuration.h 
+	ExtendedPointingInfo.cxx Extrapolator.cxx Ft2.cxx 
+	GapHandler.cxx Interpolator.cxx LatCondition.cxx LatInfo.cxx 
+	Livetime.cxx Magic7.cxx OrbMessage.cxx Status.cxx 
+	StatusFile.cxx TimeInterval.cxx mainpage.h makeFT2.cpp 
+	mergeFT2.cpp test_quaternion.cpp util.cxx util.h 
+Log Message:
+Changed the name of the package, from ft2Util_2 to ft2Util
+    *
+------------------------------------------------------------
 User: giacomov  Mon Jan 23 17:58:42 PST 2012
 ft2Util/ft2Util
 
