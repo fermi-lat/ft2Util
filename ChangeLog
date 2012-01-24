@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: giacomov  Mon Jan 23 17:58:42 PST 2012
+ft2Util/ft2Util
+
+Modified Files:
+	AttMessage.h Boresight.h ExtendedPointingInfo.h Extrapolator.h 
+	Ft2.h GapHandler.h Interpolator.h LatCondition.h LatInfo.h 
+	Livetime.h Magic7.h OrbMessage.h Status.h StatusFile.h 
+	TimeInterval.h 
+Log Message:
+Changed the name of the package, from ft2Util_2 to ft2Util
+    *
+------------------------------------------------------------
 User: giacomov  Mon Jan 23 17:58:40 PST 2012
 ft2Util/data
 
