@@ -13,15 +13,12 @@ ft2UtilLib = libEnv.StaticLibrary('ft2Util', listFiles(['src/*.cxx']))
 
 progEnv.Tool('ft2UtilLib')
 
-makeFT2Entries = progEnv.Program('makeFT2Entries',
-                                 listFiles(['apps/main.cxx']))
-mergeFT2Entries = progEnv.Program('mergeFT2Entries',
-                                  listFiles(['apps/mergeft2.cxx']))
+makeFT2 = progEnv.Program('makeFT2', listFiles(['src/makeFT2.cpp']))
+mergeFT2 = progEnv.Program('mergeFT2', listFiles(['src/mergeFT2.cpp']))
 
 
 progEnv.Tool('registerTargets', package = 'ft2Util',
              staticLibraryCxts = [[ft2UtilLib, libEnv]],
-             testAppCxts = [[makeFT2Entries, progEnv],
-                            [mergeFT2Entries, progEnv]],
+             testAppCxts = [[makeFT2, progEnv], [mergeFT2, progEnv]],
              includes = listFiles(['ft2Util/*.h']))
 

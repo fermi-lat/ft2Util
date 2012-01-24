@@ -6,9 +6,9 @@ def generate(env, **kw):
     env.Tool('commonRootDataLib')
     env.Tool('astroLib')
     env.Tool('fitsGenLib')
-    env.Tool('facilitiesLib')
+    env.Tool('xmlBaseLib')
+    env.Tool('tipLib')
     env.Tool('addLibrary', library = env['clhepLibs'])
-    env.Tool('addLibrary', library = env['cfitsioLibs'])
 
 def exists(env):
     return 1
