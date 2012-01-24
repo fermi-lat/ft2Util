@@ -1,6 +1,6 @@
-#include "ft2Util_2/Magic7.h"
-#include "ft2Util_2/Ft2.h"
-#include "ft2Util_2/Livetime.h"
+#include "ft2Util/Magic7.h"
+#include "ft2Util/Ft2.h"
+#include "ft2Util/Livetime.h"
 #include "util.h"
 #include "Configuration.h"
 #include "facilities/Util.h"
@@ -139,16 +139,16 @@ int parseCommandLine(int argc, char* argv[])
   
   if( opt->getValue( "ft2start" ) != NULL )  {cmdLine.ft2start=facilities::Util::stringToDouble(opt->getValue("ft2start")); haveTstart=1;}
   if( opt->getValue( "ft2stop" ) != NULL )  {cmdLine.ft2stop=facilities::Util::stringToDouble(opt->getValue("ft2stop")); haveTstop=1;}
-  if( opt->getValue( "m7file" ) != NULL )  { cmdLine.m7file=opt->getValue("m7file"); ft2Util_2::util::checkFileExists(cmdLine.m7file); haveM7file=1;} 
+  if( opt->getValue( "m7file" ) != NULL )  { cmdLine.m7file=opt->getValue("m7file"); ft2Util::util::checkFileExists(cmdLine.m7file); haveM7file=1;} 
   if( opt->getValue( "ft2file" ) != NULL )  {cmdLine.ft2file=opt->getValue("ft2file"); haveFT2file=1;}
-  if( opt->getValue( "digifile" ) != NULL )  {cmdLine.digifile=opt->getValue("digifile"); ft2Util_2::util::checkFileExists(cmdLine.digifile); haveDigi=1;}
-  if( opt->getValue( "meritfile" ) != NULL )  {cmdLine.meritfile=opt->getValue("meritfile"); ft2Util_2::util::checkFileExists(cmdLine.meritfile); haveMerit=1;}
-  if( opt->getValue( "gapfile" ) != NULL )  {cmdLine.gapfile=opt->getValue("gapfile"); ft2Util_2::util::checkFileExists(cmdLine.gapfile); haveGaps=1;}
+  if( opt->getValue( "digifile" ) != NULL )  {cmdLine.digifile=opt->getValue("digifile"); ft2Util::util::checkFileExists(cmdLine.digifile); haveDigi=1;}
+  if( opt->getValue( "meritfile" ) != NULL )  {cmdLine.meritfile=opt->getValue("meritfile"); ft2Util::util::checkFileExists(cmdLine.meritfile); haveMerit=1;}
+  if( opt->getValue( "gapfile" ) != NULL )  {cmdLine.gapfile=opt->getValue("gapfile"); ft2Util::util::checkFileExists(cmdLine.gapfile); haveGaps=1;}
 //   if( opt->getValue( "dt" ) != NULL )  cmdLine.step=facilities::Util::stringToDouble(opt->getValue("dt"));
   if( opt->getValue( "clobber" ) != NULL )  cmdLine.clobber=opt->getValue("clobber");
   if( opt->getValue( "dataquality" ) != NULL )  cmdLine.dataquality=facilities::Util::atoi(opt->getValue("dataquality"));
   if( opt->getValue( "latconfig" ) != NULL )  {cmdLine.latconfig=facilities::Util::atoi(opt->getValue("latconfig"));}
-  if( opt->getValue( "templateFT2" ) != NULL )  { cmdLine.templateFT2=opt->getValue("templateFT2"); ft2Util_2::util::checkFileExists(cmdLine.templateFT2); haveTemplateFT2=1;} 
+  if( opt->getValue( "templateFT2" ) != NULL )  { cmdLine.templateFT2=opt->getValue("templateFT2"); ft2Util::util::checkFileExists(cmdLine.templateFT2); haveTemplateFT2=1;} 
   if( opt->getValue( "version" ) != NULL )  cmdLine.version=facilities::Util::atoi(opt->getValue("version"));
   if( opt->getValue( "procVer" ) != NULL )  cmdLine.processingVersion=facilities::Util::atoi(opt->getValue("procVer"));
   if( opt->getValue( "configFile" ) != NULL )  cmdLine.configurationFilePath=opt->getValue("configFile");
@@ -223,7 +223,7 @@ int parseCommandLine(int argc, char* argv[])
   }
   
   //Check if the output file already exists
-  if(ft2Util_2::util::FileExists(cmdLine.ft2file)==1)
+  if(ft2Util::util::FileExists(cmdLine.ft2file)==1)
   {
     if(cmdLine.clobber!="y" && cmdLine.clobber!="true" && cmdLine.clobber !="yes") 
     {
@@ -238,7 +238,7 @@ int parseCommandLine(int argc, char* argv[])
   if(cmdLine.configurationFilePath=="") 
   {
     //Use default configuration file
-    cmdLine.configurationFilePath = facilities::commonUtilities::getDataPath("ft2Util_2")+"/configuration.rc";
+    cmdLine.configurationFilePath = facilities::commonUtilities::getDataPath("ft2Util")+"/configuration.rc";
   }
   
   //At this point we have a valid configuration. Print it
@@ -269,19 +269,19 @@ int parseCommandLine(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-    using namespace ft2Util_2;
+    using namespace ft2Util;
 
     int crtl = parseCommandLine(argc,argv);
 
     if (crtl < 0) return -1;
 
     //Print the configuration: this will instance the singleton Configuration, if it has not been already instanced
-    ft2Util_2::Configuration::Instance(cmdLine.configurationFilePath)->Print();
+    ft2Util::Configuration::Instance(cmdLine.configurationFilePath)->Print();
     
     if(cmdLine.verify=="no")
     {
       //Disable verification of input files
-      ft2Util_2::Configuration::Instance()->verify="no";
+      ft2Util::Configuration::Instance()->verify="no";
       std::cerr << "\nCHECK FOR GAPS DISABLED! (you specified verify=no in the command line)" << std::endl;
     }
 

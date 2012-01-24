@@ -4,7 +4,7 @@
 #include "util.h"
 #include <fstream>
 
-namespace ft2Util_2 {
+namespace ft2Util {
 
 /** This function is called to create an instance of the class.
     Calling the constructor publicly is not allowed. The constructor
@@ -26,7 +26,7 @@ Configuration* Configuration::Instance(std::string in_configurationFilePath)
 Configuration::Configuration(std::string in_configurationFilePath)
 {
   //I don't know how to get these information... it should be a #define when compiling, or something like that...
-  packageName = "ft2Util_2";
+  packageName = "ft2Util";
   
   if (in_configurationFilePath=="")
   {

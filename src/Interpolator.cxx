@@ -1,7 +1,7 @@
-#include "ft2Util_2/Interpolator.h"
+#include "ft2Util/Interpolator.h"
 //This class implements the interpolation of points
 
-ft2Util_2::Interpolator::Interpolator(CLHEP::Hep3Vector position1, double t1,
+ft2Util::Interpolator::Interpolator(CLHEP::Hep3Vector position1, double t1,
                            CLHEP::Hep3Vector position2, double t2) :
         m_pos1(position1), m_pos2(position2), m_t1(t1), m_t2(t2)
 {
@@ -16,11 +16,11 @@ ft2Util_2::Interpolator::Interpolator(CLHEP::Hep3Vector position1, double t1,
     m_length12 = m_vector12.mag();
 }
 
-ft2Util_2::Interpolator::~Interpolator()
+ft2Util::Interpolator::~Interpolator()
 {
 }
 
-const CLHEP::Hep3Vector ft2Util_2::Interpolator::evaluateIn(double t)
+const CLHEP::Hep3Vector ft2Util::Interpolator::evaluateIn(double t)
 {
   double fract ;
   CLHEP::Hep3Vector interpPos;

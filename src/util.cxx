@@ -11,7 +11,7 @@
 
 #include <TFile.h>
 
-namespace ft2Util_2
+namespace ft2Util
 {
 
 
@@ -49,13 +49,13 @@ void checkFileExists(std::string filename)
 {
   bool fileExists=true;
   //Use the rootFileExists function if filename is a root file
-  std::string extension = ft2Util_2::util::GetFileExtension(filename);
+  std::string extension = ft2Util::util::GetFileExtension(filename);
   if(extension=="root") 
   {
-    fileExists = ft2Util_2::util::rootFileExists(filename);
+    fileExists = ft2Util::util::rootFileExists(filename);
   } else
   {
-    int ret = ft2Util_2::util::FileExists(filename);
+    int ret = ft2Util::util::FileExists(filename);
     if(ret!=1) fileExists = false;
   }
   
@@ -117,7 +117,7 @@ double Rad2Deg ( double Angle )
 astro::SkyDir getSunPosition(double time)
 {
     //Get the position of the sun
-    double jd = astro::JulianDate((ft2Util_2::Configuration::Instance()->JulianDateMissionStart + time)/util::secondsPerDay);
+    double jd = astro::JulianDate((ft2Util::Configuration::Instance()->JulianDateMissionStart + time)/util::secondsPerDay);
     astro::SolarSystem sunAstro(astro::SolarSystem::SUN);
     return sunAstro.direction(jd);
 }

@@ -1,4 +1,4 @@
-#include "ft2Util_2/Livetime.h"
+#include "ft2Util/Livetime.h"
 #include "facilities/Util.h"
 #include "Configuration.h"
 
@@ -19,7 +19,7 @@
 //This class implements the livetime
 #include "util.h"
 
-using namespace ft2Util_2;
+using namespace ft2Util;
 
 //Here the constructor open the ROOT files (digi and merit) and set up the branches and evts
 Livetime::Livetime(const std::string& digiFile, const std::string& meritFile) :
@@ -601,9 +601,9 @@ double Livetime::getDigiEvtLivetime(Long64_t runID,const Long64_t evtID1, const 
     ULong64_t livetimeTicks  = firstEvtLivetime-sweepLivetime; 
     ULong64_t deadtimeTicks = elapsedTimeTicks-livetimeTicks;
     
-    if(deadtimeTicks <= 10 * ft2Util_2::Configuration::Instance()->ticksPerCommand) 
+    if(deadtimeTicks <= 10 * ft2Util::Configuration::Instance()->ticksPerCommand) 
     {
-      totalLivetime -= (10 * ft2Util_2::Configuration::Instance()->ticksPerCommand *this->ticksToSeconds() );
+      totalLivetime -= (10 * ft2Util::Configuration::Instance()->ticksPerCommand *this->ticksToSeconds() );
     }
     
   }
@@ -635,7 +635,7 @@ double Livetime::getDigiEvtLivetime(Long64_t runID,const Long64_t evtID1, const 
     ULong64_t livetimeTicks  = sweepLivetime-lastEvtLivetime; 
     ULong64_t deadtimeTicks = elapsedTimeTicks-livetimeTicks;
     
-    double delayTicks = ft2Util_2::Configuration::Instance()->sweepEventsDelayEnd + 10*ft2Util_2::Configuration::Instance()->ticksPerCommand;
+    double delayTicks = ft2Util::Configuration::Instance()->sweepEventsDelayEnd + 10*ft2Util::Configuration::Instance()->ticksPerCommand;
     
     if(deadtimeTicks <= (delayTicks))
     {
@@ -709,8 +709,8 @@ Int_t Livetime::GetMeritEntryWithIndex(Long64_t runID, Long64_t evtID)
 double Livetime::ticksToSeconds()
 {
     double conv;
-    double RollOver = ft2Util_2::Configuration::Instance()->RollOver;
-    double nominalValue = ft2Util_2::Configuration::Instance()->nominalTicksToSecond;
+    double RollOver = ft2Util::Configuration::Instance()->RollOver;
+    double nominalValue = ft2Util::Configuration::Instance()->nominalTicksToSecond;
     double clockTicksDelta1PPS = 0;
     //If the time tone for the current event, and the previous one, are ok,
     //use them to compute the conversion factor, otherwise use the nominal one:

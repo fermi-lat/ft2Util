@@ -3,9 +3,9 @@
 #include <cmath>
 #include <sstream>
 
-#include "ft2Util_2/Magic7.h"
-#include "ft2Util_2/Extrapolator.h"
-#include "ft2Util_2/Interpolator.h"
+#include "ft2Util/Magic7.h"
+#include "ft2Util/Extrapolator.h"
+#include "ft2Util/Interpolator.h"
 #include "util.h"
 #include "facilities/Util.h"
 

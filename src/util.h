@@ -5,7 +5,7 @@
 #include "tip/Table.h"
 #include <astro/SkyDir.h>
 #include <astro/SolarSystem.h>
-namespace ft2Util_2
+namespace ft2Util
 {
 
 void writeQDPfile(const std::string filename,

@@ -1,5 +1,5 @@
 
-/** @mainpage package ft2Util_2
+/** @mainpage package ft2Util
 * @author Giacomo Vianello <giacomov@slac.stanford.edu>
 *
 * @section intro Introduction
@@ -15,17 +15,17 @@ information about the spacecraft or the LAT at any given time (covered by the in
  <li> Instantiate the class StatusFile using the name of a FT2
  file as input:
  @verbatim
- #include <ft2Util_2/StatusFile.h>
+ #include <ft2Util/StatusFile.h>
  
- ft2Util_2::StatusFile statusfile("../data/ft2_example.fits");
+ ft2Util::StatusFile statusfile("../data/ft2_example.fits");
  @endverbatim 
  
  <li> Use the () operator to get all the informations for a given
  time contained in the FT2 file (in MET). You can obtain them
  using a syntax like statusfile(time).spacecraft.[method] for 
  the spacecraft-related quantities, 
- or statusfile(time).lat.[method] for LAT-related quantities. See ft2Util_2::ExtendedPointingInfo for the methods of the spacecraft
- object, and ft2Util_2::LatInfo for the methods of the lat object. For example:
+ or statusfile(time).lat.[method] for LAT-related quantities. See ft2Util::ExtendedPointingInfo for the methods of the spacecraft
+ object, and ft2Util::LatInfo for the methods of the lat object. For example:
  @verbatim
  //Pick up a time, for example 6.2 s after the beginning of the 
  //3rd interval

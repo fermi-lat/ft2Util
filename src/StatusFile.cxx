@@ -1,13 +1,13 @@
 //StatusFile.cxx
 
-#include "ft2Util_2/StatusFile.h"
+#include "ft2Util/StatusFile.h"
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
 #include "astro/SolarSystem.h"
 #include <algorithm>
 #include "util.h"
 
-ft2Util_2::StatusFile::StatusFile ( const std::string & filename, const std::string extname)
+ft2Util::StatusFile::StatusFile ( const std::string & filename, const std::string extname)
         : m_pointingHistory ( filename ), m_extname(extname)
 {
     //constructor
@@ -16,12 +16,12 @@ ft2Util_2::StatusFile::StatusFile ( const std::string & filename, const std::str
     getOtherData(filename);
 }
 
-ft2Util_2::StatusFile::~StatusFile()
+ft2Util::StatusFile::~StatusFile()
 {
     //Empty destructor;
 }
 
-void ft2Util_2::StatusFile::getOtherData(const std::string & filename)
+void ft2Util::StatusFile::getOtherData(const std::string & filename)
 {
     //Open the FT2 file data extension
     const tip::Table* table;
@@ -41,8 +41,8 @@ void ft2Util_2::StatusFile::getOtherData(const std::string & filename)
         ((*itor)["LAT_MODE"].get(thisMode));
         ((*itor)["LAT_CONFIG"].get(thisConfig));
         ((*itor)["DATA_QUAL"].get(thisDataQuality));
-        ft2Util_2::LatCondition thisCondition(thisMode, thisConfig, thisDataQuality);
-        m_latConditions.insert(std::pair<double, ft2Util_2::LatCondition>(cur_start,thisCondition));
+        ft2Util::LatCondition thisCondition(thisMode, thisConfig, thisDataQuality);
+        m_latConditions.insert(std::pair<double, ft2Util::LatCondition>(cur_start,thisCondition));
 
         //This should be removed when the method to get the quaternion
         //will be implemented in astro::PointingInfo
@@ -55,7 +55,7 @@ void ft2Util_2::StatusFile::getOtherData(const std::string & filename)
     delete table;
 }
 
-const ft2Util_2::Status ft2Util_2::StatusFile::operator() ( double time )
+const ft2Util::Status ft2Util::StatusFile::operator() ( double time )
 {
     //Control that the requested time is inside the allowed range
     double max_time=*(std::max_element(m_startTimes.begin(),m_startTimes.end()));
@@ -95,7 +95,7 @@ const ft2Util_2::Status ft2Util_2::StatusFile::operator() ( double time )
     double prop=(time-time1)/(time2-time1);
     astro::Quaternion cur_quaternion=lowBound_quat.interpolate(highBound_quat, prop);
 
-    return ft2Util_2::Status::Status( current_pointing.position(),
+    return ft2Util::Status::Status( current_pointing.position(),
                                       cur_quaternion,
                                       current_pointing.earthCoord(),
                                       cur_condition->second,

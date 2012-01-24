@@ -1,7 +1,7 @@
-#include "ft2Util_2/TimeInterval.h"
+#include "ft2Util/TimeInterval.h"
 #include <stdexcept>
 
-namespace ft2Util_2 
+namespace ft2Util 
 {
   TimeInterval::TimeInterval(double start, double stop, bool good) : m_start(start), m_stop(stop), m_good(good)
   {

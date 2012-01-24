@@ -1,8 +1,8 @@
-#include "ft2Util_2/Ft2.h"
-#include "ft2Util_2/Livetime.h"
-#include "ft2Util_2/Magic7.h"
-#include "ft2Util_2/TimeInterval.h"
-#include "ft2Util_2/GapHandler.h"
+#include "ft2Util/Ft2.h"
+#include "ft2Util/Livetime.h"
+#include "ft2Util/Magic7.h"
+#include "ft2Util/TimeInterval.h"
+#include "ft2Util/GapHandler.h"
 #include "Configuration.h"
 #include "fitsGen/Ft2File.h"
 #include "tip/IFileSvc.h"
@@ -17,7 +17,7 @@
 #include "digiRootData/DigiEvent.h"
 #include <iomanip>
 
-namespace ft2Util_2
+namespace ft2Util
 {
 
 Ft2::Ft2(std::string m7File, double tstart, double tstop, int latconfig, int dataquality,
@@ -101,7 +101,7 @@ Ft2::Ft2(std::string m7File, double tstart, double tstop, int latconfig, int dat
         }
 
         //Fill the three maps
-        m_statusMap.insert(std::pair<double, ft2Util_2::Status >(startTime,curStatus));
+        m_statusMap.insert(std::pair<double, ft2Util::Status >(startTime,curStatus));
         m_insideSAA.insert(std::pair<double, int>(startTime,magic7.getInSAA(startTime)));
         m_livetimes.insert(std::pair<double,double>(startTime,thisLivetime));
     }
@@ -129,7 +129,7 @@ void Ft2::padTimeIntervals(double& tstart, double& tstop, std::vector<TimeInterv
     //We need to add intervals to reach tstart
     int nBeforePad=timeIntervals.size();
     
-    while (timeIntervals.front().start()-tstart > ft2Util_2::Configuration::Instance()->NULL_TIME_DIFFERENCE) 
+    while (timeIntervals.front().start()-tstart > ft2Util::Configuration::Instance()->NULL_TIME_DIFFERENCE) 
     {
       TimeInterval newTimeInterval(timeIntervals.front().start()-1.0,timeIntervals.front().start());
       timeIntervals.insert(timeIntervals.begin(),newTimeInterval);
@@ -147,7 +147,7 @@ void Ft2::padTimeIntervals(double& tstart, double& tstop, std::vector<TimeInterv
     //We need to add intervals to reach tstop
     int nBeforePad=timeIntervals.size();
     
-    while (timeIntervals.back().stop()-tstop < ft2Util_2::Configuration::Instance()->NULL_TIME_DIFFERENCE) 
+    while (timeIntervals.back().stop()-tstop < ft2Util::Configuration::Instance()->NULL_TIME_DIFFERENCE) 
     {
       TimeInterval newTimeInterval(timeIntervals.back().stop(),timeIntervals.back().stop()+1);
       timeIntervals.push_back(newTimeInterval);
@@ -409,7 +409,7 @@ void Ft2::writeFT2file(const std::string filename, const int version, const int 
     
     //Update the header
     SC_DATA->setObsTimes(globalTstart, m_stopTime);
-    std::string pack = ft2Util_2::Configuration::Instance()->packageName+"_"+ft2Util_2::Configuration::Instance()->packageVersion;
+    std::string pack = ft2Util::Configuration::Instance()->packageName+"_"+ft2Util::Configuration::Instance()->packageVersion;
     SC_DATA->setPhduKeyword("CREATOR", pack);
     SC_DATA->setPhduKeyword("VERSION", version);
     SC_DATA->setPhduKeyword("PROC_VER", processingVersion);

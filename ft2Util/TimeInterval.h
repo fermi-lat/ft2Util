@@ -6,7 +6,7 @@
 #ifndef TIMEINTERVAL_H
 #define TIMEINTERVAL_H
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *

@@ -1,5 +1,5 @@
-#include "ft2Util_2/GapHandler.h"
-#include "ft2Util_2/TimeInterval.h"
+#include "ft2Util/GapHandler.h"
+#include "ft2Util/TimeInterval.h"
 #include "facilities/Util.h"
 #include "Configuration.h"
 
@@ -16,7 +16,7 @@
 #include <cmath>
 #include <fstream>
 
-namespace ft2Util_2
+namespace ft2Util
 {
   GapHandler::GapHandler(const std::string& digiFile, const std::string& meritFile, 
                          const std::string& digiGapFile, std::vector<TimeInterval> &timeIntervals) :
@@ -203,7 +203,7 @@ void GapHandler::parseGapFile(const std::string &gapFile)
             Long64_t gapStartId = (Long64_t) facilities::Util::stringToUnsigned(tokens[1]);
             Long64_t gapStopId = (Long64_t) facilities::Util::stringToUnsigned(tokens[2]);
 
-            double padding = ft2Util_2::Configuration::Instance()->deadPad*1E-6;
+            double padding = ft2Util::Configuration::Instance()->deadPad*1E-6;
 
             //Now get the corresponding time stamps
             m_digiTree->GetEntryWithIndex(m_runNumber,gapStartId);
@@ -483,7 +483,7 @@ void GapHandler::handleMeritGap()
 
     //This is the padding to add (subtract) from the time stamp of the event before (after) the gap, to avoid
     //the inclusion of the two good events in the bad time interval
-    double padding = ft2Util_2::Configuration::Instance()->deadPad*1E-6;
+    double padding = ft2Util::Configuration::Instance()->deadPad*1E-6;
 
     m_meritTree->GetEntry(meritEventBeforeTheGapNumber);
     double timeBeforeGap = m_meritTree->GetLeaf("EvtElapsedTime")->GetValue();
@@ -507,7 +507,7 @@ void GapHandler::handleDigiGap()
     Long64_t digiEventAfterTheGapNumber = m_digiTree->GetEntryNumberWithIndex(m_runNumber,m_curDigiEvtId);
     Long64_t digiEventBeforeTheGapNumber = digiEventAfterTheGapNumber-1;
 
-    double padding = ft2Util_2::Configuration::Instance()->deadPad*1E-6;
+    double padding = ft2Util::Configuration::Instance()->deadPad*1E-6;
     m_digiTree->GetEntry(digiEventBeforeTheGapNumber);
     double timeBeforeGap = m_digiEvt->getTimeStamp();
 

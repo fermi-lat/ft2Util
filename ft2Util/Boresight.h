@@ -12,7 +12,7 @@
 //#include "fitsGen/Ft2File.h"
 #include "astro/PointingHistory.h"
 
-namespace ft2Util_2
+namespace ft2Util
     {
       /**
       *

@@ -4,8 +4,8 @@
 
 #Package info
 
-packageVersion             = v0r0p0
-packageName                = ft2Util_2
+packageVersion             = v1r0p0
+packageName                = ft2Util
 packageAuthor              = G.Vianello
 packageAuthorEmail         = giacomov@slac.stanford.edu
 

@@ -9,13 +9,13 @@
 #include <map>
 
 #include "astro/PointingInfo.h"
-#include "ft2Util_2/AttMessage.h"
-#include "ft2Util_2/OrbMessage.h"
-#include "ft2Util_2/TimeInterval.h"
+#include "ft2Util/AttMessage.h"
+#include "ft2Util/OrbMessage.h"
+#include "ft2Util/TimeInterval.h"
 
 class TimeInterval;
 
-namespace ft2Util_2
+namespace ft2Util
 {
 /**
 *
