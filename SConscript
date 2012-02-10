@@ -16,9 +16,12 @@ progEnv.Tool('ft2UtilLib')
 makeFT2 = progEnv.Program('makeFT2', listFiles(['src/makeFT2.cpp']))
 mergeFT2 = progEnv.Program('mergeFT2', listFiles(['src/mergeFT2.cpp']))
 
+dataFiles = [os.path.join("data", x) for x in ("config.rc")]
 
 progEnv.Tool('registerTargets', package = 'ft2Util',
              staticLibraryCxts = [[ft2UtilLib, libEnv]],
              testAppCxts = [[makeFT2, progEnv], [mergeFT2, progEnv]],
-             includes = listFiles(['ft2Util/*.h']))
+             includes = listFiles(['ft2Util/*.h']),
+	     recursive = True,
+	     data = dataFiles)
 
