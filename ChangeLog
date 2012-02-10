@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: monzani  Thu Feb  9 16:52:14 PST 2012
+ft2Util
+
+Modified Files:
+	SConscript 
+Log Message:
+installing data path
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-00, operation: add
 Package: ft2Util
