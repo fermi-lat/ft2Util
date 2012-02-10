@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: monzani  Thu Feb  9 19:19:23 PST 2012
+ft2Util
+
+Modified Files:
+	SConscript 
+Log Message:
+fixed a problem with SConscript
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-01, operation: add
 Package: ft2Util
