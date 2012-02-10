@@ -3,7 +3,6 @@
 # Authors: Giacomo Vianello <giacomov@slac.stanford.edu>
 # Version: ft2Util-02-00-01
 
-import os
 Import('baseEnv')
 Import('listFiles')
 progEnv = baseEnv.Clone()
@@ -17,11 +16,9 @@ progEnv.Tool('ft2UtilLib')
 makeFT2 = progEnv.Program('makeFT2', listFiles(['src/makeFT2.cpp']))
 mergeFT2 = progEnv.Program('mergeFT2', listFiles(['src/mergeFT2.cpp']))
 
-dataFiles = [os.path.join("data","config.rc")]
-
 progEnv.Tool('registerTargets', package = 'ft2Util',
              staticLibraryCxts = [[ft2UtilLib, libEnv]],
              testAppCxts = [[makeFT2, progEnv], [mergeFT2, progEnv]],
              includes = listFiles(['ft2Util/*.h']),
-	     data = dataFiles)
+	     data = listFiles(['data/*.rc']))
 
