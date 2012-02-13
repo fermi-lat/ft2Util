@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Mon Feb 13 12:53:56 PST 2012
+ft2Util/src
+
+Modified Files:
+	Configuration.cxx Configuration.h Extrapolator.cxx Ft2.cxx 
+Log Message:
+Added a mechanism to forbid extrapolations by more than extrapolationLimit seconds, where extrapolationLimit is set in the configuration file
+    *
+------------------------------------------------------------
 User: giacomov  Mon Feb 13 12:53:09 PST 2012
 ft2Util/data
 
