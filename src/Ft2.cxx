@@ -139,6 +139,15 @@ void Ft2::padTimeIntervals(double& tstart, double& tstop, std::vector<TimeInterv
     
     int addedBefore=timeIntervals.size()-nBeforePad;
     
+    if(addedBefore>ft2Util::Configuration::Instance()->extrapolationLimit) 
+    {
+        std::string msg;
+        msg = "FATAL: the provided Magic 7 file does not cover the requested time interval.";
+        msg += " To cover the requested interval we would need to extrapolate position and attitude (backward) more than ";
+        msg += " what permitted by the current configuration (see the parameter 'extrapolationLimit'). ";
+        throw std::runtime_error(msg);
+    }
+    
     if (addedBefore > 0) std::cout << "INFO: Ft2::Ft2():: Added " << addedBefore << " entry/ies before start time of Magic 7 ORB sequence to cover"
       << " requested Tstart " << tstart << std::endl;
   }
@@ -156,6 +165,16 @@ void Ft2::padTimeIntervals(double& tstart, double& tstop, std::vector<TimeInterv
     if (timeIntervals.back().stop() > tstop) timeIntervals.back().setStop(tstop);
     
     int addedAfter=timeIntervals.size()-nBeforePad;
+    
+    if(addedAfter>ft2Util::Configuration::Instance()->extrapolationLimit) 
+    {
+        std::string msg;
+        msg = "FATAL: the provided Magic 7 file does not cover the requested time interval.";
+        msg += " To cover the requested interval we would need to extrapolate position and attitude (forward) more than ";
+        msg += " what permitted by the current configuration (see the parameter 'extrapolationLimit'). ";
+        throw std::runtime_error(msg);
+    }
+    
     if (addedAfter > 0) std::cout << "INFO: Ft2::Ft2():: Added " << addedAfter << " entry/ies after stop time of Magic 7 ORB sequence to cover"
       << " requested Tstop " << tstop << std::endl;
   }

@@ -91,6 +91,7 @@ Configuration::Configuration(std::string in_configurationFilePath)
   magic7ReadPadding = facilities::Util::stringToDouble(m_parameters["magic7ReadPadding"]);
   verify = m_parameters["verify"];
   deadPad = facilities::Util::stringToDouble(m_parameters["deadPad"]);
+  extrapolationLimit = facilities::Util::stringToDouble(m_parameters["extrapolationLimit"]);
 }
 
 void Configuration::Print() 
@@ -115,6 +116,7 @@ void Configuration::Print()
   std::cout << "magic7ReadPadding                     :" << magic7ReadPadding << std::endl;
   std::cout << "verify                                :" << verify << std::endl;
   std::cout << "deadPad                               :" << deadPad  << std::endl;
+  std::cout << "extrapolationLimit                    :" << extrapolationLimit  << std::endl;
 }
 
 }
