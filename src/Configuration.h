@@ -40,6 +40,7 @@ public:
     double Rz;
     double magic7ReadPadding;
     double deadPad;
+    double extrapolationLimit;
     std::string verify;
 private:
   Configuration(std::string in_configurationFilePath); // Private so that it can  not be called

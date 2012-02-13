@@ -31,7 +31,7 @@ Extrapolator::Extrapolator(std::vector<double> x, std::vector<double> y, int pol
   applyOffset(m_x,m_timeOffset);
 
   //Generate the TGraph with the current points
-  m_graph=new TGraph(m_x.size(),&m_x[0],&m_y[0]);
+  m_graph=new TGraph(m_x.size(),&m_x[0],&m_y[0]);  
 
   //Generate the name of a polynomial with the requested grade
   std::stringstream str;
@@ -39,7 +39,14 @@ Extrapolator::Extrapolator(std::vector<double> x, std::vector<double> y, int pol
   m_functionName=str.str();
 
   //Fit the points (not a real fit, since we have no errors...)
-  m_graph->Fit(m_functionName.c_str(),"MQNF");
+  TFitResultPtr r;
+  r = m_graph->Fit(m_functionName.c_str(),"Q");
+  int fitStatus = (int) r;
+  if (fitStatus != 0) {
+    m_graph->SaveAs("extrapolationGraph.root");
+    throw std::runtime_error("FATAL: Fit for extrapolation FAILED. A graph containing the last known point has been dumped (extrapolationGraph.root).");
+  }
+  
   m_function = m_graph->GetFunction(m_functionName.c_str());
   //Get best fit parameters
   m_par=m_function->GetParameters();
