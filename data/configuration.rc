@@ -56,3 +56,10 @@ verify                     = yes
 #the loosing of the events before and after the gap because of the GTI filtering
 #(in micro seconds)
 deadPad                    =  1
+
+#The following parameter set the limit after which the extrapolation of the
+#position of the spacecraft is stopped. Such extrapolation can happen when 
+#the provided magic 7 does not cover completely the time
+#span requested for the FT2 file.
+#(in seconds)
+extrapolationLimit         = 2
