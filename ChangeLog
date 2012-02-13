@@ -1,4 +1,63 @@
 ------------------------------------------------------------
+TAG
+Tag name: ft2Util-02-00-03, operation: add
+Package: ft2Util
+User: giacomov  Mon Feb 13 13:10:29 2012
+Files:
+  ft2Util/cmt/requirements  1.19
+  ft2Util/data/insertReconCrash.C  1.1
+  ft2Util/data/configuration.rc  1.5
+  ft2Util/data/r0327356667_digi_gaps.root  1.1
+  ft2Util/data/r0327356667_v001_merit_crashes.root  1.1
+  ft2Util/data/r0327356667_v001_magic7L1.txt  1.1
+  ft2Util/data/ft2_example.fits  1.1
+  ft2Util/data/r0327356667_v001_digiGap_2gaps.txt  1.1
+  ft2Util/data/cookMyDigi.C  1.1
+  ft2Util/doc/release.notes  1.26
+  ft2Util/doc/DoxyFile  1.1
+  ft2Util/ft2Util/Livetime.h  1.2
+  ft2Util/ft2Util/ExtendedPointingInfo.h  1.2
+  ft2Util/ft2Util/TimeInterval.h  1.2
+  ft2Util/ft2Util/OrbMessage.h  1.2
+  ft2Util/ft2Util/Magic7.h  1.2
+  ft2Util/ft2Util/Boresight.h  1.2
+  ft2Util/ft2Util/Extrapolator.h  1.2
+  ft2Util/ft2Util/StatusFile.h  1.2
+  ft2Util/ft2Util/Ft2.h  1.2
+  ft2Util/ft2Util/AttMessage.h  1.2
+  ft2Util/ft2Util/Status.h  1.2
+  ft2Util/ft2Util/LatInfo.h  1.2
+  ft2Util/ft2Util/Interpolator.h  1.2
+  ft2Util/ft2Util/GapHandler.h  1.2
+  ft2Util/ft2Util/LatCondition.h  1.2
+  ft2Util/src/Status.cxx  1.2
+  ft2Util/src/util.h  1.2
+  ft2Util/src/OrbMessage.cxx  1.2
+  ft2Util/src/LatCondition.cxx  1.2
+  ft2Util/src/AttMessage.cxx  1.2
+  ft2Util/src/StatusFile.cxx  1.2
+  ft2Util/src/Livetime.cxx  1.2
+  ft2Util/src/mergeFT2.cpp  1.2
+  ft2Util/src/mainpage.h  1.6
+  ft2Util/src/makeFT2.cpp  1.2
+  ft2Util/src/LatInfo.cxx  1.2
+  ft2Util/src/test_quaternion.cpp  1.2
+  ft2Util/src/Extrapolator.cxx  1.3
+  ft2Util/src/Configuration.h  1.3
+  ft2Util/src/Configuration.cxx  1.3
+  ft2Util/src/anyoption.h  1.1
+  ft2Util/src/TimeInterval.cxx  1.2
+  ft2Util/src/ExtendedPointingInfo.cxx  1.2
+  ft2Util/src/anyoption.cxx  1.1
+  ft2Util/src/GapHandler.cxx  1.2
+  ft2Util/src/Ft2.cxx  1.3
+  ft2Util/src/Boresight.cxx  1.2
+  ft2Util/src/Interpolator.cxx  1.2
+  ft2Util/src/util.cxx  1.2
+  ft2Util/src/Magic7.cxx  1.2
+
+    *
+------------------------------------------------------------
 User: giacomov  Mon Feb 13 13:10:12 PST 2012
 ft2Util/data
 
