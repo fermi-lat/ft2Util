@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: giacomov  Mon Feb 13 12:53:09 PST 2012
+ft2Util/data
+
+Modified Files:
+	configuration.rc 
+Removed Files:
+	ft2.tpl 
+Log Message:
+Removed ft2.tpl and added the new parameter 'extrapolationLimit'
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-02, operation: add
 Package: ft2Util
