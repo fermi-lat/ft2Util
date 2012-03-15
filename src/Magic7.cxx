@@ -97,7 +97,7 @@ ft2Util::Magic7::Magic7(const std::string m7txtFile, const double tstart, const 
     std::cout << "Time of the last ATT message (MET)    :" << (--m_attMessages.end())->first << std::endl;
     std::cout << "N. of ORB messages                    :" << m_orbMessages.size() << std::endl;
     std::cout << "Time of the first ORB message (MET)   :" << m_orbMessages.begin()->first << std::endl;
-    std::cout << "Time of the last ORB message (MET)    :" << (--m_attMessages.end())->first << std::endl << std::endl;
+    std::cout << "Time of the last ORB message (MET)    :" << (--m_orbMessages.end())->first << std::endl << std::endl;
     std::cout.precision(5);
 //Setup the time intervals
     this->setupTimeIntervals();
