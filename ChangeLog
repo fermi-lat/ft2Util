@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Thu Mar 15 16:21:13 PDT 2012
+ft2Util/src
+
+Modified Files:
+	GapHandler.cxx TimeInterval.cxx 
+Log Message:
+Modified some output to make it clearer when dealing with out-of-order events
+    *
+------------------------------------------------------------
 User: giacomov  Thu Mar 15 16:21:12 PDT 2012
 ft2Util
 
