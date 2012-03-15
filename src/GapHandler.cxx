@@ -202,7 +202,14 @@ void GapHandler::parseGapFile(const std::string &gapFile)
             //Note that these are event Ids, NOT times
             Long64_t gapStartId = (Long64_t) facilities::Util::stringToUnsigned(tokens[1]);
             Long64_t gapStopId = (Long64_t) facilities::Util::stringToUnsigned(tokens[2]);
-
+            
+            if( gapStartId >= gapStopId ) 
+            {
+              std::cerr << "The ID of the event before the gap (" << gapStartId 
+                        << ") is equal or greater than the ID of the event after the gap (" << gapStopId << "), which is impossible!" << std::endl;
+              throw std::runtime_error("GapHandler::parseGapFile(): fatal error in the gap file, the start and stop eventID are not sequential.");
+            }
+            
             double padding = ft2Util::Configuration::Instance()->deadPad*1E-6;
 
             //Now get the corresponding time stamps
@@ -213,10 +220,17 @@ void GapHandler::parseGapFile(const std::string &gapFile)
             double gapStopTime = m_digiEvt->getTimeStamp()-padding;
 
             //Set up the time interval
-            TimeInterval gap(gapStartTime,gapStopTime);
-            gap.setAsBad();
-            m_badTimeIntervals.push_back(gap);
-            numberOfGaps++;
+            try {
+              TimeInterval gap(gapStartTime,gapStopTime);
+              gap.setAsBad();
+              m_badTimeIntervals.push_back(gap);
+              numberOfGaps++;
+            } catch (...) {
+              std::cerr << "GapHandler::parseGapFile(): could not create a bad time interval between event "
+                        << gapStartId << " (at time " << gapStartTime << ") and event "
+                        << gapStopId  << " (at time " << gapStopTime  << ")." << std::endl;
+              throw std::runtime_error("GapHandler::parseGapFile(): fatal error in the gap file and/or Digi file, gap with zero or negative duration!");                      
+            }            
         }
     }
     input_file.close();
@@ -412,10 +426,14 @@ void GapHandler::verifyDigiAndMerit()
         if (m_prevDigiID==m_curDigiEvtId && (m_prevDigiID==m_digiStartID || m_prevDigiID==m_digiStopID))
         {
             digiIsSweep = true;
+        } else {
+            digiIsSweep = false;
         }
         if (m_prevMeritID==m_curMeritEvtId && (m_prevMeritID==m_meritStartID || m_prevMeritID==m_meritStopID))
         {
             meritIsSweep = true;
+        } else {
+            meritIsSweep = false;
         }
 
         //Enforce ordered event IDs in both trees (taking into account sweep events)
