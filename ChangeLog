@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Thu Mar 15 16:22:31 PDT 2012
+ft2Util
+
+Modified Files:
+	SConscript 
+Log Message:
+correct a problem with the tag name
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-04, operation: add
 Package: ft2Util
