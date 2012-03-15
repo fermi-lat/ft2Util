@@ -1,5 +1,6 @@
 #include "ft2Util/TimeInterval.h"
 #include <stdexcept>
+#include <iostream>
 
 namespace ft2Util 
 {
@@ -7,6 +8,7 @@ namespace ft2Util
   {
     if(start >=stop) 
     {
+      std::cerr << "TimeInterval() input: start = " << start << ", stop = " << stop << std::endl;
       throw std::runtime_error("TimeInterval():start is >= stop, invalid time interval!");
     }
   }
