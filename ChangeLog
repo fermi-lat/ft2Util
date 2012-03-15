@@ -1,13 +1,4 @@
 ------------------------------------------------------------
-User: giacomov  Thu Mar 15 16:21:12 PDT 2012
-ft2Util
-
-Modified Files:
-	SConscript 
-Log Message:
-Modified some output to make it clearer when dealing with out-of-order events
-    *
-------------------------------------------------------------
 User: giacomov  Thu Mar 15 14:29:50 PDT 2012
 ft2Util/src
 
