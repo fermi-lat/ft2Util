@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Thu Mar 15 14:29:50 PDT 2012
+ft2Util/src
+
+Modified Files:
+	Magic7.cxx 
+Log Message:
+Corrected an error in the output: time of the last ATT message was printed instead of the last ORB message
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-03, operation: add
 Package: ft2Util
