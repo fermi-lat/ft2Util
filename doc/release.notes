@@ -2,6 +2,7 @@
 package manager:Giacomo Vianello
  *         EOH
 
+ ft2Util-02-00-06 20-Apr-2012 monzani Removing unused boost library
  ft2Util-02-00-05 15-Feb-2012 giacomov Correct a misspelled tag name in the SConscript file
  ft2Util-02-00-04 15-Feb-2012 giacomov Modified the screen error message when the code encounter events out-of-order respect to their time stamp, to make it clearer.
  ft2Util-02-00-03 13-Feb-2012 giacomov Added a mechanism to forbid extrapolations by more than extrapolationLimit seconds, where extrapolationLimit is set in the configuration file
