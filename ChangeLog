@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: monzani  Fri Apr 20 15:45:31 PDT 2012
+ft2Util/src
+
+Modified Files:
+	util.cxx 
+Log Message:
+removed unused boost library
+    *
+------------------------------------------------------------
+User: monzani  Fri Apr 20 15:45:31 PDT 2012
 ft2Util/doc
 
 Modified Files:
