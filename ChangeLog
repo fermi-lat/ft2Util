@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: monzani  Fri Apr 20 15:45:31 PDT 2012
+ft2Util/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+removed unused boost library
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-05, operation: add
 Package: ft2Util
