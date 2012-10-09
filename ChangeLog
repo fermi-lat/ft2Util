@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Tue Oct  9 12:29:00 PDT 2012
+ft2Util/src
+
+Modified Files:
+	Ft2.cxx 
+Log Message:
+Adding Lambda to the FT2 file. This has to be linked with a GR containing astro > astro-03-13-03 and fitsGen > fitsGen-06-06-00
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-00-06, operation: add
 Package: ft2Util
