@@ -82,9 +82,10 @@ Ft2::Ft2(std::string m7File, double tstart, double tstop, int latconfig, int dat
         CLHEP::Hep3Vector curPosition=magic7.getPosition(startTime);
         astro::Quaternion curQuaternion=magic7.getQuaternion(startTime);
         LatCondition curCondition=LatCondition(magic7.getMode(startTime), latconfig, dataquality);
+        astro::EarthCoordinate curEarthCoordinate(curPosition, startTime);
         Status curStatus(curPosition,
                          curQuaternion,
-                         astro::EarthCoordinate(curPosition, startTime),
+                         curEarthCoordinate,
                          curCondition,
                          util::getSunPosition(startTime)
                         );
@@ -252,6 +253,7 @@ void Ft2::writeFT2file(const std::string filename, const int version, const int 
     knownColumns.insert("b_mcilwain");
     knownColumns.insert("l_mcilwain");
     knownColumns.insert("geomag_lat");
+    knownColumns.insert("lambda");
     knownColumns.insert("in_saa");
     knownColumns.insert("ra_scz");
     knownColumns.insert("dec_scz");
@@ -270,6 +272,7 @@ void Ft2::writeFT2file(const std::string filename, const int version, const int 
     knownColumns.insert("qsj_4");
     knownColumns.insert("ra_sun");
     knownColumns.insert("dec_sun");
+    
 
     //now get the columns contained in the template
     std::vector<std::string> definedColumnsV = SC_DATA->getFieldNames();
@@ -361,7 +364,10 @@ void Ft2::writeFT2file(const std::string filename, const int version, const int 
 
         //Geomagnetic latitude
         if (haveColumn["geomag_lat"]) (*tableItor)["geomag_lat"].set(curStatus->spacecraft().geolat());
-
+        
+        //Lambda parameter
+        if (haveColumn["lambda"]) (*tableItor)["lambda"].set(curStatus->spacecraft().lambda());
+        
         //in SAA?
         //Here we do not use the spacecraft.insideSAA() method of the Status class
         //because the SAA poligon used by it is sligthly different from the one used onboard
