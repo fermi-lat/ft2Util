@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: focke  Wed Oct 31 16:00:37 PDT 2012
+ft2Util
+
+Modified Files:
+	SConscript 
+Log Message:
+fixed version in SConscript
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-01-01, operation: add
 Package: ft2Util
