@@ -2,6 +2,7 @@
 package manager:Giacomo Vianello
  *         EOH
 
+ ft2Util-02-01-01 31-Oct-2012  focke fixed version number
  ft2Util-02-01-00 09-Oct-2012 giacomov Adding Lambda to the FT2 file. This has to be linked with a GR containing astro > astro-03-13-03 and fitsGen > fitsGen-06-06-00. The new version of astro contains also a new Earth magnetic model.
  ft2Util-02-00-06 20-Apr-2012 monzani Removing unused boost library
  ft2Util-02-00-05 15-Feb-2012 giacomov Correct a misspelled tag name in the SConscript file
