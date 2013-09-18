@@ -5,13 +5,15 @@
 #include "ft2Util/LatCondition.h"
 
 bool ft2Util::LatInfo::s_angles_have_been_updated=false;
-ft2Util::Boresight ft2Util::LatInfo::s_boresight;
+//ft2Util::Boresight ft2Util::LatInfo::s_boresight;
 
 ft2Util::LatInfo::LatInfo ( const ft2Util::ExtendedPointingInfo& spacecraft,
                                             const ft2Util::LatCondition& condition)
         : m_spacecraft(spacecraft), 
         m_condition(condition)
 {
+  //Initialize the boresight angles with the default values
+  s_boresight = Boresight();
 }
 
 
@@ -63,7 +65,7 @@ astro::SkyDir ft2Util::LatInfo::zAxis() const
     return ft2Util::LatInfo::boresightCorrection ( m_spacecraft.rotation(), m_spacecraft.zAxis() );
 }
 
-astro::Quaternion ft2Util::LatInfo::quaternion() const
+astro::Quaternion ft2Util::LatInfo::quaternion()
 {
   //Compose the two quaternions
   return s_boresight.getQuaternion()*m_spacecraft.quaternion();

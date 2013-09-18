@@ -45,8 +45,10 @@ public:
 private:
   Configuration(std::string in_configurationFilePath); // Private so that it can  not be called
     ~Configuration() {};
-    static Configuration* s_pInstance;
     std::map<std::string, std::string> m_parameters;
+    Configuration(){};
+    Configuration(Configuration const&);
+    void operator=(Configuration const&);
 };
 
 }
