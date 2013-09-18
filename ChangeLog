@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Wed Sep 18 16:55:44 PDT 2013
+ft2Util/src
+
+Modified Files:
+	Configuration.cxx Configuration.h LatInfo.cxx 
+Log Message:
+Removed the static initialization of a member in LatInfo which was causing the Configuration singleton to be instanced before everything else
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-01-01, operation: add
 Package: ft2Util
