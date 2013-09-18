@@ -11,20 +11,18 @@ namespace ft2Util {
     is private and is only called by this Instance function.
 */
 
-Configuration* Configuration::s_pInstance=NULL;
+//Configuration* Configuration::s_pInstance=NULL;
 
 Configuration* Configuration::Instance(std::string in_configurationFilePath)
 {
-    if (NULL == s_pInstance)   // Only allow one instance of class to be generated.
-    {
-      s_pInstance = new Configuration(in_configurationFilePath);
-    }
-
-    return s_pInstance;
+    static Configuration s_pInstance(in_configurationFilePath);
+    return &s_pInstance;
 }
 
 Configuration::Configuration(std::string in_configurationFilePath)
 {
+  facilities::commonUtilities::setupEnvironment();
+  
   //I don't know how to get these information... it should be a #define when compiling, or something like that...
   packageName = "ft2Util";
   

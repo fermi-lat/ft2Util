@@ -81,7 +81,7 @@ namespace ft2Util
                 //!  returns the quaternion corresponding to the LAT pointing
                 
                 //!The LAT quaternion corresponds to the spacecraft quaternion corrected for the boresight
-                astro::Quaternion quaternion() const;
+                astro::Quaternion quaternion();
                 //Accessors for the LatCondition class
                 //!  LAT mode (1=capture,2=sunpoint,3=inertial pointing,4=Maneuver,5=zenithpoint/survey, or the reentry modes 6 and 7).
                 short int mode() const;
@@ -95,7 +95,7 @@ namespace ft2Util
                   return s_angles_have_been_updated;
                 }
                 //! Return the boresight correction currently stored in this class
-                static const Boresight & boresight() {
+                Boresight & boresight() {
                   return s_boresight;
                 }
                 
@@ -111,7 +111,7 @@ namespace ft2Util
                 //Instance a default boresight correction. This represents
                 //the rotation with the default angles (see boresight.h), 
                 //and could be overwritten by updateBoresightAngles.
-                static Boresight s_boresight;
+                Boresight s_boresight;
         };
 }
 #endif
