@@ -21,7 +21,6 @@ Configuration* Configuration::Instance(std::string in_configurationFilePath)
 
 Configuration::Configuration(std::string in_configurationFilePath)
 {
-  facilities::commonUtilities::setupEnvironment();
   
   //I don't know how to get these information... it should be a #define when compiling, or something like that...
   packageName = "ft2Util";

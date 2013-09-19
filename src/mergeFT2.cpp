@@ -159,7 +159,9 @@ int parseCommandLine(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
     using namespace ft2Util;
-
+    
+    facilities::commonUtilities::setupEnvironment();
+    
     int crtl = parseCommandLine(argc,argv);
 
     if (crtl < 0) return -1;
