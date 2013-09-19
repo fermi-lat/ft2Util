@@ -1,0 +1,1 @@
+../../../builds/bin/redhat5-i686-32bit-gcc41-Debug/makeFT2 -ft2start 327356690 -ft2stop 327356830 -m7file r0327356667_v001_magic7L1.txt -ft2file test.fits -digifile r0327356667_digi_gaps.root -meritfile r0327356667_v001_merit_crashes.root -gapfile r0327356667_v001_digiGap_2gaps.txt -clobber yes
