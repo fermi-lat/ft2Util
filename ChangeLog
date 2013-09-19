@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Wed Sep 18 17:30:43 PDT 2013
+ft2Util/src
+
+Modified Files:
+	Configuration.cxx makeFT2.cpp mergeFT2.cpp 
+Log Message:
+Moved facilities::commonUtilities::setupEnvironment(); to the main programs
+    *
+------------------------------------------------------------
 User: giacomov  Wed Sep 18 17:30:23 PDT 2013
 ft2Util/data
 
