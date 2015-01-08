@@ -2,6 +2,7 @@
 package manager:Giacomo Vianello
  *         EOH
 
+ ft2Util-02-03-00 08-Jan-2015 monzani added missing library
  ft2Util-02-02-00 18-Sep-2013 giacomov Fixed a problem with static initialization which was causing seg. fault because of the changed behavior of facilities::commonUtilities::getDataPath
  ft2Util-02-01-02 18-Sep-2013 giacomov Fixed a problem with static initialization which was causing seg. fault because of the changed behavior of facilities::commonUtilities::getDataPath
  ft2Util-02-01-01 31-Oct-2012  focke fixed version number
