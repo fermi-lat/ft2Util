@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: monzani  Thu Jan  8 08:15:27 PST 2015
+ft2Util/src
+
+Modified Files:
+	anyoption.cxx 
+Log Message:
+added missing library
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-03-00, operation: add
 Package: ft2Util
