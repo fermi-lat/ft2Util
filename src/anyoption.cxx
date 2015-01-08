@@ -60,6 +60,8 @@
  */
 
 #include "anyoption.h"
+#include <stdio.h>
+#include <string.h>
 
 AnyOption::AnyOption()
 {
