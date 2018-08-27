@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: giacomov  Mon Aug 27 16:38:40 PDT 2018
+ft2Util/src
+
+Modified Files:
+	Ft2.cxx Magic7.cxx Status.cxx 
+Log Message:
+Adding velocity vector
+    *
+------------------------------------------------------------
+User: giacomov  Mon Aug 27 16:38:40 PDT 2018
 ft2Util/ft2Util
 
 Modified Files:
