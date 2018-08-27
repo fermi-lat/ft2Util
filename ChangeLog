@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Mon Aug 27 16:38:40 PDT 2018
+ft2Util/ft2Util
+
+Modified Files:
+	ExtendedPointingInfo.h Ft2.h Magic7.h Status.h 
+Log Message:
+Adding velocity vector
+    *
+------------------------------------------------------------
 TAG
 Tag name: ft2Util-02-04-00, operation: add
 Package: ft2Util
