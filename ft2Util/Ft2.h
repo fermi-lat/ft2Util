@@ -12,6 +12,7 @@
 #include "ft2Util/Status.h"
 #include "ft2Util/TimeInterval.h"
 #include "facilities/commonUtilities.h"
+#include "CLHEP/Vector/ThreeVector.h"
 
 namespace ft2Util
 {
@@ -52,6 +53,7 @@ private:
     std::map<double, ft2Util::Status> m_statusMap;
     std::map<double, double> m_livetimes;
     std::map<double, int> m_insideSAA;
+    std::map<double, CLHEP::Hep3Vector> m_velocityMap;
     double m_stopTime;
     void verifyDigiAndMerit(const std::string& digiFile, const std::string& meritFile, std::vector<double> &timeIntervals);
     void padTimeIntervals(double& tstart, double& tstop, std::vector<TimeInterval>& timeIntervals);

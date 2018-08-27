@@ -410,6 +410,124 @@ const CLHEP::Hep3Vector ft2Util::Magic7::getPosition(double time) const
 }
 
 
+const CLHEP::Hep3Vector ft2Util::Magic7::getVelocity(double time) const
+{
+    //Lower_bound returns the element whose key is equal to "time" if exists,
+    //otherwise returns the first element whose key is greater than "time"
+    std::map<double, OrbMessage>::const_iterator orbItor = m_orbMessages.lower_bound(time);
+    if (orbItor->first == time)
+    {
+        //Found a message corresponding to the requested time
+        return m_orbMessages.find(time)->second.getVelocity();
+    } else
+    {
+        //No messages corresponding to the requested time found. Interpolation or extrapolation required:
+        //-If the time requested is somewhere inside the interval covered by the magic 7 file.
+        // interpolation is required and we will use the method already implemented in gtBary
+        //- If the time requested is outside the time covered by the M7 file, we need extrapolation,
+        //  and we'll use a parabolic extrapolation
+
+        if (orbItor != m_orbMessages.begin() && orbItor != m_orbMessages.end())
+        {
+            //GtBary method, see https://confluence.slac.stanford.edu/display/ISOC/Position+interpolation+using+FT2+files
+            //Find the point before this
+            std::cerr << "WARNING: Magic7::getVelocity(): interpolation needed to get velocity "
+                         "at time " << time << std::endl;
+            std::map<double, OrbMessage>::const_iterator prevPosItor = orbItor;
+            --prevPosItor;
+            std::cerr << std::endl << std::endl << "----------------------" << std::endl;
+            std::cerr << "INTERPOLATIONS NEEDED" << std::endl << std::endl;
+            Interpolator velInterpolator(prevPosItor->second.getVelocity(),prevPosItor->first,
+                                         orbItor->second.getVelocity(), orbItor->first);
+            return velInterpolator.evaluateIn(time);
+        }
+        else
+        {
+            std::cerr << std::endl << std::endl << "----------------------" << std::endl;
+            std::cerr <<  "EXTRAPOLATIONS NEEDED" << std::endl << std::endl;
+            //  Quadratic extrapolation of the velocity
+            //Take at least 4 points and at most 20 points for the fit
+            std::map<double, CLHEP::Hep3Vector> points;
+            //Collect points before the requested one until a maximum of 10 points
+            for (int i=0;i < 10;++i)
+            {
+                if (orbItor == m_orbMessages.begin())
+                {
+                    //If this happens the first loop, it means that there are no messages before the time requested
+                    //so we are dealing with a backward extrapolation
+                    std::cerr.precision(14);
+                    std::cerr << std::endl << "WARNING: Magic7::getVelocity(): backward extrapolation needed to "
+                                              "get velocity at time " << time << std::endl;
+                    break;
+                } else
+                {
+                    --orbItor;
+                    points[orbItor->first]=(orbItor->second.getVelocity());
+                }
+            }
+//             int npointsBefore=points.size();
+            //std::cout << "Collected "<< npointsBefore << " points before";
+            //Reset orbItor to the initial value
+            orbItor = m_orbMessages.lower_bound(time);
+
+            //Collect points after the requested one until a maximum of 10 points
+            for (int i=0;i < 10;++i)
+            {
+                if (orbItor == m_orbMessages.end())
+                {
+                    //If this happens the first loop, it means that there are no messages after the time requested
+                    //so we are dealing with a forward extrapolation
+                    std::cerr.precision(14);
+                    std::cerr << std::endl << "WARNING: Magic7::getVelocity(): forward extrapolation needed to get "
+                                              "velocity at time " << time << std::endl;
+                    break;
+                } else
+                {
+                    points[orbItor->first]=(orbItor->second.getVelocity());
+                    ++orbItor;
+                }
+            }
+            //Check how many points I have collected
+            //std::cout << " and " << points.size()-npointsBefore << " after the requested time "
+            //<< "to use for the interpolation" << std::endl;
+
+            if (points.size() < 4)
+            {
+                std::cerr << "FATAL ERROR: Only " << points.size() << " points available for extrapolation (minimum = 4)"
+                          << std::endl;
+                std::stringstream str;
+                str.precision(15);
+                str << "Magic7::getVelocity():: too few points available for extrapolating the velocity at the time "
+                    << time << std::endl;
+                throw std::runtime_error(str.str());
+            }
+
+
+            //Now that we have enough points, extrapolate
+            std::vector<double> times,x,y,z;
+            for (std::map<double, CLHEP::Hep3Vector>::iterator itor=points.begin();itor!=points.end();++itor)
+            {
+                times.push_back(itor->first);
+                CLHEP::Hep3Vector v=itor->second;
+                x.push_back(v.x());
+                y.push_back(v.y());
+                z.push_back(v.z());
+            }
+            std::vector<double> zero(x.size(),1e3);
+            Extrapolator extrapX(times,x,2);
+            Extrapolator extrapY(times,y,2);
+            Extrapolator extrapZ(times,z,2);
+
+            double nx=extrapX.evaluateIn(time);
+            double ny=extrapY.evaluateIn(time);
+            double nz=extrapZ.evaluateIn(time);
+            CLHEP::Hep3Vector cur_velocity(nx,ny,nz);
+            return cur_velocity;
+        }
+    }
+}
+
+
 const int ft2Util::Magic7::getMode(double time) const
 {
     //Lower_bound returns the element whose key is equal to "time" if exists,
