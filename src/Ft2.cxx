@@ -76,7 +76,7 @@ Ft2::Ft2(std::string m7File, double tstart, double tstop, int latconfig, int dat
     }
     //Instantiate a status class for the current time
     CLHEP::Hep3Vector curPosition = magic7.getPosition(startTime);
-    CLHEP::Hep3Vector curVelocity = magic7.getVelocity(startTime)
+    CLHEP::Hep3Vector curVelocity = magic7.getVelocity(startTime);
     astro::Quaternion curQuaternion = magic7.getQuaternion(startTime);
     LatCondition curCondition = LatCondition(magic7.getMode(startTime), latconfig, dataquality);
     astro::EarthCoordinate curEarthCoordinate(curPosition, startTime);
