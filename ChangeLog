@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: giacomov  Mon Aug 27 17:19:52 PDT 2018
+ft2Util/src
+
+Modified Files:
+	Ft2.cxx 
+Log Message:
+Now do not crash if sc_velocity is not in the template
+    *
+------------------------------------------------------------
 User: giacomov  Mon Aug 27 17:09:16 PDT 2018
 ft2Util/src
 
