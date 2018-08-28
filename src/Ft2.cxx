@@ -333,7 +333,7 @@ void Ft2::writeFT2file(const std::string filename,
     }
 
     // Orbital velocity vector
-    if (haveColumn["sc_position"]) {
+    if (haveColumn["sc_velocity"]) {
 
       double curVelocityArray[3] = {m_velocityMap[statusItor->first].x(),
                                     m_velocityMap[statusItor->first].y(),
