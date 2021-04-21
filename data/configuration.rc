@@ -4,7 +4,7 @@
 
 #Package info
 
-packageVersion             = ft2Util-02-01-01
+packageVersion             = ft2Util-02-05-01
 packageName                = ft2Util
 packageAuthor              = G.Vianello
 packageAuthorEmail         = giacomov@slac.stanford.edu
@@ -62,4 +62,4 @@ deadPad                    =  1
 #the provided magic 7 does not cover completely the time
 #span requested for the FT2 file.
 #(in seconds)
-extrapolationLimit         = 2
+extrapolationLimit         = 3
