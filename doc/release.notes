@@ -2,7 +2,9 @@
 package manager:Giacomo Vianello
  *         EOH
 
- ft2Util-02-05-00 21-Apr-2021 monzani increased extrapolationLimit to support padding of fakeFT2
+ ft2Util-02-05-03 21-Apr-2021 monzani second attempt at updating release notes
+ ft2Util-02-05-02 21-Apr-2021 monzani updated release notes for the last 5 years
+ ft2Util-02-05-01 21-Apr-2021 monzani increased extrapolationLimit to support padding of fakeFT2
  ft2Util-02-05-00 27-Aug-2018 giacomov added support for velocity vector
  ft2Util-02-04-00 08-Jan-2015 monzani added missing library
  ft2Util-02-03-00 08-Jan-2015 monzani added missing library
